@@ -10,11 +10,14 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@hookform/resolvers": "^5.2.2",
     "gsap": "^3.14.2",
     "lucide-react": "^0.562.0",
     "next-intl": "^3.26.3",
     "react": "19.1.4",
-    "react-dom": "19.1.4"
+    "react-dom": "19.1.4",
+    "react-hook-form": "^7.70.0",
+    "zod": "^4.3.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
