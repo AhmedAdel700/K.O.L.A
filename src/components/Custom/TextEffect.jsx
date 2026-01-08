@@ -1,4 +1,4 @@
-'use client';
+"use client";
 /**
  * ModernTextEffect Component
  *
@@ -42,6 +42,7 @@ import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePageTransition } from "@/app/Providers/PageTransitionContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,7 +51,7 @@ const TextEffect = ({
   lang = "en",
   animationType = "matrix",
   className = "",
-  delay = 0,
+  delay = 0.35,
   duration = 1.2,
   fontStyle = "",
   mt = 0,
@@ -58,9 +59,11 @@ const TextEffect = ({
 }) => {
   const containerRef = useRef(null);
   const textRef = useRef(null);
+  const { transitionDone } = usePageTransition();
 
   useGSAP(
     () => {
+      if (!transitionDone) return; // ⛔ WAIT for routing to finish ** unable this if you will use page routing transition **
       if (!textRef.current) return;
 
       const chars = textRef.current.querySelectorAll(".char");
@@ -840,7 +843,14 @@ const TextEffect = ({
     },
     {
       scope: containerRef,
-      dependencies: [text, lang, animationType, delay, duration],
+      dependencies: [
+        transitionDone, // ⛔ WAIT for routing to finish ** unable this if you will use page routing transition **
+        text,
+        lang,
+        animationType,
+        delay,
+        duration,
+      ],
     }
   );
 

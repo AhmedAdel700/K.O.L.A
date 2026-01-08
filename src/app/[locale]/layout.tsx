@@ -4,8 +4,10 @@ import { NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import SmoothScroll from "@/components/Custom/SmoothScroll";
+import SmoothScrollProvider from "@/app/Providers/SmoothScrollProvider";
 import "@/styles/globals.css";
+import { PageTransitionProvider } from "../Providers/PageTransitionContext";
+import PageTransitionHandler from "@/app/Providers/PageTransitionHandler";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
@@ -37,7 +39,10 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <SmoothScroll>{children}</SmoothScroll>
+          <PageTransitionProvider>
+            <PageTransitionHandler />
+            <SmoothScrollProvider>{children}</SmoothScrollProvider>
+          </PageTransitionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

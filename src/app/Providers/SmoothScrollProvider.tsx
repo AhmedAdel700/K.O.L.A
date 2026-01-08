@@ -11,9 +11,10 @@ interface SmoothScrollProps {
   children: ReactNode;
 }
 
-export default function SmoothScroll({ children }: SmoothScrollProps) {
+export default function SmoothScrollProvider({ children }: SmoothScrollProps) {
+
+  // Create ScrollSmoother ONCE
   useEffect(() => {
-    // Prevent multiple instances
     if (ScrollSmoother.get()) return;
 
     const smoother = ScrollSmoother.create({
@@ -29,7 +30,7 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
   }, []);
 
   return (
-    <div id="smooth-wrapper">
+    <div id="smooth-wrapper" className="bg-black"> {/* The Background Of The Whole App So Make It Gradient or something (when navigating throw pages) */}
       <div id="smooth-content">{children}</div>
     </div>
   );
