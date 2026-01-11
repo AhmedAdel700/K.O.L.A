@@ -1,11 +1,9 @@
-import TransitionLink from "@/components/Custom/TransitionLink";
-import React from "react";
-
+import TransitionLink from "@/components/Custom/TransitionLink";;
 export default function page() {
   return (
     <div>
       <div className="flex justify-center items-center bg-red-700 h-screen">
-        <TransitionLink transitionType="accordion" href={"/about"}>
+        <TransitionLink transitionType="elastic" href={"/about"}>
           About Page
         </TransitionLink>
       </div>

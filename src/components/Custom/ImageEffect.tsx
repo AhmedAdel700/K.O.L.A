@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePageTransition } from "@/app/Providers/PageTransitionContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -469,8 +470,10 @@ export const ImageEffect: React.FC<AnimatedImageProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
+  const { transitionDone } = usePageTransition();
 
   useEffect(() => {
+    if (!transitionDone) return; // ⛔ WAIT for routing to finish ** unable this if you will use page routing transition **
     if (!containerRef.current || !imageRef.current) return;
 
     const config = getAnimationConfig(animationStyle, reverse);
@@ -501,7 +504,7 @@ export const ImageEffect: React.FC<AnimatedImageProps> = ({
       animation.kill();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, [animationStyle, delay, duration, reverse]);
+  }, [animationStyle, delay, duration, reverse, transitionDone]);
 
   const marginTop = typeof mt === "number" ? `${mt}px` : mt;
   const marginBottom = typeof mb === "number" ? `${mb}px` : mb;
