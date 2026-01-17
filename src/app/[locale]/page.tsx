@@ -4,7 +4,7 @@ import React from "react";
 export default function page() {
   return (
     <div className="flex justify-center items-center bg-red-700 h-screen">
-      <TransitionLink transitionType="doorSwing" href={"/about"}>
+      <TransitionLink transitionType="cornerPush" href={"/about"}>
         About Page
       </TransitionLink>
     </div>

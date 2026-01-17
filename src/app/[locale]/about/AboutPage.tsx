@@ -2,13 +2,12 @@
 
 import TextEffect from "@/components/Custom/TextEffect";
 import TransitionLink from "@/components/Custom/TransitionLink";
-import { Link } from "@/navigations";
 
 export default function AboutPage() {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center gap-12 px-6 bg-green-900 text-white">
       <TransitionLink
-        transitionType="doorSwing"
+        transitionType="cubeRotate"
         href="/"
         className="mt-10 inline-block px-6 py-3 rounded-full border border-white text-white hover:bg-white hover:text-black transition-colors"
       >

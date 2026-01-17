@@ -12,7 +12,6 @@ interface SmoothScrollProps {
 }
 
 export default function SmoothScrollProvider({ children }: SmoothScrollProps) {
-
   // Create ScrollSmoother ONCE
   useEffect(() => {
     if (ScrollSmoother.get()) return;
@@ -30,7 +29,9 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProps) {
   }, []);
 
   return (
-    <div id="smooth-wrapper" className="bg-black"> {/* The Background Of The Whole App So Make It Gradient or something (when navigating throw pages) */}
+    <div id="smooth-wrapper" className="bg-black">
+      {" "}
+      {/* The Background Of The Whole App So Make It Gradient or something (when navigating throw pages) */}
       <div id="smooth-content">{children}</div>
     </div>
   );

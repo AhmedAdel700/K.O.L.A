@@ -13,7 +13,8 @@ export type TransitionType =
   | "doorSwing" // Door swing open/close effect
   | "ripple" // Ripple distortion effect
   | "elastic" // Elastic bounce effect
-  | "kaleidoscope"; // Multi-axis rotation effect
+  | "kaleidoscope" // Multi-axis rotation effect
+  | "cornerPush"; // Push from corner effect
 
 // Default transition type
 let currentTransitionType: TransitionType = "rotateScale";
@@ -109,6 +110,15 @@ export function getExitState(type: TransitionType) {
         scale: 0.2,
         filter: "blur(20px) hue-rotate(360deg)",
       };
+    case "cornerPush":
+      return {
+        x: "-120%",
+        y: "-120%",
+        rotation: -25,
+        scale: 0.6,
+        transformOrigin: "top left",
+        filter: "blur(12px)",
+      };
     default:
       return {
         opacity: 0,
@@ -179,6 +189,15 @@ export function getEnterInitialState(type: TransitionType) {
         scale: 0.2,
         filter: "blur(20px) hue-rotate(-360deg)",
       };
+    case "cornerPush":
+      return {
+        x: "120%",
+        y: "120%",
+        rotation: 25,
+        scale: 0.6,
+        transformOrigin: "bottom right",
+        filter: "blur(12px)",
+      };
     default:
       return {
         opacity: 0,
@@ -200,10 +219,8 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
       resolve();
       return;
     }
-
     const transitionType = type || currentTransitionType;
     const tl = gsap.timeline({ onComplete: resolve });
-
     switch (transitionType) {
       case "flip3D":
         // 3D flip rotation effect
@@ -217,7 +234,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power3.in",
         });
         break;
-
       case "slideWipe":
         // Horizontal slide/wipe effect
         tl.to(content, {
@@ -229,7 +245,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power4.in",
         });
         break;
-
       case "rotateScale":
         // Rotation with scale effect
         tl.to(content, {
@@ -242,7 +257,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "back.in(1.5)",
         });
         break;
-
       case "accordion":
         // Vertical accordion collapse
         tl.to(content, {
@@ -253,7 +267,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power2.in",
         });
         break;
-
       case "swirl":
         // Swirling rotation with perspective
         tl.to(content, {
@@ -266,7 +279,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power2.in",
         });
         break;
-
       case "cubeRotate":
         // 3D cube rotation
         tl.to(content, {
@@ -278,7 +290,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power3.in",
         });
         break;
-
       case "doorSwing":
         // Door swing effect
         tl.to(content, {
@@ -289,7 +300,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power2.in",
         });
         break;
-
       case "ripple":
         // Ripple distortion
         tl.to(content, {
@@ -301,7 +311,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power3.in",
         });
         break;
-
       case "elastic":
         // Elastic bounce compression
         tl.to(content, {
@@ -313,7 +322,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "back.in(2)",
         });
         break;
-
       case "kaleidoscope":
         // Multi-axis rotation kaleidoscope
         tl.to(content, {
@@ -326,7 +334,19 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power2.in",
         });
         break;
-
+      case "cornerPush":
+        // Push from corner effect
+        tl.to(content, {
+          x: "-120%",
+          y: "-120%",
+          rotation: -25,
+          scale: 0.6,
+          transformOrigin: "top left",
+          filter: "blur(12px)",
+          duration: 0.85,
+          ease: "power3.in",
+        });
+        break;
       default:
         // Fallback to fadeBlur
         tl.to(content, {
@@ -353,10 +373,8 @@ export function playEnterAnimation(
 ) {
   const content = document.getElementById("smooth-content");
   if (!content) return;
-
   const transitionType = type || currentTransitionType;
   const tl = gsap.timeline();
-
   switch (transitionType) {
     case "flip3D":
       // 3D flip rotation effect
@@ -379,7 +397,6 @@ export function playEnterAnimation(
         ease: "power3.out",
       });
       break;
-
     case "slideWipe":
       // Horizontal slide/wipe effect
       if (!skipInitialState) {
@@ -399,7 +416,6 @@ export function playEnterAnimation(
         ease: "power4.out",
       });
       break;
-
     case "rotateScale":
       // Rotation with scale effect
       if (!skipInitialState) {
@@ -421,7 +437,6 @@ export function playEnterAnimation(
         ease: "back.out(1.2)",
       });
       break;
-
     case "accordion":
       // Vertical accordion expand
       if (!skipInitialState) {
@@ -438,7 +453,6 @@ export function playEnterAnimation(
         ease: "power2.out",
       });
       break;
-
     case "swirl":
       // Swirling rotation with perspective
       if (!skipInitialState) {
@@ -460,7 +474,6 @@ export function playEnterAnimation(
         ease: "power2.out",
       });
       break;
-
     case "cubeRotate":
       // 3D cube rotation
       if (!skipInitialState) {
@@ -479,7 +492,6 @@ export function playEnterAnimation(
         ease: "power3.out",
       });
       break;
-
     case "doorSwing":
       // Door swing effect
       if (!skipInitialState) {
@@ -496,7 +508,6 @@ export function playEnterAnimation(
         ease: "power2.out",
       });
       break;
-
     case "ripple":
       // Ripple distortion
       if (!skipInitialState) {
@@ -515,7 +526,6 @@ export function playEnterAnimation(
         ease: "elastic.out(1, 0.5)",
       });
       break;
-
     case "elastic":
       // Elastic bounce expansion
       if (!skipInitialState) {
@@ -535,7 +545,6 @@ export function playEnterAnimation(
         ease: "elastic.out(1, 0.6)",
       });
       break;
-
     case "kaleidoscope":
       // Multi-axis rotation kaleidoscope
       if (!skipInitialState) {
@@ -557,7 +566,28 @@ export function playEnterAnimation(
         ease: "power2.out",
       });
       break;
-
+    case "cornerPush":
+      // Push from corner effect
+      if (!skipInitialState) {
+        gsap.set(content, {
+          x: "120%",
+          y: "120%",
+          rotation: 25,
+          scale: 0.6,
+          transformOrigin: "bottom right",
+          filter: "blur(12px)",
+        });
+      }
+      tl.to(content, {
+        x: 0,
+        y: 0,
+        rotation: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 1.1,
+        ease: "power3.out",
+      });
+      break;
     default:
       // Fallback to fadeBlur
       if (!skipInitialState) {
