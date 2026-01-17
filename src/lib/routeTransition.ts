@@ -14,10 +14,15 @@ export type TransitionType =
   | "ripple" // Ripple distortion effect
   | "elastic" // Elastic bounce effect
   | "kaleidoscope" // Multi-axis rotation effect
+<<<<<<< HEAD
   | "cornerPush"; // Push from corner effect
+=======
+  | "overlay"; // Animated overlay effect
+>>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
 
 // Default transition type
 let currentTransitionType: TransitionType = "rotateScale";
+
 // Store the transition type for the current transition
 let activeTransitionType: TransitionType | null = null;
 
@@ -48,6 +53,165 @@ export function setActiveTransitionType(type: TransitionType | null) {
  */
 export function getActiveTransitionType(): TransitionType | null {
   return activeTransitionType;
+}
+
+/**
+ * Create and animate transition overlay with block/pixel effect
+ */
+export function createTransitionOverlay(): Promise<void> {
+  return new Promise((resolve) => {
+    // Create overlay container
+    let overlay = document.getElementById("page-transition-overlay");
+
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.id = "page-transition-overlay";
+      overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        pointer-events: none;
+        display: grid;
+        grid-template-columns: repeat(20, 1fr);
+        grid-template-rows: repeat(20, 1fr);
+        gap: 0;
+      `;
+
+      // Create grid of blocks
+      const colors = ["#667eea", "#764ba2", "#f093fb", "#4facfe"];
+      for (let i = 0; i < 400; i++) {
+        const block = document.createElement("div");
+        block.className = "overlay-block";
+        block.style.cssText = `
+          background: ${colors[Math.floor(Math.random() * colors.length)]};
+          width: 100%;
+          height: 100%;
+        `;
+        overlay.appendChild(block);
+      }
+
+      // Add loading text overlay
+      const textOverlay = document.createElement("div");
+      textOverlay.className = "overlay-text";
+      textOverlay.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3rem;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        z-index: 10000;
+        text-shadow: 0 0 20px rgba(0,0,0,0.5);
+      `;
+      textOverlay.textContent = "Loading";
+
+      document.body.appendChild(overlay);
+      document.body.appendChild(textOverlay);
+    }
+
+    const blocks = overlay.querySelectorAll(".overlay-block");
+    const textOverlay = document.querySelector(".overlay-text");
+
+    // Animate blocks in with stagger
+    const tl = gsap.timeline({
+      onComplete: resolve,
+    });
+
+    // Set initial state for all blocks
+    gsap.set(blocks, {
+      scaleY: 0,
+      transformOrigin: "top",
+    });
+
+    gsap.set(textOverlay, {
+      opacity: 0,
+      scale: 0.5,
+    });
+
+    gsap.set(overlay, {
+      display: "grid",
+    });
+
+    // Animate blocks appearing in random order
+    tl.to(blocks, {
+      scaleY: 1,
+      duration: 0.8,
+      ease: "power2.out",
+      stagger: {
+        amount: 0.6,
+        from: "random",
+      },
+    })
+      .to(
+        textOverlay,
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.5,
+          ease: "back.out(1.7)",
+        },
+        "-=0.3"
+      )
+      .to(textOverlay, {
+        scale: 1.1,
+        duration: 0.4,
+        ease: "power1.inOut",
+        yoyo: true,
+        repeat: 1,
+      });
+  });
+}
+
+/**
+ * Hide transition overlay with block animation
+ */
+export function hideTransitionOverlay(): Promise<void> {
+  return new Promise((resolve) => {
+    const overlay = document.getElementById("page-transition-overlay");
+    const textOverlay = document.querySelector(".overlay-text");
+
+    if (!overlay) {
+      resolve();
+      return;
+    }
+
+    const blocks = overlay.querySelectorAll(".overlay-block");
+    const tl = gsap.timeline();
+
+    // Animate text out first
+    tl.to(textOverlay, {
+      opacity: 0,
+      scale: 0.5,
+      duration: 0.3,
+      ease: "power2.in",
+    })
+      // Then animate blocks out
+      .to(blocks, {
+        scaleY: 0,
+        transformOrigin: "bottom",
+        duration: 0.8,
+        ease: "power2.in",
+        stagger: {
+          amount: 0.6,
+          from: "random",
+        },
+        onComplete: () => {
+          if (overlay) {
+            overlay.style.display = "none";
+          }
+          if (textOverlay) {
+            (textOverlay as HTMLElement).style.display = "none";
+          }
+          resolve();
+        },
+      });
+  });
 }
 
 /**
@@ -110,6 +274,7 @@ export function getExitState(type: TransitionType) {
         scale: 0.2,
         filter: "blur(20px) hue-rotate(360deg)",
       };
+<<<<<<< HEAD
     case "cornerPush":
       return {
         x: "-120%",
@@ -119,6 +284,10 @@ export function getExitState(type: TransitionType) {
         transformOrigin: "top left",
         filter: "blur(12px)",
       };
+=======
+    case "overlay":
+      return { opacity: 1 };
+>>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
     default:
       return {
         opacity: 0,
@@ -189,6 +358,7 @@ export function getEnterInitialState(type: TransitionType) {
         scale: 0.2,
         filter: "blur(20px) hue-rotate(-360deg)",
       };
+<<<<<<< HEAD
     case "cornerPush":
       return {
         x: "120%",
@@ -198,6 +368,10 @@ export function getEnterInitialState(type: TransitionType) {
         transformOrigin: "bottom right",
         filter: "blur(12px)",
       };
+=======
+    case "overlay":
+      return { opacity: 1 };
+>>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
     default:
       return {
         opacity: 0,
@@ -220,6 +394,15 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
       return;
     }
     const transitionType = type || currentTransitionType;
+
+    // Handle overlay transition separately
+    if (transitionType === "overlay") {
+      createTransitionOverlay().then(() => {
+        resolve();
+      });
+      return;
+    }
+
     const tl = gsap.timeline({ onComplete: resolve });
     switch (transitionType) {
       case "flip3D":
@@ -334,6 +517,7 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power2.in",
         });
         break;
+<<<<<<< HEAD
       case "cornerPush":
         // Push from corner effect
         tl.to(content, {
@@ -347,6 +531,8 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power3.in",
         });
         break;
+=======
+>>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
       default:
         // Fallback to fadeBlur
         tl.to(content, {
@@ -374,6 +560,13 @@ export function playEnterAnimation(
   const content = document.getElementById("smooth-content");
   if (!content) return;
   const transitionType = type || currentTransitionType;
+
+  // Handle overlay transition separately
+  if (transitionType === "overlay") {
+    hideTransitionOverlay();
+    return;
+  }
+
   const tl = gsap.timeline();
   switch (transitionType) {
     case "flip3D":
@@ -566,6 +759,7 @@ export function playEnterAnimation(
         ease: "power2.out",
       });
       break;
+<<<<<<< HEAD
     case "cornerPush":
       // Push from corner effect
       if (!skipInitialState) {
@@ -588,6 +782,8 @@ export function playEnterAnimation(
         ease: "power3.out",
       });
       break;
+=======
+>>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
     default:
       // Fallback to fadeBlur
       if (!skipInitialState) {

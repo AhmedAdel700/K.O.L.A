@@ -69,7 +69,7 @@ export default function PageTransitionHandler() {
           clearInterval(checkContent);
           setActiveTransitionType(null);
           endTransition();
-        }, 50);
+        }, 5); // 50
       }
     } else if (pathname !== previousPathname.current) {
       // Regular navigation (no TransitionLink) - just update pathname ref
