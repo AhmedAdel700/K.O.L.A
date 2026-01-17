@@ -5,16 +5,6 @@ import TransitionLink from "@/components/Custom/TransitionLink";
 
 export default function AboutPage() {
   return (
-<<<<<<< HEAD
-    <section className="min-h-screen flex flex-col items-center justify-center gap-12 px-6 bg-green-900 text-white">
-      <TransitionLink
-        transitionType="cubeRotate"
-        href="/"
-        className="mt-10 inline-block px-6 py-3 rounded-full border border-white text-white hover:bg-white hover:text-black transition-colors"
-      >
-        Go back home
-      </TransitionLink>
-=======
     <>
       <section className="min-h-screen flex flex-col items-center justify-center gap-12 px-6 bg-green-900 text-white">
         <TransitionLink
@@ -24,7 +14,6 @@ export default function AboutPage() {
         >
           Go back home
         </TransitionLink>
->>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
 
         <TextEffect
           text="We craft immersive digital experiences with motion and meaning."

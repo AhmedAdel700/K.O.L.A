@@ -14,11 +14,7 @@ export type TransitionType =
   | "ripple" // Ripple distortion effect
   | "elastic" // Elastic bounce effect
   | "kaleidoscope" // Multi-axis rotation effect
-<<<<<<< HEAD
   | "cornerPush"; // Push from corner effect
-=======
-  | "overlay"; // Animated overlay effect
->>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
 
 // Default transition type
 let currentTransitionType: TransitionType = "rotateScale";
@@ -274,7 +270,6 @@ export function getExitState(type: TransitionType) {
         scale: 0.2,
         filter: "blur(20px) hue-rotate(360deg)",
       };
-<<<<<<< HEAD
     case "cornerPush":
       return {
         x: "-120%",
@@ -284,10 +279,6 @@ export function getExitState(type: TransitionType) {
         transformOrigin: "top left",
         filter: "blur(12px)",
       };
-=======
-    case "overlay":
-      return { opacity: 1 };
->>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
     default:
       return {
         opacity: 0,
@@ -358,7 +349,6 @@ export function getEnterInitialState(type: TransitionType) {
         scale: 0.2,
         filter: "blur(20px) hue-rotate(-360deg)",
       };
-<<<<<<< HEAD
     case "cornerPush":
       return {
         x: "120%",
@@ -368,10 +358,6 @@ export function getEnterInitialState(type: TransitionType) {
         transformOrigin: "bottom right",
         filter: "blur(12px)",
       };
-=======
-    case "overlay":
-      return { opacity: 1 };
->>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
     default:
       return {
         opacity: 0,
@@ -394,14 +380,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
       return;
     }
     const transitionType = type || currentTransitionType;
-
-    // Handle overlay transition separately
-    if (transitionType === "overlay") {
-      createTransitionOverlay().then(() => {
-        resolve();
-      });
-      return;
-    }
 
     const tl = gsap.timeline({ onComplete: resolve });
     switch (transitionType) {
@@ -517,7 +495,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power2.in",
         });
         break;
-<<<<<<< HEAD
       case "cornerPush":
         // Push from corner effect
         tl.to(content, {
@@ -531,8 +508,6 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power3.in",
         });
         break;
-=======
->>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
       default:
         // Fallback to fadeBlur
         tl.to(content, {
@@ -560,12 +535,6 @@ export function playEnterAnimation(
   const content = document.getElementById("smooth-content");
   if (!content) return;
   const transitionType = type || currentTransitionType;
-
-  // Handle overlay transition separately
-  if (transitionType === "overlay") {
-    hideTransitionOverlay();
-    return;
-  }
 
   const tl = gsap.timeline();
   switch (transitionType) {
@@ -759,7 +728,6 @@ export function playEnterAnimation(
         ease: "power2.out",
       });
       break;
-<<<<<<< HEAD
     case "cornerPush":
       // Push from corner effect
       if (!skipInitialState) {
@@ -782,8 +750,6 @@ export function playEnterAnimation(
         ease: "power3.out",
       });
       break;
-=======
->>>>>>> 9bfc86f55510c421d49f14c95ccc018377c601c5
     default:
       // Fallback to fadeBlur
       if (!skipInitialState) {
