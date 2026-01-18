@@ -16,6 +16,7 @@ export type TransitionType =
   | "kaleidoscope" // Multi-axis rotation effect
   | "overlay"; // Animated overlay effect
 
+  
 // Default transition type
 let currentTransitionType: TransitionType = "rotateScale";
 

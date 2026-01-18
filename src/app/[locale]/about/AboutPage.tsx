@@ -2,26 +2,29 @@
 
 import TextEffect from "@/components/Custom/TextEffect";
 import TransitionLink from "@/components/Custom/TransitionLink";
+import { useLocale } from "next-intl";
 
 export default function AboutPage() {
+  const locale = useLocale();
   return (
     <>
       <section className="min-h-screen flex flex-col items-center justify-center gap-12 px-6 bg-green-900 text-white">
         <TransitionLink
-          transitionType="doorSwing"
+          transitionType="accordion"
           href="/"
           className="mt-10 inline-block px-6 py-3 rounded-full border border-white text-white hover:bg-white hover:text-black transition-colors"
         >
           Go back home
         </TransitionLink>
-
+        (
         <TextEffect
           text="We craft immersive digital experiences with motion and meaning."
           lang="en"
-          animationType="wordWave"
+          animationType={locale === "ar" ? "matrix" : "matrix"}
           duration={1}
           className="text-lg max-w-xl text-center text-gray-400"
         />
+        )
         <TextEffect
           text="We craft immersive digital experiences with motion and meaning."
           lang="en"
