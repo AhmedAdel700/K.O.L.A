@@ -23,7 +23,7 @@ export default function Page() {
           start: "top top",
           end: "+=300%", // how long the pin lasts (3 screen heights)
           pin: true,
-          scrub: 1, // link animation to scroll
+          scrub: true, // link animation to scroll
           markers: true,
           //   fastScrollEnd: true, // stop it on fast scrolls
         },
