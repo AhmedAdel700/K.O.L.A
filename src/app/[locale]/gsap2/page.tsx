@@ -1,5 +1,5 @@
 "use client";
-
+import MainButton from "@/components/Custom/MainButton";
 import TextEffect from "@/components/Custom/TextEffect";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -61,15 +61,14 @@ export default function Page() {
 
   return (
     <>
-
       <section className="h-screen flex justify-center items-center bg-gray-800">
-        <div>
-          <button
-            onClick={handleClick}
-            className="w-40 py-6 text-white cursor-pointer bg-black/50"
-          >
-            Click Me
-          </button>
+        <div className="border w-1/2 flex flex-col gap-5">
+          <MainButton size={"full"} intent="delete" variant={"translucent"}>
+            Edit
+          </MainButton>
+          <MainButton size={"full"} intent="delete" variant={"translucent"}>
+            Edit
+          </MainButton>
         </div>
       </section>
 
