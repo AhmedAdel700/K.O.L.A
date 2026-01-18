@@ -14,7 +14,7 @@ export type TransitionType =
   | "ripple" // Ripple distortion effect
   | "elastic" // Elastic bounce effect
   | "kaleidoscope" // Multi-axis rotation effect
-  | "overlay"; // Animated overlay effect
+  | "cornerPush"; // Push from corner effect
 
   
 // Default transition type
@@ -271,8 +271,15 @@ export function getExitState(type: TransitionType) {
         scale: 0.2,
         filter: "blur(20px) hue-rotate(360deg)",
       };
-    case "overlay":
-      return { opacity: 1 };
+    case "cornerPush":
+      return {
+        x: "-120%",
+        y: "-120%",
+        rotation: -25,
+        scale: 0.6,
+        transformOrigin: "top left",
+        filter: "blur(12px)",
+      };
     default:
       return {
         opacity: 0,
@@ -343,8 +350,15 @@ export function getEnterInitialState(type: TransitionType) {
         scale: 0.2,
         filter: "blur(20px) hue-rotate(-360deg)",
       };
-    case "overlay":
-      return { opacity: 1 };
+    case "cornerPush":
+      return {
+        x: "120%",
+        y: "120%",
+        rotation: 25,
+        scale: 0.6,
+        transformOrigin: "bottom right",
+        filter: "blur(12px)",
+      };
     default:
       return {
         opacity: 0,
@@ -366,19 +380,9 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
       resolve();
       return;
     }
-
     const transitionType = type || currentTransitionType;
 
-    // Handle overlay transition separately
-    if (transitionType === "overlay") {
-      createTransitionOverlay().then(() => {
-        resolve();
-      });
-      return;
-    }
-
     const tl = gsap.timeline({ onComplete: resolve });
-
     switch (transitionType) {
       case "flip3D":
         // 3D flip rotation effect
@@ -492,6 +496,19 @@ export function playExitAnimation(type?: TransitionType): Promise<void> {
           ease: "power2.in",
         });
         break;
+      case "cornerPush":
+        // Push from corner effect
+        tl.to(content, {
+          x: "-120%",
+          y: "-120%",
+          rotation: -25,
+          scale: 0.6,
+          transformOrigin: "top left",
+          filter: "blur(12px)",
+          duration: 0.85,
+          ease: "power3.in",
+        });
+        break;
       default:
         // Fallback to fadeBlur
         tl.to(content, {
@@ -518,17 +535,9 @@ export function playEnterAnimation(
 ) {
   const content = document.getElementById("smooth-content");
   if (!content) return;
-
   const transitionType = type || currentTransitionType;
 
-  // Handle overlay transition separately
-  if (transitionType === "overlay") {
-    hideTransitionOverlay();
-    return;
-  }
-
   const tl = gsap.timeline();
-
   switch (transitionType) {
     case "flip3D":
       // 3D flip rotation effect
@@ -718,6 +727,28 @@ export function playEnterAnimation(
         filter: "blur(0px) hue-rotate(0deg)",
         duration: 1.4,
         ease: "power2.out",
+      });
+      break;
+    case "cornerPush":
+      // Push from corner effect
+      if (!skipInitialState) {
+        gsap.set(content, {
+          x: "120%",
+          y: "120%",
+          rotation: 25,
+          scale: 0.6,
+          transformOrigin: "bottom right",
+          filter: "blur(12px)",
+        });
+      }
+      tl.to(content, {
+        x: 0,
+        y: 0,
+        rotation: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 1.1,
+        ease: "power3.out",
       });
       break;
     default:
