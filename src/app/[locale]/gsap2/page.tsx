@@ -1,13 +1,12 @@
 "use client";
 import MainButton from "@/components/Custom/MainButton";
-import { MainInput } from "@/components/Custom/MainInput";
 import TextEffect from "@/components/Custom/TextEffect";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollSmoother, ScrollTrigger } from "gsap/all";
+import { ScrollSmoother, ScrollTrigger, SplitText } from "gsap/all";
 import { useRef } from "react";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export default function Page() {
   const container = useRef<HTMLDivElement>(null);
@@ -16,6 +15,60 @@ export default function Page() {
   useGSAP(
     () => {
       if (!container.current) return;
+
+      // const split = SplitText.create("h2", {
+      //   type: "lines,words,chars",
+      //   // linesClass: "lines++", // to add classes after spliting them make them haev line 1 , line 2 classes ect ...
+      //   // wordsClass: "words", // to add classes after spliting them.
+      //   // charsClass: "chars", // to add classes after spliting them.
+      //   // mask: "lines", // you choose one of the 3 (lines ect ...).
+      //   smartWrap: true, // this is so so so important if you split by chars (must do it).
+      //   ignore: "", // use this to ignore anything a class or a div or a tag or anything.
+      //   autoSplit: true, // this means whenever i resize the screen the spit happens again.
+
+      //   onSplit: (self) => {
+      //     return gsap.from(self.chars, {
+      //       autoAlpha: 0,
+      //       stagger: {
+      //         each: 0.05,
+      //         from: "random",
+      //       },
+      //       scale: 2,
+      //       ease: "power2.inOut",
+      //       duration: 1,
+      //       onComplete: () => {
+      //         self.revert();
+      //       },
+      //     });
+      //   },
+      // });
+
+      const split = SplitText.create("h2", {
+        type: "lines,words,chars",
+        // linesClass: "lines++", // to add classes after spliting them make them haev line 1 , line 2 classes ect ...
+        // wordsClass: "words", // to add classes after spliting them.
+        // charsClass: "chars", // to add classes after spliting them.
+        // mask: "lines", // you choose one of the 3 (lines ect ...).
+        smartWrap: true, // this is so so so important if you split by chars (must do it).
+        ignore: "", // use this to ignore anything a class or a div or a tag or anything.
+        autoSplit: true, // this means whenever i resize the screen the spit happens again.
+      });
+
+      gsap.from(split.chars, {
+        autoAlpha: 0,
+        stagger: {
+          each: 0.05,
+          from: "random",
+        },
+        scale: 2,
+        ease: "power2.inOut",
+        duration: 1,
+        onComplete: () => {
+          split.revert();
+        },
+      });
+
+      ////////////////////////////////////////////////////////////
 
       // create a timeline for multiple animations
       const tl = gsap.timeline({
@@ -54,14 +107,14 @@ export default function Page() {
       texts.current.push(el);
     }
   };
-  const handleClick = () => {
-    const smoother = ScrollSmoother.get();
-    smoother?.scrollTo(1000, true);
-    // smoother?.paused(true) // i can use this when open a pop up like a modal or somthing to stop the scroll an then make it false after i close it
-  };
+  // const handleClick = () => {
+  //   const smoother = ScrollSmoother.get();
+  //   smoother?.scrollTo(1000, true);
+  //   // smoother?.paused(true) // i can use this when open a pop up like a modal or somthing to stop the scroll an then make it false after i close it
+  // };
 
   return (
-    <>
+    <main ref={container}>
       <section className="h-screen flex justify-center items-center bg-gray-800">
         <div className="w-1/2 flex gap-5">
           <MainButton size={"lg"} intent="edit" variant={"outline"}>
@@ -70,22 +123,20 @@ export default function Page() {
           <MainButton size={"lg"} intent="edit" hoverEffect={"shimmer"}>
             Edit
           </MainButton>
+          <h2 className="text-5xl text-white">This is A test</h2>
         </div>
       </section>
 
       {/* Pinned Section */}
-      <section
-        ref={container}
-        className="h-screen flex flex-col justify-center items-center bg-amber-200 gap-8"
-      >
+      <section className="h-screen flex flex-col justify-center items-center bg-amber-200 gap-8">
         <div ref={addToRefs} className="text-4xl font-bold">
-          Step 1
+          <h1>Step 1 This Is A Test</h1>
         </div>
         <div ref={addToRefs} className="text-4xl font-bold">
-          Step 2
+          <h1>Step 2 This Is A Test</h1>
         </div>
         <div ref={addToRefs} className="text-4xl font-bold">
-          Step 3
+          <h1>Step 3 This Is A Test</h1>
         </div>
       </section>
 
@@ -97,6 +148,6 @@ export default function Page() {
           delay={0}
         />
       </section>
-    </>
+    </main>
   );
 }
