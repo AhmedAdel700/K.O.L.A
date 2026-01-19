@@ -1,5 +1,6 @@
 "use client";
 import MainButton from "@/components/Custom/MainButton";
+import { MainInput } from "@/components/Custom/MainInput";
 import TextEffect from "@/components/Custom/TextEffect";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -38,13 +39,13 @@ export default function Page() {
             opacity: 0,
             scale: 2,
           },
-          i * 0.5 // stagger: each text starts 0.5 after the previous
+          i * 0.5, // stagger: each text starts 0.5 after the previous
         );
       });
     },
     {
       scope: container,
-    }
+    },
   );
 
   // helper to attach refs to array
@@ -62,11 +63,11 @@ export default function Page() {
   return (
     <>
       <section className="h-screen flex justify-center items-center bg-gray-800">
-        <div className="border w-1/2 flex flex-col gap-5">
-          <MainButton size={"full"} intent="delete" variant={"translucent"}>
+        <div className="w-1/2 flex gap-5">
+          <MainButton size={"lg"} intent="edit" variant={"outline"}>
             Edit
           </MainButton>
-          <MainButton size={"full"} intent="delete" variant={"translucent"}>
+          <MainButton size={"lg"} intent="edit" hoverEffect={"shimmer"}>
             Edit
           </MainButton>
         </div>

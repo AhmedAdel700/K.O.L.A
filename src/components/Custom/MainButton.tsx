@@ -37,26 +37,28 @@ const buttonStyles = cva(
   "relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl font-medium transition-all cursor-pointer",
   {
     variants: {
+      /* ------------------------------- intent ------------------------------ */
       intent: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        add: "bg-emerald-600 text-white hover:bg-emerald-700",
-        edit: "bg-blue-600 text-white hover:bg-blue-700",
-        delete: "bg-red-600 text-white hover:bg-red-700",
-        submit: "bg-indigo-600 text-white hover:bg-indigo-700",
-        warning: "bg-amber-500 text-white hover:bg-amber-600",
-        info: "bg-cyan-600 text-white hover:bg-cyan-700",
+        default: "text-primary",
+        add: "text-emerald-600",
+        edit: "text-blue-600",
+        delete: "text-red-600",
+        submit: "text-indigo-600",
+        warning: "text-amber-500",
+        info: "text-cyan-600",
       },
 
+      /* ------------------------------- variant ----------------------------- */
       variant: {
         solid: "",
-        outline: "bg-transparent border border-current",
-        ghost: "bg-transparent hover:bg-black/5",
-        gradient:
-          "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white",
-        translucent: "bg-white/10 text-white backdrop-blur-sm",
-        link: "bg-transparent text-indigo-600 underline hover:text-indigo-700 hover:bg-transparent",
+        outline: "bg-transparent border",
+        ghost: "bg-transparent",
+        translucent: "backdrop-blur-sm",
+        gradient: "text-white",
+        link: "bg-transparent underline hover:bg-transparent hover:opacity-80",
       },
 
+      /* -------------------------------- size -------------------------------- */
       size: {
         sm: "h-9 px-3 text-sm",
         md: "h-11 px-5 text-base",
@@ -64,14 +66,123 @@ const buttonStyles = cva(
         full: "flex-1 h-12 px-5 text-lg",
       },
 
+      /* ---------------------------- hover effect ---------------------------- */
       hoverEffect: {
         none: "",
         lift: "hover:-translate-y-0.5 hover:shadow-lg",
-        glow: "hover:shadow-[0_0_20px_rgba(99,102,241,0.45)]",
-        slide:
-          "before:absolute before:inset-0 before:-translate-x-full before:bg-white/10 before:transition-transform hover:before:translate-x-0",
+        glow: "hover:shadow-[0_0_20px_rgba(0,0,0,0.25)]",
+        scale: "hover:scale-[1.03] active:scale-[0.98] transition-transform",
+        pulse: "hover:animate-pulse",
+        shimmer:
+          "before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:transition-transform hover:before:translate-x-full",
       },
     },
+
+    /* ----------------------- intent + variant logic ----------------------- */
+    compoundVariants: [
+      /* -------------------------------- solid ------------------------------ */
+      {
+        intent: "add",
+        variant: "solid",
+        className: "bg-emerald-600 text-white hover:bg-emerald-700",
+      },
+      {
+        intent: "edit",
+        variant: "solid",
+        className: "bg-blue-600 text-white hover:bg-blue-700",
+      },
+      {
+        intent: "delete",
+        variant: "solid",
+        className: "bg-red-600 text-white hover:bg-red-700",
+      },
+      {
+        intent: "submit",
+        variant: "solid",
+        className: "bg-indigo-600 text-white hover:bg-indigo-700",
+      },
+      {
+        intent: "warning",
+        variant: "solid",
+        className: "bg-amber-500 text-white hover:bg-amber-600",
+      },
+      {
+        intent: "info",
+        variant: "solid",
+        className: "bg-cyan-600 text-white hover:bg-cyan-700",
+      },
+
+      /* ------------------------------- outline ----------------------------- */
+      {
+        intent: "add",
+        variant: "outline",
+        className:
+          "border-emerald-600 bg-emerald-600/5 hover:bg-emerald-600/10",
+      },
+      {
+        intent: "edit",
+        variant: "outline",
+        className: "border-blue-600 bg-blue-600/5 hover:bg-blue-600/10",
+      },
+      {
+        intent: "delete",
+        variant: "outline",
+        className: "border-red-600 bg-red-600/5 hover:bg-red-600/10",
+      },
+      {
+        intent: "submit",
+        variant: "outline",
+        className: "border-indigo-600 bg-indigo-600/5 hover:bg-indigo-600/10",
+      },
+
+      /* -------------------------------- ghost ------------------------------ */
+      {
+        intent: "add",
+        variant: "ghost",
+        className: "hover:bg-emerald-600/10",
+      },
+      {
+        intent: "edit",
+        variant: "ghost",
+        className: "hover:bg-blue-600/10",
+      },
+      {
+        intent: "delete",
+        variant: "ghost",
+        className: "hover:bg-red-600/10",
+      },
+
+      /* ----------------------------- translucent --------------------------- */
+      {
+        intent: "add",
+        variant: "translucent",
+        className: "bg-emerald-600/15 text-emerald-700",
+      },
+      {
+        intent: "edit",
+        variant: "translucent",
+        className: "bg-blue-600/15 text-blue-700",
+      },
+      {
+        intent: "delete",
+        variant: "translucent",
+        className: "bg-red-600/15 text-red-700",
+      },
+
+      /* ------------------------------- gradient ---------------------------- */
+      {
+        intent: "add",
+        variant: "gradient",
+        className:
+          "bg-gradient-to-r from-emerald-500 to-green-600 hover:opacity-90",
+      },
+      {
+        intent: "edit",
+        variant: "gradient",
+        className:
+          "bg-gradient-to-r from-blue-500 to-indigo-600 hover:opacity-90",
+      },
+    ],
 
     defaultVariants: {
       intent: "default",
@@ -97,6 +208,7 @@ export interface MainButtonProps
   suffix?: React.ReactNode;
   loading?: boolean;
   ripple?: boolean;
+  press?: boolean;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -114,6 +226,7 @@ const MainButton = React.forwardRef<HTMLButtonElement, MainButtonProps>(
       suffix,
       loading = false,
       ripple = true,
+      press = false,
       disabled,
       type,
       className,
@@ -166,6 +279,7 @@ const MainButton = React.forwardRef<HTMLButtonElement, MainButtonProps>(
         className={cn(
           buttonStyles({ intent, variant, size, hoverEffect }),
           isDisabled && "cursor-not-allowed opacity-60",
+          press && "active:scale-[0.95] active:shadow-inner",
           className,
         )}
         {...rest}
