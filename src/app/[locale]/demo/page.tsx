@@ -8,6 +8,8 @@ import { useLocale } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { toast } from "sonner";
+
 export default function Demo() {
   const locale = useLocale();
 
@@ -16,7 +18,7 @@ export default function Demo() {
     { name: "email", required: true },
     { name: "password", required: true },
     { name: "confirmPassword", required: true },
-    { name: "select", required: true }, // ✅ added select
+    { name: "select", required: true },
   ]);
 
   type FormData = z.infer<typeof schema>;
@@ -25,6 +27,7 @@ export default function Demo() {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -33,13 +36,13 @@ export default function Demo() {
       email: "",
       password: "",
       confirmPassword: "",
-      select: "", // ✅ default value for select
+      select: "",
     },
   });
 
   const onSubmit = (data: FormData) => {
     console.log("Form submitted:", data);
-    alert("Form submitted successfully! Check console for data.");
+    toast.success("Form submitted successfully!");
     reset();
   };
 
@@ -107,7 +110,7 @@ export default function Demo() {
             type="select"
             label={locale === "en" ? "Select Option" : "اختر خيارًا"}
             placeholder={locale === "en" ? "Choose..." : "اختر..."}
-            register={register}
+            control={control}
             error={errors.select?.message}
             required
             fullWidth

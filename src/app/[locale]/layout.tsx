@@ -8,6 +8,7 @@ import SmoothScrollProvider from "@/app/Providers/SmoothScrollProvider";
 import "@/styles/globals.css";
 import { PageTransitionProvider } from "../Providers/PageTransitionContext";
 import PageTransitionHandler from "@/app/Providers/PageTransitionHandler";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
@@ -42,6 +43,7 @@ export default async function RootLayout({
           <PageTransitionProvider>
             <PageTransitionHandler />
             <SmoothScrollProvider>{children}</SmoothScrollProvider>
+            <Toaster position="top-center" />
           </PageTransitionProvider>
         </NextIntlClientProvider>
       </body>

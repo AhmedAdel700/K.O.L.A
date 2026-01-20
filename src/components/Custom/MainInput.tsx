@@ -130,9 +130,11 @@ export const MainInput: React.FC<MainInputProps> = ({
                 value={field.value}
                 onValueChange={field.onChange}
                 disabled={disabled}
-                className={`${fullWidth ? "w-full" : ""} ${className}`}
+                dir={locale === "ar" ? "rtl" : "ltr"}
               >
-                <SelectTrigger>
+                <SelectTrigger
+                  className={`${fullWidth ? "w-full" : ""} ${className}`}
+                >
                   <SelectValue placeholder={placeholder} />
                 </SelectTrigger>
                 <SelectContent>
@@ -146,22 +148,9 @@ export const MainInput: React.FC<MainInputProps> = ({
             )}
           />
         ) : (
-          <Select
-            {...(register ? register(name, { required }) : {})}
-            disabled={disabled}
-            className={`${fullWidth ? "w-full" : ""} ${className}`}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <p className="text-red-500 text-xs">
+            Admin Error: Select input requires "control" prop.
+          </p>
         )}
 
         {error && <span className="text-xs text-red-600">{error}</span>}
@@ -214,6 +203,7 @@ export const MainInput: React.FC<MainInputProps> = ({
         {(type === "password" || type === "confirmPassword") && (
           <button
             type="button"
+            suppressHydrationWarning
             tabIndex={-1}
             onClick={() => setShowPassword((p) => !p)}
             className={`absolute ${locale === "en" ? "right-2" : "left-2"} top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700`}
