@@ -51,46 +51,96 @@ export const createFormSchema = (lang: Lang) => {
         : "العنوان يجب أن يكون 5 أحرف على الأقل",
   };
 
-  // ✅ Return all individual field schemas
   return {
-    name: z.string().min(1, t.required).min(4, t.nameMin).max(50, t.nameMax),
-    email: z.string().min(1, t.required).email(t.email),
-    phone: z
+    // Required versions
+    nameRequired: z
+      .string()
+      .min(1, t.required)
+      .min(4, t.nameMin)
+      .max(50, t.nameMax),
+    emailRequired: z.string().min(1, t.required).email(t.email),
+    phoneRequired: z
       .string()
       .min(1, t.required)
       .min(10, t.phoneShort)
       .max(15, t.phoneLong)
       .regex(/^\+?[0-9\s-]+$/, t.phoneInvalid),
-    password: z.string().min(1, t.required).min(8, t.passwordMin),
-    confirmPassword: z.string().min(1, t.required),
-    message: z
+    passwordRequired: z.string().min(1, t.required).min(8, t.passwordMin),
+    confirmPasswordRequired: z.string().min(1, t.required),
+    messageRequired: z
       .string()
       .min(1, t.required)
       .min(10, t.messageMin)
       .max(500, t.messageMax),
-    address: z.string().min(1, t.required).min(5, t.addressMin),
+    addressRequired: z.string().min(1, t.required).min(5, t.addressMin),
+
+    // Optional versions
+    name: z
+      .string()
+      .min(4, t.nameMin)
+      .max(50, t.nameMax)
+      .optional()
+      .or(z.literal("")),
+    email: z.string().email(t.email).optional().or(z.literal("")),
+    phone: z
+      .string()
+      .min(10, t.phoneShort)
+      .max(15, t.phoneLong)
+      .regex(/^\+?[0-9\s-]+$/, t.phoneInvalid)
+      .optional()
+      .or(z.literal("")),
+    password: z.string().min(8, t.passwordMin).optional().or(z.literal("")),
+    confirmPassword: z.string().optional().or(z.literal("")),
+    message: z
+      .string()
+      .min(10, t.messageMin)
+      .max(500, t.messageMax)
+      .optional()
+      .or(z.literal("")),
+    address: z.string().min(5, t.addressMin).optional().or(z.literal("")),
+
+    // ✅ New select field
+    selectRequired: z.string().min(1, t.required),
+    select: z.string().optional().or(z.literal("")),
+
     translations: t,
   };
 };
 
 // ✅ Helper function to pick only the fields you need
-export const pickFormFields = <T extends string[]>(lang: Lang, fields: T) => {
+export const pickFormFields = <T extends string[]>(
+  lang: Lang,
+  fields: { name: T[number]; required?: boolean }[],
+) => {
   const schemaFields = createFormSchema(lang);
 
   const picked = fields.reduce((acc, field) => {
-    if (schemaFields[field as keyof typeof schemaFields]) {
-      acc[field] = schemaFields[field as keyof typeof schemaFields];
+    const fieldName = field.name;
+    const isRequired = field.required ?? false;
+
+    let fieldSchema: any;
+
+    if (isRequired) {
+      fieldSchema =
+        schemaFields[`${fieldName}Required` as keyof typeof schemaFields];
+    } else {
+      fieldSchema = schemaFields[fieldName as keyof typeof schemaFields];
     }
+
+    if (fieldSchema) {
+      acc[fieldName] = fieldSchema;
+    }
+
     return acc;
   }, {} as any);
 
   const baseSchema = z.object(picked);
 
   // Add password confirmation validation if both password fields are included
-  if (
-    fields.includes("password" as T[number]) &&
-    fields.includes("confirmPassword" as T[number])
-  ) {
+  const hasPassword = fields.some((f) => f.name === "password");
+  const hasConfirmPassword = fields.some((f) => f.name === "confirmPassword");
+
+  if (hasPassword && hasConfirmPassword) {
     return baseSchema.refine(
       (data: any) => data.password === data.confirmPassword,
       {

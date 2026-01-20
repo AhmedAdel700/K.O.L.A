@@ -11,12 +11,12 @@ import { z } from "zod";
 export default function Demo() {
   const locale = useLocale();
 
-  // ✅ Pick only the fields you want - they will ALL be required
   const schema = pickFormFields(locale, [
-    "name",
-    "email",
-    "password",
-    "confirmPassword",
+    { name: "name", required: true },
+    { name: "email", required: true },
+    { name: "password", required: true },
+    { name: "confirmPassword", required: true },
+    { name: "select", required: true }, // ✅ added select
   ]);
 
   type FormData = z.infer<typeof schema>;
@@ -33,13 +33,14 @@ export default function Demo() {
       email: "",
       password: "",
       confirmPassword: "",
+      select: "", // ✅ default value for select
     },
   });
 
   const onSubmit = (data: FormData) => {
     console.log("Form submitted:", data);
     alert("Form submitted successfully! Check console for data.");
-    reset(); // ✅ Reset to empty values
+    reset();
   };
 
   return (
@@ -59,7 +60,9 @@ export default function Demo() {
             label={locale === "en" ? "Full Name" : "الاسم الكامل"}
             placeholder={locale === "en" ? "Enter your name" : "أدخل اسمك"}
             register={register}
+            outline={false}
             error={errors.name?.message}
+            required
           />
 
           <MainInput
@@ -71,7 +74,7 @@ export default function Demo() {
             }
             register={register}
             error={errors.email?.message}
-            fullWidth
+            required
           />
 
           <MainInput
@@ -83,7 +86,7 @@ export default function Demo() {
             }
             register={register}
             error={errors.password?.message}
-            fullWidth
+            required
           />
 
           <MainInput
@@ -95,24 +98,69 @@ export default function Demo() {
             }
             register={register}
             error={errors.confirmPassword?.message}
+            required
+          />
+
+          {/* ------------------ select field ------------------ */}
+          <MainInput
+            name="select"
+            type="select"
+            label={locale === "en" ? "Select Option" : "اختر خيارًا"}
+            placeholder={locale === "en" ? "Choose..." : "اختر..."}
+            register={register}
+            error={errors.select?.message}
+            required
+            fullWidth
+            options={[
+              {
+                value: "option1",
+                label: locale === "en" ? "Option 1" : "الخيار 1",
+              },
+              {
+                value: "option2",
+                label: locale === "en" ? "Option 2" : "الخيار 2",
+              },
+              {
+                value: "option3",
+                label: locale === "en" ? "Option 3" : "الخيار 3",
+              },
+            ]}
+          />
+
+          <MainInput
+            name="phone"
+            type="phone"
+            label={locale === "en" ? "Phone Number" : "رقم الهاتف"}
+            placeholder={
+              locale === "en" ? "+966 5 123 45678" : "+966 5 123 45678"
+            }
+            register={register}
+            error={errors.phone?.message}
+            required
             fullWidth
           />
 
-          <MainButton type="submit" variant={"solid"} intent={"submit"} size={"full"} className="col-span-2">Submit</MainButton>
+          <MainInput
+            name="message"
+            type="textarea"
+            label={locale === "en" ? "Message" : "الرسالة"}
+            placeholder={locale === "en" ? "Enter your message" : "أدخل رسالتك"}
+            register={register}
+            error={errors.message?.message}
+            required
+            fullWidth
+          />
+
+          <MainButton
+            type="submit"
+            variant={"solid"}
+            intent={"submit"}
+            size={"full"}
+            className="col-span-2"
+          >
+            Submit
+          </MainButton>
         </form>
-
-        <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-          <p className="text-sm text-gray-600 mb-2 font-semibold">
-            {locale === "en" ? "Usage Examples:" : "أمثلة الاستخدام:"}
-          </p>
-          <code className="text-xs block bg-white p-2 rounded border">
-            {`// Contact form
-const schema = pickFormFields(locale, ["name", "email", "message"]);
-
-// Profile form  
-const schema = pickFormFields(locale, ["name", "phone", "address"]);`}
-          </code>
-        </div>
       </div>
     </div>
   );
