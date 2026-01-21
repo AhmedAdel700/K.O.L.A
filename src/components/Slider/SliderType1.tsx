@@ -70,12 +70,12 @@ export default function SliderType1({ data }: SliderType1Props) {
       // Configuration per mode
       if (mode === 'mobile') {
         cardWidthRef.current = 140;
-        cardHeightRef.current = 210;
+        cardHeightRef.current = 180;
         gapRef.current = 20;
         numberSizeRef.current = 30;
         
         // Stack at bottom right
-        offsetTopRef.current = innerHeight - 240; 
+        offsetTopRef.current = innerHeight - 210; 
         offsetLeftRef.current = innerWidth - 160; 
       } 
       else if (mode === 'landscape') {
@@ -100,13 +100,25 @@ export default function SliderType1({ data }: SliderType1Props) {
       } 
       else {
         // Desktop
-        cardWidthRef.current = 200;
-        cardHeightRef.current = 300;
-        gapRef.current = 40;
-        numberSizeRef.current = 50;
-        
-        offsetTopRef.current = innerHeight - 430;
-        offsetLeftRef.current = innerWidth - 830;
+        if (innerWidth < 1536) {
+          // LG & XL (1024px - 1535px)
+          cardWidthRef.current = 160;
+          cardHeightRef.current = 240;
+          gapRef.current = 30;
+          numberSizeRef.current = 40;
+          
+          offsetTopRef.current = innerHeight - 380;
+          offsetLeftRef.current = innerWidth - 680;
+        } else {
+          // 2XL (1536px+)
+          cardWidthRef.current = 200;
+          cardHeightRef.current = 300;
+          gapRef.current = 40;
+          numberSizeRef.current = 50;
+          
+          offsetTopRef.current = innerHeight - 430;
+          offsetLeftRef.current = innerWidth - 830;
+        }
       }
   };
 
@@ -209,6 +221,9 @@ export default function SliderType1({ data }: SliderType1Props) {
       zIndex: 0
     });
     
+    // NEW: Hide active card content initially to prevent double text
+    gsap.set(cardContentsRef.current[active], { opacity: 0 });
+    
     // Details
     // Ensure hidden ones are hidden
     gsap.set(detailsEvenStateRef.current ? detailsOddRef.current : detailsEvenRef.current, { opacity: 0, zIndex: 12 });
@@ -234,8 +249,9 @@ export default function SliderType1({ data }: SliderType1Props) {
         gsap.set('#details-odd .cta', { y: 60 });
     }
 
+    const progressTotalWidth = (layoutMode === 'mobile' || layoutMode === 'landscape') ? 180 : (layoutMode === 'tablet' ? 220 : 500);
     gsap.set(progressRef.current, {
-      width: (isSmall ? 280 : 500) * (1 / orderRef.current.length) * (active + 1)
+      width: progressTotalWidth * (1 / orderRef.current.length) * (active + 1)
     });
 
     // Stack Cards
@@ -416,8 +432,9 @@ export default function SliderType1({ data }: SliderType1Props) {
       gsap.to(slideItemsRef.current[prv], { x: -ns, ease });
       
       const isSmall = layoutMode === 'mobile' || layoutMode === 'landscape';
+      const progressTotalWidth = isSmall ? 180 : (layoutMode === 'tablet' ? 220 : 500);
       gsap.to(progressRef.current, {
-        width: (isSmall ? 280 : 500) * (1 / newOrder.length) * (active + 1), ease
+        width: progressTotalWidth * (1 / newOrder.length) * (active + 1), ease
       });
 
       gsap.to(cardsRef.current[active], {
@@ -525,8 +542,9 @@ export default function SliderType1({ data }: SliderType1Props) {
             y: ot + ch - 10, opacity: 0, duration: 0.3, ease
         });
         
+        const progressTotalWidth = (layoutMode === 'mobile' || layoutMode === 'landscape') ? 180 : (layoutMode === 'tablet' ? 220 : 500);
         gsap.to(progressRef.current, {
-            width: (isSmall ? 280 : 500) * (1 / newOrder.length) * (active + 1), ease
+            width: progressTotalWidth * (1 / newOrder.length) * (active + 1), ease
         });
 
         gsap.set(slideItemsRef.current[active], { x: -ns });
@@ -569,19 +587,19 @@ export default function SliderType1({ data }: SliderType1Props) {
       {data.map((item, index) => (
         <React.Fragment key={index}>
           <div
-            ref={el => cardsRef.current[index] = el}
+            ref={el => { cardsRef.current[index] = el }}
             onClick={() => handleCardClick(order.indexOf(index))}
             className="absolute left-0 top-0 bg-center bg-cover shadow-[6px_6px_10px_2px_rgba(0,0,0,0.6)] cursor-pointer"
             style={{ backgroundImage: `url(${item.image})` }}
           />
           <div
-            ref={el => cardContentsRef.current[index] = el}
-            className="absolute left-0 top-0 text-[#FFFFFFDD] pl-4 pointer-events-none"
+            ref={el => { cardContentsRef.current[index] = el }}
+            className="absolute left-0 top-0 text-[#FFFFFFDD] ps-4 pointer-events-none"
           >
             <div className={`w-[30px] h-[5px] rounded-full bg-[#FFFFFFDD] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'hidden' : ''}`} />
-            <div className={`mt-1.5 font-medium ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[10px]' : 'text-[13px]'}`}>{item.place}</div>
-            <div className={`font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[14px]' : 'text-[20px]'}`}>{item.title}</div>
-            <div className={`font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[14px]' : 'text-[20px]'}`}>{item.title2}</div>
+            <div className={`mt-1.5 font-medium ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[8px]' : 'text-[13px]'}`}>{item.place}</div>
+            <div className={`font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[11px]' : 'text-[20px]'}`}>{item.title}</div>
+            <div className={`font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[11px]' : 'text-[20px]'}`}>{item.title2}</div>
           </div>
         </React.Fragment>
       ))}
@@ -597,13 +615,13 @@ export default function SliderType1({ data }: SliderType1Props) {
             {data[textIndices.even].place}
           </div>
         </div>
-        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[60px]' : 'h-[100px]'}`}>
-          <div className={`title-1 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[42px]' : 'text-[72px]'}`}>{data[textIndices.even].title}</div>
+        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[45px]' : 'h-[100px]'}`}>
+          <div className={`title-1 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[32px]' : 'text-[72px]'}`}>{data[textIndices.even].title}</div>
         </div>
-        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[60px]' : 'h-[100px]'}`}>
-          <div className={`title-2 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[42px]' : 'text-[72px]'}`}>{data[textIndices.even].title2}</div>
+        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[45px]' : 'h-[100px]'}`}>
+          <div className={`title-2 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[32px]' : 'text-[72px]'}`}>{data[textIndices.even].title2}</div>
         </div>
-        <div className={`desc mt-4 ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[300px] text-sm' : 'w-[500px]'}`}>{data[textIndices.even].description}</div>
+        <div className={`desc mt-4 ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[300px] text-xs' : 'w-[500px]'}`}>{data[textIndices.even].description}</div>
         <div className={`cta mt-6 flex items-center ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[300px]' : 'w-[500px]'}`}>
           <button className="bookmark border-none bg-[#ecad29] w-9 h-9 rounded-full text-white grid place-items-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -627,13 +645,13 @@ export default function SliderType1({ data }: SliderType1Props) {
             {data[textIndices.odd].place}
           </div>
         </div>
-        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[60px]' : 'h-[100px]'}`}>
-          <div className={`title-1 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[42px]' : 'text-[72px]'}`}>{data[textIndices.odd].title}</div>
+        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[45px]' : 'h-[100px]'}`}>
+          <div className={`title-1 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[32px]' : 'text-[72px]'}`}>{data[textIndices.odd].title}</div>
         </div>
-        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[60px]' : 'h-[100px]'}`}>
-          <div className={`title-2 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[42px]' : 'text-[72px]'}`}>{data[textIndices.odd].title2}</div>
+        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[45px]' : 'h-[100px]'}`}>
+          <div className={`title-2 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[32px]' : 'text-[72px]'}`}>{data[textIndices.odd].title2}</div>
         </div>
-        <div className={`desc mt-4 ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[300px] text-sm' : 'w-[500px]'}`}>{data[textIndices.odd].description}</div>
+        <div className={`desc mt-4 ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[300px] text-xs' : 'w-[500px]'}`}>{data[textIndices.odd].description}</div>
         <div className={`cta mt-6 flex items-center ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[300px]' : 'w-[500px]'}`}>
           <button className="bookmark border-none bg-[#ecad29] w-9 h-9 rounded-full text-white grid place-items-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -646,34 +664,34 @@ export default function SliderType1({ data }: SliderType1Props) {
         </div>
       </div>
 
-      <div ref={paginationRef} className={`absolute inline-flex ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? '' : 'left-0 top-0'}`}>
+      <div ref={paginationRef} className={`absolute inline-flex items-center ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'hidden' : 'left-0 top-0'}`}>
         <div 
             onClick={handlePrevStep}
-            className={`arrow-left z-[60] w-[50px] h-[50px] rounded-full border-2 border-[#ffffff55] grid place-items-center cursor-pointer hover:bg-[#ffffff22] transition-colors`}
+            className={`arrow-left z-[60] rounded-full border-2 border-[#ffffff55] grid place-items-center cursor-pointer hover:bg-[#ffffff22] transition-colors ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[35px] h-[35px]' : (layoutMode === 'tablet' ? 'w-[40px] h-[40px]' : 'w-[50px] h-[50px]')}`}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6 stroke-[2] text-[#ffffff99]">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`stroke-[2] text-[#ffffff99] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-4 h-4' : (layoutMode === 'tablet' ? 'w-5 h-5' : 'w-6 h-6')}`}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
           </svg>
         </div>
         <div 
             onClick={() => handleNextStep(false)}
-            className="arrow-right ml-5 z-[60] w-[50px] h-[50px] rounded-full border-2 border-[#ffffff55] grid place-items-center cursor-pointer hover:bg-[#ffffff22] transition-colors"
+            className={`arrow-right z-[60] rounded-full border-2 border-[#ffffff55] grid place-items-center cursor-pointer hover:bg-[#ffffff22] transition-colors ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[35px] h-[35px] ms-3' : (layoutMode === 'tablet' ? 'w-[40px] h-[40px] ms-4' : 'w-[50px] h-[50px] ms-5')}`}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6 stroke-[2] text-[#ffffff99]">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`stroke-[2] text-[#ffffff99] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-4 h-4' : (layoutMode === 'tablet' ? 'w-5 h-5' : 'w-6 h-6')}`}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
           </svg>
         </div>
-        <div className={`ml-6 z-[60] h-[50px] flex items-center ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[280px]' : 'w-[500px]'}`}>
-          <div className={`${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[280px]' : 'w-[500px]'} h-[3px] bg-[#ffffff33]`}>
+        <div className={`z-[60] h-[50px] flex items-center ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[180px] ms-4' : (layoutMode === 'tablet' ? 'w-[220px] ms-5' : 'w-[500px] ms-6')}`}>
+          <div className={`${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[180px]' : (layoutMode === 'tablet' ? 'w-[220px]' : 'w-[500px]')} h-[3px] bg-[#ffffff33]`}>
             <div ref={progressRef} className="h-[3px] bg-[#ecad29]" />
           </div>
         </div>
-        <div className={`w-[50px] h-[50px] overflow-hidden z-[60] relative ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'hidden' : ''}`}> 
+        <div className={`overflow-hidden z-[60] relative ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[35px] h-[35px] ms-2' : (layoutMode === 'tablet' ? 'w-[40px] h-[40px] ms-2' : 'w-[50px] h-[50px]')}`}> 
           {data.map((_, index) => (
             <div
               key={index}
-              ref={el => slideItemsRef.current[index] = el}
-              className="w-[50px] h-[50px] absolute text-white top-0 left-0 grid place-items-center text-[32px] font-bold"
+              ref={el => { slideItemsRef.current[index] = el }}
+              className={`absolute text-white top-0 left-0 grid place-items-center font-bold ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[35px] h-[35px] text-[20px] ms-[-3.5px]' : (layoutMode === 'tablet' ? 'w-[40px] h-[40px] text-[24px] ms-[-4px]' : 'w-[50px] h-[50px] text-[32px] ms-[-5px]')}`}
             >
               {index + 1}
             </div>
