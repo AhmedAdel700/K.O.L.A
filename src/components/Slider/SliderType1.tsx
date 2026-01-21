@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { useLocale } from 'next-intl';
 
 export interface SliderItem {
     place: string;
@@ -22,6 +23,8 @@ export default function SliderType1({ data }: SliderType1Props) {
   
   // Responsive State flags for class switching if needed
   const [layoutMode, setLayoutMode] = useState<'desktop' | 'tablet' | 'mobile' | 'landscape'>('desktop');
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
 
   const orderRef = useRef([0, 1, 2, 3, 4, 5]);
   const detailsEvenStateRef = useRef(true);
@@ -231,7 +234,7 @@ export default function SliderType1({ data }: SliderType1Props) {
     gsap.set(detailsActive, { 
         opacity: isIntro ? 0 : 1, 
         zIndex: 22, 
-        x: isIntro ? -200 : 0 
+        x: isIntro ? (isRTL ? 200 : -200) : 0 
     });
 
     // Reset Elements internal positions
@@ -257,10 +260,11 @@ export default function SliderType1({ data }: SliderType1Props) {
     // Stack Cards
     rest.forEach((i, index) => {
       // If intro, start offset and animate in. If not intro (resize), just set.
-      const xTarget = ol + index * (cw + gp);
+      const stackOffset = isRTL ? (window.innerWidth - ol - cw - index * (cw + gp)) : (ol + index * (cw + gp));
+      const xTarget = stackOffset;
       
       gsap.set(cardsRef.current[i], {
-        x: isIntro ? ol + 400 + index * (cw + gp) : xTarget,
+        x: isIntro ? (isRTL ? stackOffset - 400 : ol + 400 + index * (cw + gp)) : xTarget,
         y: ot,
         width: cw,
         height: ch,
@@ -268,7 +272,7 @@ export default function SliderType1({ data }: SliderType1Props) {
         borderRadius: 10
       });
       gsap.set(cardContentsRef.current[i], {
-        x: isIntro ? ol + 400 + index * (cw + gp) : xTarget,
+        x: isIntro ? (isRTL ? stackOffset - 400 : ol + 400 + index * (cw + gp)) : xTarget,
         zIndex: 40,
         y: ot + ch - (isSmall ? 60 : 100),
         opacity: isIntro ? 0 : 1
@@ -292,14 +296,15 @@ export default function SliderType1({ data }: SliderType1Props) {
         });
     
         rest.forEach((i, index) => {
+          const stackOffset = isRTL ? (window.innerWidth - ol - cw - index * (cw + gp)) : (ol + index * (cw + gp));
           gsap.to(cardsRef.current[i], {
-            x: ol + index * (cw + gp),
+            x: stackOffset,
             zIndex: 30,
             delay: startDelay + 0.05 * index,
             ease
           });
           gsap.to(cardContentsRef.current[i], {
-            x: ol + index * (cw + gp),
+            x: stackOffset,
             zIndex: 40,
             delay: startDelay + 0.05 * index,
             opacity: 1,
@@ -440,7 +445,7 @@ export default function SliderType1({ data }: SliderType1Props) {
       gsap.to(cardsRef.current[active], {
         x: 0, y: 0, ease, width: window.innerWidth, height: window.innerHeight, borderRadius: 0,
         onComplete: () => {
-          const xNew = ol + (rest.length - 1) * (cw + gp);
+          const xNew = isRTL ? (window.innerWidth - ol - cw - (rest.length - 1) * (cw + gp)) : (ol + (rest.length - 1) * (cw + gp));
           gsap.set(cardsRef.current[prv], {
             x: xNew, y: ot, width: cw, height: ch, zIndex: 30, borderRadius: 10, scale: 1
           });
@@ -462,13 +467,13 @@ export default function SliderType1({ data }: SliderType1Props) {
 
       rest.forEach((i, index) => {
         if (i !== prv) {
-          const xNew = ol + index * (cw + gp);
+          const stackOffset = isRTL ? (window.innerWidth - ol - cw - index * (cw + gp)) : (ol + index * (cw + gp));
           gsap.set(cardsRef.current[i], { zIndex: 30 });
           gsap.to(cardsRef.current[i], {
-            x: xNew, y: ot, width: cw, height: ch, ease, delay: 0.1 * (index + 1)
+            x: stackOffset, y: ot, width: cw, height: ch, ease, delay: 0.1 * (index + 1)
           });
           gsap.to(cardContentsRef.current[i], {
-            x: xNew, y: ot + ch - (isSmall ? 60 : 100), opacity: 1, zIndex: 40, ease, delay: 0.1 * (index + 1)
+            x: stackOffset, y: ot + ch - (isSmall ? 60 : 100), opacity: 1, zIndex: 40, ease, delay: 0.1 * (index + 1)
           });
           gsap.to(slideItemsRef.current[i], { x: (index + 1) * ns, ease });
         }
@@ -527,11 +532,12 @@ export default function SliderType1({ data }: SliderType1Props) {
         const rest = newOrder.slice(1);
         
         gsap.set(cardsRef.current[oldActive], { zIndex: 30 });
+        const firstStackOffset = isRTL ? (window.innerWidth - ol - cw) : ol;
         gsap.to(cardsRef.current[oldActive], {
-            x: ol, y: ot, width: cw, height: ch, borderRadius: 10, ease
+            x: firstStackOffset, y: ot, width: cw, height: ch, borderRadius: 10, ease
         });
         gsap.to(cardContentsRef.current[oldActive], {
-            x: ol, y: ot + ch - (isSmall ? 60 : 100), opacity: 1, zIndex: 40, ease
+            x: firstStackOffset, y: ot + ch - (isSmall ? 60 : 100), opacity: 1, zIndex: 40, ease
         });
         
         gsap.set(cardsRef.current[active], { zIndex: 20 });
@@ -553,12 +559,12 @@ export default function SliderType1({ data }: SliderType1Props) {
         rest.forEach((i, index) => {
              gsap.to(slideItemsRef.current[i], { x: (index + 1) * ns, ease });
              if (i !== oldActive) {
-                 const xNew = ol + index * (cw + gp);
+                 const stackOffset = isRTL ? (window.innerWidth - ol - cw - index * (cw + gp)) : (ol + index * (cw + gp));
                  gsap.to(cardsRef.current[i], {
-                    x: xNew, y: ot, width: cw, height: ch, ease
+                    x: stackOffset, y: ot, width: cw, height: ch, ease
                  });
                  gsap.to(cardContentsRef.current[i], {
-                    x: xNew, y: ot + ch - (isSmall ? 60 : 100), opacity: 1, zIndex: 40, ease
+                    x: stackOffset, y: ot + ch - (isSmall ? 60 : 100), opacity: 1, zIndex: 40, ease
                  });
              }
         });
@@ -608,7 +614,7 @@ export default function SliderType1({ data }: SliderType1Props) {
       <div 
         ref={detailsEvenRef} 
         id="details-even" 
-        className={`z-[22] absolute ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'top-[80px] left-[20px]' : 'top-[240px] left-[60px]'}`}
+        className={`z-[22] absolute ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'top-[80px]' : 'top-[240px]'} ${isRTL ? ((layoutMode === 'mobile' || layoutMode === 'landscape') ? 'right-[20px]' : 'right-[60px]') : ((layoutMode === 'mobile' || layoutMode === 'landscape') ? 'left-[20px]' : 'left-[60px]')}`}
       >
         <div className="h-[46px] overflow-hidden">
           <div className="text pt-4 text-[20px] relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-[30px] before:h-1 before:rounded-full before:bg-white">
@@ -638,7 +644,7 @@ export default function SliderType1({ data }: SliderType1Props) {
       <div 
         ref={detailsOddRef} 
         id="details-odd" 
-        className={`z-[22] absolute ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'top-[80px] left-[20px]' : 'top-[240px] left-[60px]'}`}
+        className={`z-[22] absolute ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'top-[80px]' : 'top-[240px]'} ${isRTL ? ((layoutMode === 'mobile' || layoutMode === 'landscape') ? 'right-[20px]' : 'right-[60px]') : ((layoutMode === 'mobile' || layoutMode === 'landscape') ? 'left-[20px]' : 'left-[60px]')}`}
       >
         <div className="h-[46px] overflow-hidden">
           <div className="text pt-4 text-[20px] relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-[30px] before:h-1 before:rounded-full before:bg-white">
