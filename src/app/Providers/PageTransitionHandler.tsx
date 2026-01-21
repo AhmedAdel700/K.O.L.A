@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { usePathname } from "@/navigations";
+import { usePathname } from "@/i18n/navigation";
 import { usePageTransition } from "@/app/Providers/PageTransitionContext";
 import {
   playEnterAnimation,

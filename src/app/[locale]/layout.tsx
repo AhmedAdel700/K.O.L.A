@@ -9,6 +9,7 @@ import "@/styles/globals.css";
 import { PageTransitionProvider } from "../Providers/PageTransitionContext";
 import PageTransitionHandler from "@/app/Providers/PageTransitionHandler";
 import { Toaster } from "sonner";
+import Header from "@/components/Header/Header";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
@@ -42,7 +43,10 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages} locale={locale}>
           <PageTransitionProvider>
             <PageTransitionHandler />
-            <SmoothScrollProvider>{children}</SmoothScrollProvider>
+            <SmoothScrollProvider>
+              <Header type="popup" />
+              {children}
+            </SmoothScrollProvider>
             <Toaster position="top-center" />
           </PageTransitionProvider>
         </NextIntlClientProvider>

@@ -2,7 +2,7 @@
 
 import { usePageTransition } from "@/app/Providers/PageTransitionContext";
 import { playExitAnimation, type TransitionType, setActiveTransitionType, getTransitionType, getExitState, getEnterInitialState } from "@/lib/routeTransition";
-import { Link, useRouter } from "@/navigations";
+import { Link, useRouter } from "@/i18n/navigation";
 import { ReactNode, MouseEvent, ComponentProps } from "react";
 import gsap from "gsap";
 
