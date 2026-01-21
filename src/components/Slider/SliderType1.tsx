@@ -3,57 +3,26 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
-const data = [
-  {
-    place: 'Switzerland Alps',
-    title: 'SAINT',
-    title2: 'ANTONIEN',
-    description: 'Tucked away in the Switzerland Alps, Saint Antönien offers an idyllic retreat for those seeking tranquility and adventure alike. It\'s a hidden gem for backcountry skiing in winter and boasts lush trails for hiking and mountain biking during the warmer months.',
-    image: 'https://assets.codepen.io/3685267/timed-cards-1.jpg'
-  },
-  {
-    place: 'Japan Alps',
-    title: 'NANGANO',
-    title2: 'PREFECTURE',
-    description: 'Nagano Prefecture, set within the majestic Japan Alps, is a cultural treasure trove with its historic shrines and temples, particularly the famous Zenkō-ji. The region is also a hotspot for skiing and snowboarding, offering some of the country\'s best powder.',
-    image: 'https://assets.codepen.io/3685267/timed-cards-2.jpg'
-  },
-  {
-    place: 'Sahara Desert - Morocco',
-    title: 'MARRAKECH',
-    title2: 'MEROUGA',
-    description: 'The journey from the vibrant souks and palaces of Marrakech to the tranquil, starlit sands of Merzouga showcases the diverse splendor of Morocco. Camel treks and desert camps offer an unforgettable immersion into the nomadic way of life.',
-    image: 'https://assets.codepen.io/3685267/timed-cards-3.jpg'
-  },
-  {
-    place: 'Sierra Nevada - USA',
-    title: 'YOSEMITE',
-    title2: 'NATIONAL PARK',
-    description: 'Yosemite National Park is a showcase of the American wilderness, revered for its towering granite monoliths, ancient giant sequoias, and thundering waterfalls. The park offers year-round recreational activities, from rock climbing to serene valley walks.',
-    image: 'https://assets.codepen.io/3685267/timed-cards-4.jpg'
-  },
-  {
-    place: 'Tarifa - Spain',
-    title: 'LOS LANCES',
-    title2: 'BEACH',
-    description: 'Los Lances Beach in Tarifa is a coastal paradise known for its consistent winds, making it a world-renowned spot for kitesurfing and windsurfing. The beach\'s long, sandy shores provide ample space for relaxation and sunbathing, with a vibrant atmosphere of beach bars and cafes.',
-    image: 'https://assets.codepen.io/3685267/timed-cards-5.jpg'
-  },
-  {
-    place: 'Cappadocia - Turkey',
-    title: 'Göreme',
-    title2: 'Valley',
-    description: 'Göreme Valley in Cappadocia is a historical marvel set against a unique geological backdrop, where centuries of wind and water have sculpted the landscape into whimsical formations. The valley is also famous for its open-air museums, underground cities, and the enchanting experience of hot air ballooning.',
-    image: 'https://assets.codepen.io/3685267/timed-cards-6.jpg'
-  }
-];
+export interface SliderItem {
+    place: string;
+    title: string;
+    title2: string;
+    description: string;
+    image: string;
+}
 
-export default function SliderType1() {
-  const [order, setOrder] = useState([0, 1, 2, 3, 4, 5]);
+interface SliderType1Props {
+    data: SliderItem[];
+}
+
+export default function SliderType1({ data }: SliderType1Props) {
+  const [order, setOrder] = useState<number[]>([0, 1, 2, 3, 4, 5]);
   const [detailsEven, setDetailsEven] = useState(true);
-  // Separate indices to handle cross-fade without content flash
   const [textIndices, setTextIndices] = useState({ even: 0, odd: 1 });
   
+  // Responsive State flags for class switching if needed
+  const [layoutMode, setLayoutMode] = useState<'desktop' | 'tablet' | 'mobile' | 'landscape'>('desktop');
+
   const orderRef = useRef([0, 1, 2, 3, 4, 5]);
   const detailsEvenStateRef = useRef(true);
 
@@ -64,23 +33,99 @@ export default function SliderType1() {
   const detailsOddRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
-  const navRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const coverRef = useRef<HTMLDivElement>(null);
   
   const isAnimatingRef = useRef(false);
   const autoPlayRef = useRef(true);
+  const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
   const actionQueueRef = useRef<('next' | 'prev')[]>([]);
 
+  // Layout Refs (Mutable based on resize)
   const offsetTopRef = useRef(200);
   const offsetLeftRef = useRef(700);
-  const cardWidth = 200;
-  const cardHeight = 300;
-  const gap = 40;
-  const numberSize = 50;
+  const cardWidthRef = useRef(200);
+  const cardHeightRef = useRef(300);
+  const gapRef = useRef(40);
+  const numberSizeRef = useRef(50);
   const ease = "sine.inOut";
 
+  // Initialize Layout based on Screen Size
+  const updateLayout = () => {
+      if (typeof window === 'undefined') return;
+      const { innerWidth, innerHeight } = window;
+      
+      // Determine Mode
+      let mode: 'desktop' | 'tablet' | 'mobile' | 'landscape' = 'desktop';
+      
+      if (innerWidth < 768) {
+          if (innerHeight < 500) mode = 'landscape';
+          else mode = 'mobile';
+      } else if (innerWidth < 1024) {
+          mode = 'tablet';
+      }
+
+      setLayoutMode(mode);
+
+      // Configuration per mode
+      if (mode === 'mobile') {
+        cardWidthRef.current = 140;
+        cardHeightRef.current = 210;
+        gapRef.current = 20;
+        numberSizeRef.current = 30;
+        
+        // Stack at bottom right
+        offsetTopRef.current = innerHeight - 240; 
+        offsetLeftRef.current = innerWidth - 160; 
+      } 
+      else if (mode === 'landscape') {
+        // Mobile Landscape (short height)
+        cardWidthRef.current = 100;
+        cardHeightRef.current = 150;
+        gapRef.current = 15;
+        numberSizeRef.current = 25;
+        
+        // Stack at bottom right
+        offsetTopRef.current = innerHeight - 170;
+        offsetLeftRef.current = innerWidth - 120;
+      }
+      else if (mode === 'tablet') {
+        cardWidthRef.current = 160;
+        cardHeightRef.current = 240;
+        gapRef.current = 30;
+        numberSizeRef.current = 40;
+        
+        offsetTopRef.current = innerHeight - 350;
+        offsetLeftRef.current = innerWidth - 600; // Adjusted for tablet
+      } 
+      else {
+        // Desktop
+        cardWidthRef.current = 200;
+        cardHeightRef.current = 300;
+        gapRef.current = 40;
+        numberSizeRef.current = 50;
+        
+        offsetTopRef.current = innerHeight - 430;
+        offsetLeftRef.current = innerWidth - 830;
+      }
+  };
+
   useEffect(() => {
+    updateLayout();
+    
+    // Resize Listener
+    const handleResize = () => {
+        updateLayout();
+        // Force re-init layout positions without full reload animation if possible
+        // But for consistency let's re-run init logic to snap to new positions
+        // We only want to snap the stack, not restart the big intro animation.
+        // However, `init` does an intro animation.
+        // Let's create a `snapLayout` function or just re-run init which is acceptable for resize.
+        init(false); // Pass false to skip intro delays
+    };
+
+    window.addEventListener('resize', handleResize);
+
     const loadImages = async () => {
       const promises = data.map(({ image }) => {
         return new Promise((resolve, reject) => {
@@ -91,121 +136,172 @@ export default function SliderType1() {
         });
       });
       await Promise.all(promises);
-      init();
+      init(true); // True for intro
     };
     loadImages();
     
     // Auto-loop logic
     const loop = async () => {
         if (!autoPlayRef.current) return;
-        
-        // Use a longer duration tween for the indicator as a timer
         await gsap.to(indicatorRef.current, { x: 0, duration: 3, ease: 'linear' });
         
         if (autoPlayRef.current) {
-             // Animate out indicator
             await gsap.to(indicatorRef.current, { x: window.innerWidth, duration: 0.8, ease });
             gsap.set(indicatorRef.current, { x: -window.innerWidth });
-            
-            // Trigger step if still auto-playing
             handleNextStep(true);
         } else {
              gsap.set(indicatorRef.current, { x: -window.innerWidth });
         }
     };
     
+    return () => {
+        window.removeEventListener('resize', handleResize);
+        if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+    };
   }, []);
 
-  const init = () => {
-    const { innerHeight: height, innerWidth: width } = window;
-    offsetTopRef.current = height - 430;
-    offsetLeftRef.current = width - 830;
+  const restartAutoLoop = () => {
+      if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+      gsap.killTweensOf(indicatorRef.current);
+      gsap.set(indicatorRef.current, { x: -window.innerWidth });
+
+      autoPlayTimerRef.current = setTimeout(() => {
+          autoPlayRef.current = true;
+          startAutoLoop();
+      }, 4000); 
+  };
+
+  const init = (isIntro = false) => {
+    if (typeof window === 'undefined') return;
+    updateLayout(); 
 
     const active = orderRef.current[0];
     const rest = orderRef.current.slice(1);
     const detailsActive = detailsEvenStateRef.current ? detailsEvenRef.current : detailsOddRef.current;
-    const detailsInactive = detailsEvenStateRef.current ? detailsOddRef.current : detailsEvenRef.current;
+    
+    const cw = cardWidthRef.current;
+    const ch = cardHeightRef.current;
+    const gp = gapRef.current;
+    const ns = numberSizeRef.current;
+    const ot = offsetTopRef.current;
+    const ol = offsetLeftRef.current;
 
-    // Initial Text Data Setup
     setTextIndices({ even: active, odd: rest[0] });
 
+    // Pagination Position
+    // For mobile/landscape we might change this
+    const isSmall = layoutMode === 'mobile' || layoutMode === 'landscape';
     gsap.set(paginationRef.current, {
-      top: offsetTopRef.current + 330,
-      left: offsetLeftRef.current,
-      y: 200,
-      opacity: 0,
+      top: isSmall ? 'unset' : ot + ch + 30, // Position below cards on desktop
+      bottom: isSmall ? 20 : 'unset',
+      left: isSmall ? 20 : ol,
+      y: isIntro ? 200 : 0,
+      opacity: isIntro ? 0 : 1,
       zIndex: 60
     });
-    gsap.set(navRef.current, { y: -200, opacity: 0 });
+
+    // Active Card Full Screen
     gsap.set(cardsRef.current[active], {
       x: 0,
       y: 0,
       width: window.innerWidth,
-      height: window.innerHeight
+      height: window.innerHeight,
+      zIndex: 0
     });
-    gsap.set(cardContentsRef.current[active], { x: 0, y: 0, opacity: 0 });
-    gsap.set(detailsActive, { opacity: 0, zIndex: 22, x: -200 });
-    gsap.set(detailsInactive, { opacity: 0, zIndex: 12 });
-    gsap.set(`#${detailsEvenStateRef.current ? 'details-odd' : 'details-even'} .text`, { y: 100 });
-    gsap.set(`#${detailsEvenStateRef.current ? 'details-odd' : 'details-even'} .title-1`, { y: 100 });
-    gsap.set(`#${detailsEvenStateRef.current ? 'details-odd' : 'details-even'} .title-2`, { y: 100 });
-    gsap.set(`#${detailsEvenStateRef.current ? 'details-odd' : 'details-even'} .desc`, { y: 50 });
-    gsap.set(`#${detailsEvenStateRef.current ? 'details-odd' : 'details-even'} .cta`, { y: 60 });
+    
+    // Details
+    // Ensure hidden ones are hidden
+    gsap.set(detailsEvenStateRef.current ? detailsOddRef.current : detailsEvenRef.current, { opacity: 0, zIndex: 12 });
+    // Active Detail
+    gsap.set(detailsActive, { 
+        opacity: isIntro ? 0 : 1, 
+        zIndex: 22, 
+        x: isIntro ? -200 : 0 
+    });
+
+    // Reset Elements internal positions
+    if (isIntro) {
+        gsap.set('#details-even .text', { y: 100 });
+        gsap.set('#details-even .title-1', { y: 100 });
+        gsap.set('#details-even .title-2', { y: 100 });
+        gsap.set('#details-even .desc', { y: 50 });
+        gsap.set('#details-even .cta', { y: 60 });
+        
+        gsap.set('#details-odd .text', { y: 100 });
+        gsap.set('#details-odd .title-1', { y: 100 });
+        gsap.set('#details-odd .title-2', { y: 100 });
+        gsap.set('#details-odd .desc', { y: 50 });
+        gsap.set('#details-odd .cta', { y: 60 });
+    }
 
     gsap.set(progressRef.current, {
-      width: 500 * (1 / orderRef.current.length) * (active + 1)
+      width: (isSmall ? 280 : 500) * (1 / orderRef.current.length) * (active + 1)
     });
 
+    // Stack Cards
     rest.forEach((i, index) => {
+      // If intro, start offset and animate in. If not intro (resize), just set.
+      const xTarget = ol + index * (cw + gp);
+      
       gsap.set(cardsRef.current[i], {
-        x: offsetLeftRef.current + 400 + index * (cardWidth + gap),
-        y: offsetTopRef.current,
-        width: cardWidth,
-        height: cardHeight,
+        x: isIntro ? ol + 400 + index * (cw + gp) : xTarget,
+        y: ot,
+        width: cw,
+        height: ch,
         zIndex: 30,
         borderRadius: 10
       });
       gsap.set(cardContentsRef.current[i], {
-        x: offsetLeftRef.current + 400 + index * (cardWidth + gap),
+        x: isIntro ? ol + 400 + index * (cw + gp) : xTarget,
         zIndex: 40,
-        y: offsetTopRef.current + cardHeight - 100
+        y: ot + ch - (isSmall ? 60 : 100),
+        opacity: isIntro ? 0 : 1
       });
-      gsap.set(slideItemsRef.current[i], { x: (index + 1) * numberSize });
+      gsap.set(slideItemsRef.current[i], { x: (index + 1) * ns });
     });
 
-    gsap.set(indicatorRef.current, { x: -window.innerWidth });
-
-    const startDelay = 0.6;
-
-    gsap.to(coverRef.current, {
-      x: width + 400,
-      delay: 0.5,
-      ease,
-      onComplete: () => {
-        setTimeout(() => {
-          startAutoLoop();
-        }, 500);
-      }
-    });
-
-    rest.forEach((i, index) => {
-      gsap.to(cardsRef.current[i], {
-        x: offsetLeftRef.current + index * (cardWidth + gap),
-        zIndex: 30,
-        delay: startDelay + 0.05 * index,
-        ease
-      });
-      gsap.to(cardContentsRef.current[i], {
-        x: offsetLeftRef.current + index * (cardWidth + gap),
-        zIndex: 40,
-        delay: startDelay + 0.05 * index,
-        ease
-      });
-    });
-
-    gsap.to(paginationRef.current, { y: 0, opacity: 1, ease, delay: startDelay });
-    gsap.to(navRef.current, { y: 0, opacity: 1, ease, delay: startDelay });
-    gsap.to(detailsActive, { opacity: 1, x: 0, ease, delay: startDelay });
+    if (isIntro) {
+        gsap.set(indicatorRef.current, { x: -window.innerWidth });
+        const startDelay = 0.6;
+    
+        gsap.to(coverRef.current, {
+          x: window.innerWidth + 400,
+          delay: 0.5,
+          ease,
+          onComplete: () => {
+            setTimeout(() => {
+              startAutoLoop();
+            }, 500);
+          }
+        });
+    
+        rest.forEach((i, index) => {
+          gsap.to(cardsRef.current[i], {
+            x: ol + index * (cw + gp),
+            zIndex: 30,
+            delay: startDelay + 0.05 * index,
+            ease
+          });
+          gsap.to(cardContentsRef.current[i], {
+            x: ol + index * (cw + gp),
+            zIndex: 40,
+            delay: startDelay + 0.05 * index,
+            opacity: 1,
+            ease
+          });
+        });
+    
+        gsap.to(paginationRef.current, { y: 0, opacity: 1, ease, delay: startDelay });
+        gsap.to(detailsActive, { opacity: 1, x: 0, ease, delay: startDelay });
+        
+        // Animate text elements in for the first slide
+        const detailsActiveId = detailsEvenStateRef.current ? 'details-even' : 'details-odd';
+        gsap.to(`#${detailsActiveId} .text`, { y: 0, delay: startDelay + 0.1, duration: 0.7, ease });
+        gsap.to(`#${detailsActiveId} .title-1`, { y: 0, delay: startDelay + 0.15, duration: 0.7, ease });
+        gsap.to(`#${detailsActiveId} .title-2`, { y: 0, delay: startDelay + 0.15, duration: 0.7, ease });
+        gsap.to(`#${detailsActiveId} .desc`, { y: 0, delay: startDelay + 0.3, duration: 0.4, ease });
+        gsap.to(`#${detailsActiveId} .cta`, { y: 0, delay: startDelay + 0.35, duration: 0.4, ease });
+    }
   };
 
   const startAutoLoop = async () => {
@@ -228,12 +324,8 @@ export default function SliderType1() {
       if (!action) return;
 
       isAnimatingRef.current = true;
-      
-      if (action === 'next') {
-          await stepForward();
-      } else if (action === 'prev') {
-          await stepBack();
-      }
+      if (action === 'next') await stepForward();
+      else if (action === 'prev') await stepBack();
       
       isAnimatingRef.current = false;
       processQueue();
@@ -242,9 +334,7 @@ export default function SliderType1() {
   const handleNextStep = (isAuto = false) => {
       if (!isAuto) {
           autoPlayRef.current = false;
-          // Kill indicator tween if active
-          gsap.killTweensOf(indicatorRef.current);
-          gsap.set(indicatorRef.current, { x: -window.innerWidth });
+          restartAutoLoop();
       }
       actionQueueRef.current.push('next');
       processQueue();
@@ -252,9 +342,7 @@ export default function SliderType1() {
 
   const handlePrevStep = () => {
       autoPlayRef.current = false;
-      gsap.killTweensOf(indicatorRef.current);
-      gsap.set(indicatorRef.current, { x: -window.innerWidth });
-      
+      restartAutoLoop();
       actionQueueRef.current.push('prev');
       processQueue();
   };
@@ -262,10 +350,7 @@ export default function SliderType1() {
   const handleCardClick = (indexInOrder: number) => {
       if (indexInOrder === 0) return; // Active
       autoPlayRef.current = false;
-      gsap.killTweensOf(indicatorRef.current);
-      gsap.set(indicatorRef.current, { x: -window.innerWidth });
-
-      // Queue multiple next steps
+      restartAutoLoop();
       for (let i = 0; i < indexInOrder; i++) {
         actionQueueRef.current.push('next');
       }
@@ -278,15 +363,11 @@ export default function SliderType1() {
       const newOrder = [...currentOrder.slice(1), currentOrder[0]];
       const newDetailsEven = !detailsEvenStateRef.current;
       
-      // Update Refs
       orderRef.current = newOrder;
       detailsEvenStateRef.current = newDetailsEven;
-
-      // Sync State for React Render
       setOrder(newOrder);
       setDetailsEven(newDetailsEven);
       
-      // Update Text Indices BEFORE animation
       setTextIndices(prev => ({
           ...prev,
           even: newDetailsEven ? newOrder[0] : prev.even,
@@ -296,7 +377,13 @@ export default function SliderType1() {
       const detailsActive = newDetailsEven ? detailsEvenRef.current : detailsOddRef.current;
       const detailsInactive = newDetailsEven ? detailsOddRef.current : detailsEvenRef.current;
       const detailsActiveId = newDetailsEven ? 'details-even' : 'details-odd';
-      const detailsInactiveId = newDetailsEven ? 'details-odd' : 'details-even';
+      
+      const cw = cardWidthRef.current;
+      const ch = cardHeightRef.current;
+      const gp = gapRef.current;
+      const ns = numberSizeRef.current;
+      const ot = offsetTopRef.current;
+      const ol = offsetLeftRef.current;
 
       gsap.set(detailsActive, { zIndex: 22 });
       gsap.to(detailsActive, { opacity: 1, delay: 0.4, ease });
@@ -305,71 +392,49 @@ export default function SliderType1() {
       gsap.to(`#${detailsActiveId} .title-2`, { y: 0, delay: 0.15, duration: 0.7, ease });
       gsap.to(`#${detailsActiveId} .desc`, { y: 0, delay: 0.3, duration: 0.4, ease });
       
-      // Resolve promise after CTA animates (rough end of sequence)
       gsap.to(`#${detailsActiveId} .cta`, {
-        y: 0,
-        delay: 0.35,
-        duration: 0.4,
-        ease,
+        y: 0, delay: 0.35, duration: 0.4, ease,
         onComplete: () => {
-            // Check for restart autoLoop if needed, otherwise just resolve
-            if (autoPlayRef.current && actionQueueRef.current.length === 0) {
-                 startAutoLoop();
-            }
-            resolve(); // IMPORTANT: Resolve here so queue can continue
+            if (autoPlayRef.current && actionQueueRef.current.length === 0) startAutoLoop();
+            resolve();
         }
       });
       gsap.set(detailsInactive, { zIndex: 12 });
 
       const active = newOrder[0];
       const rest = newOrder.slice(1);
-      const prv = rest[rest.length - 1]; // This is the item that WAS at 0, now at end
+      const prv = rest[rest.length - 1]; 
 
       gsap.set(cardsRef.current[prv], { zIndex: 10 });
       gsap.set(cardsRef.current[active], { zIndex: 20 });
       gsap.to(cardsRef.current[prv], { scale: 1.5, ease });
 
       gsap.to(cardContentsRef.current[active], {
-        y: offsetTopRef.current + cardHeight - 10,
-        opacity: 0,
-        duration: 0.3,
-        ease
+        y: ot + ch - 10, opacity: 0, duration: 0.3, ease
       });
       gsap.to(slideItemsRef.current[active], { x: 0, ease });
-      gsap.to(slideItemsRef.current[prv], { x: -numberSize, ease });
+      gsap.to(slideItemsRef.current[prv], { x: -ns, ease });
+      
+      const isSmall = layoutMode === 'mobile' || layoutMode === 'landscape';
       gsap.to(progressRef.current, {
-        width: 500 * (1 / newOrder.length) * (active + 1),
-        ease
+        width: (isSmall ? 280 : 500) * (1 / newOrder.length) * (active + 1), ease
       });
 
       gsap.to(cardsRef.current[active], {
-        x: 0,
-        y: 0,
-        ease,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        borderRadius: 0,
+        x: 0, y: 0, ease, width: window.innerWidth, height: window.innerHeight, borderRadius: 0,
         onComplete: () => {
-          const xNew = offsetLeftRef.current + (rest.length - 1) * (cardWidth + gap);
+          const xNew = ol + (rest.length - 1) * (cw + gp);
           gsap.set(cardsRef.current[prv], {
-            x: xNew,
-            y: offsetTopRef.current,
-            width: cardWidth,
-            height: cardHeight,
-            zIndex: 30,
-            borderRadius: 10,
-            scale: 1
+            x: xNew, y: ot, width: cw, height: ch, zIndex: 30, borderRadius: 10, scale: 1
           });
-
           gsap.set(cardContentsRef.current[prv], {
-            x: xNew,
-            y: offsetTopRef.current + cardHeight - 100,
-            opacity: 1,
-            zIndex: 40
+            x: xNew, y: ot + ch - (isSmall ? 60 : 100), opacity: 1, zIndex: 40
           });
-          gsap.set(slideItemsRef.current[prv], { x: rest.length * numberSize });
+          gsap.set(slideItemsRef.current[prv], { x: rest.length * ns });
 
           gsap.set(detailsInactive, { opacity: 0 });
+          const detailsInactiveId = newDetailsEven ? 'details-odd' : 'details-even';
+          
           gsap.set(`#${detailsInactiveId} .text`, { y: 100 });
           gsap.set(`#${detailsInactiveId} .title-1`, { y: 100 });
           gsap.set(`#${detailsInactiveId} .title-2`, { y: 100 });
@@ -380,26 +445,15 @@ export default function SliderType1() {
 
       rest.forEach((i, index) => {
         if (i !== prv) {
-          const xNew = offsetLeftRef.current + index * (cardWidth + gap);
+          const xNew = ol + index * (cw + gp);
           gsap.set(cardsRef.current[i], { zIndex: 30 });
           gsap.to(cardsRef.current[i], {
-            x: xNew,
-            y: offsetTopRef.current,
-            width: cardWidth,
-            height: cardHeight,
-            ease,
-            delay: 0.1 * (index + 1)
+            x: xNew, y: ot, width: cw, height: ch, ease, delay: 0.1 * (index + 1)
           });
-
           gsap.to(cardContentsRef.current[i], {
-            x: xNew,
-            y: offsetTopRef.current + cardHeight - 100,
-            opacity: 1,
-            zIndex: 40,
-            ease,
-            delay: 0.1 * (index + 1)
+            x: xNew, y: ot + ch - (isSmall ? 60 : 100), opacity: 1, zIndex: 40, ease, delay: 0.1 * (index + 1)
           });
-          gsap.to(slideItemsRef.current[i], { x: (index + 1) * numberSize, ease });
+          gsap.to(slideItemsRef.current[i], { x: (index + 1) * ns, ease });
         }
       });
     });
@@ -410,31 +464,31 @@ export default function SliderType1() {
         const currentOrder = orderRef.current;
         const last = currentOrder[currentOrder.length - 1];
         const newOrder = [last, ...currentOrder.slice(0, currentOrder.length - 1)];
-        
         const newDetailsEven = !detailsEvenStateRef.current;
         
-        // Update Refs
         orderRef.current = newOrder;
         detailsEvenStateRef.current = newDetailsEven;
-        
-        // Update State
         setOrder(newOrder);
         setDetailsEven(newDetailsEven);
         
-        // Update Indices
         setTextIndices(prev => ({
-          ...prev,
-          even: newDetailsEven ? newOrder[0] : prev.even,
-          odd: !newDetailsEven ? newOrder[0] : prev.odd
+          ...prev, even: newDetailsEven ? newOrder[0] : prev.even, odd: !newDetailsEven ? newOrder[0] : prev.odd
         }));
         
-
         const detailsActive = newDetailsEven ? detailsEvenRef.current : detailsOddRef.current;
         const detailsInactive = newDetailsEven ? detailsOddRef.current : detailsEvenRef.current;
         const detailsActiveId = newDetailsEven ? 'details-even' : 'details-odd';
         const detailsInactiveId = newDetailsEven ? 'details-odd' : 'details-even';
+        
+        const cw = cardWidthRef.current;
+        const ch = cardHeightRef.current;
+        const gp = gapRef.current;
+        const ns = numberSizeRef.current;
+        const ot = offsetTopRef.current;
+        const ol = offsetLeftRef.current;
+        const isSmall = layoutMode === 'mobile' || layoutMode === 'landscape';
 
-        // 1. Animate Details (Text) - Same entry animation
+        // 1. Animate Details
         gsap.set(detailsActive, { zIndex: 22 });
         gsap.to(detailsActive, { opacity: 1, delay: 0.4, ease });
         gsap.to(`#${detailsActiveId} .text`, { y: 0, delay: 0.1, duration: 0.7, ease });
@@ -442,151 +496,74 @@ export default function SliderType1() {
         gsap.to(`#${detailsActiveId} .title-2`, { y: 0, delay: 0.15, duration: 0.7, ease });
         gsap.to(`#${detailsActiveId} .desc`, { y: 0, delay: 0.3, duration: 0.4, ease });
         gsap.to(`#${detailsActiveId} .cta`, {
-            y: 0,
-            delay: 0.35,
-            duration: 0.4,
-            ease,
+            y: 0, delay: 0.35, duration: 0.4, ease,
             onComplete: () => {
-                if (autoPlayRef.current && actionQueueRef.current.length === 0) {
-                     startAutoLoop();
-                }
+                if (autoPlayRef.current && actionQueueRef.current.length === 0) startAutoLoop();
                 resolve();
             }
         });
         gsap.set(detailsInactive, { zIndex: 12 });
 
         // 2. Animate Cards
-        const active = newOrder[0]; // The one becoming active (was last)
-        const oldActive = order[0]; // The one leaving active (moves to pos 0)
+        const active = newOrder[0];
+        const oldActive = order[0];
         const rest = newOrder.slice(1);
         
-        // oldActive moves from FullScreen(0,0) to cards stack Pos 0
-        gsap.set(cardsRef.current[oldActive], { zIndex: 30 }); // reset z-index
+        gsap.set(cardsRef.current[oldActive], { zIndex: 30 });
         gsap.to(cardsRef.current[oldActive], {
-            x: offsetLeftRef.current, // Pos 0
-            y: offsetTopRef.current,
-            width: cardWidth,
-            height: cardHeight,
-            borderRadius: 10,
-            ease
+            x: ol, y: ot, width: cw, height: ch, borderRadius: 10, ease
         });
-        // Content reappear
         gsap.to(cardContentsRef.current[oldActive], {
-            x: offsetLeftRef.current,
-            y: offsetTopRef.current + cardHeight - 100,
-            opacity: 1,
-            zIndex: 40,
-            ease
+            x: ol, y: ot + ch - (isSmall ? 60 : 100), opacity: 1, zIndex: 40, ease
         });
         
-        // newActive moves from Tail to FullScreen
-        // Since it was at tail, we animate it to 0,0
         gsap.set(cardsRef.current[active], { zIndex: 20 });
         gsap.to(cardsRef.current[active], {
-            x: 0,
-            y: 0,
-            width: window.innerWidth,
-            height: window.innerHeight,
-            borderRadius: 0,
-            ease
+            x: 0, y: 0, width: window.innerWidth, height: window.innerHeight, borderRadius: 0, ease
         });
          gsap.to(cardContentsRef.current[active], {
-            y: offsetTopRef.current + cardHeight - 10,
-            opacity: 0,
-            duration: 0.3,
-            ease
+            y: ot + ch - 10, opacity: 0, duration: 0.3, ease
         });
         
-        // Progress Bar Update
         gsap.to(progressRef.current, {
-            width: 500 * (1 / newOrder.length) * (active + 1),
-            ease
+            width: (isSmall ? 280 : 500) * (1 / newOrder.length) * (active + 1), ease
         });
 
-        // Slide Items (Numbers)
-        // newActive number: snap to -50, animate to 0.
-        // oldActive number: animate to 50.
-        // others: animate to +50?
-        
-        // Reset newActive number to start from left (-50)
-        gsap.set(slideItemsRef.current[active], { x: -numberSize });
+        gsap.set(slideItemsRef.current[active], { x: -ns });
         gsap.to(slideItemsRef.current[active], { x: 0, ease });
         
-        // Shift all others
         rest.forEach((i, index) => {
-             // rest[0] is oldActive. index=0. to 50.
-             // rest[1] is old rest[0]. index=1. to 100.
-             gsap.to(slideItemsRef.current[i], { x: (index + 1) * numberSize, ease });
-             
-             // Move cards in stack right
+             gsap.to(slideItemsRef.current[i], { x: (index + 1) * ns, ease });
              if (i !== oldActive) {
-                 const xNew = offsetLeftRef.current + index * (cardWidth + gap);
+                 const xNew = ol + index * (cw + gp);
                  gsap.to(cardsRef.current[i], {
-                    x: xNew,
-                    y: offsetTopRef.current,
-                    width: cardWidth,
-                    height: cardHeight,
-                    ease
+                    x: xNew, y: ot, width: cw, height: ch, ease
                  });
                  gsap.to(cardContentsRef.current[i], {
-                    x: xNew,
-                    y: offsetTopRef.current + cardHeight - 100,
-                    opacity: 1,
-                    zIndex: 40,
-                    ease
+                    x: xNew, y: ot + ch - (isSmall ? 60 : 100), opacity: 1, zIndex: 40, ease
                  });
              }
         });
         
-        // Cleanup Inactive Details
-         gsap.set(detailsInactive, { opacity: 0 });
-         gsap.set(`#${detailsInactiveId} .text`, { y: 100 });
-         gsap.set(`#${detailsInactiveId} .title-1`, { y: 100 });
-         gsap.set(`#${detailsInactiveId} .title-2`, { y: 100 });
-         gsap.set(`#${detailsInactiveId} .desc`, { y: 50 });
-         gsap.set(`#${detailsInactiveId} .cta`, { y: 60 });
+        gsap.set(detailsInactive, { opacity: 0 });
+        gsap.set(`#${detailsInactiveId} .text`, { y: 100 });
+        gsap.set(`#${detailsInactiveId} .title-1`, { y: 100 });
+        gsap.set(`#${detailsInactiveId} .title-2`, { y: 100 });
+        gsap.set(`#${detailsInactiveId} .desc`, { y: 50 });
+        gsap.set(`#${detailsInactiveId} .cta`, { y: 60 });
     });
   };
+
+  // Safe checks for data availability
+  if (!data || data.length === 0) return null;
 
   return (
     <div className="relative w-screen h-screen bg-[#1a1a1a] text-[#FFFFFFDD] overflow-hidden font-['Inter']">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500&display=swap');
       `}</style>
-
+      
       <div ref={indicatorRef} className="fixed left-0 right-0 top-0 h-[5px] z-[60] bg-[#ecad29]" />
-
-      <nav ref={navRef} className="fixed left-0 top-0 right-0 z-50 flex items-center justify-between px-9 py-5 font-medium">
-        <div className="inline-flex items-center gap-2.5 uppercase text-sm">
-          <div className="w-5 h-5">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-            </svg>
-          </div>
-          <div>Globe Express</div>
-        </div>
-        <div className="inline-flex items-center gap-6 uppercase text-sm">
-          <div className="relative">
-            Home
-            <div className="absolute bottom-[-8px] left-0 right-0 h-[3px] rounded-full bg-[#ecad29]" />
-          </div>
-          <div>Holidays</div>
-          <div>Destinations</div>
-          <div>Flights</div>
-          <div>Offers</div>
-          <div>Contact</div>
-          <div className="w-5 h-5">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-            </svg>
-          </div>
-          <div className="w-5 h-5">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
-            </svg>
-          </div>
-        </div>
-      </nav>
 
       {/* Cards Render */}
       {data.map((item, index) => (
@@ -601,30 +578,33 @@ export default function SliderType1() {
             ref={el => cardContentsRef.current[index] = el}
             className="absolute left-0 top-0 text-[#FFFFFFDD] pl-4 pointer-events-none"
           >
-            <div className="w-[30px] h-[5px] rounded-full bg-[#FFFFFFDD]" />
-            <div className="mt-1.5 text-[13px] font-medium">{item.place}</div>
-            <div className="font-semibold text-[20px] font-['Oswald']">{item.title}</div>
-            <div className="font-semibold text-[20px] font-['Oswald']">{item.title2}</div>
+            <div className={`w-[30px] h-[5px] rounded-full bg-[#FFFFFFDD] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'hidden' : ''}`} />
+            <div className={`mt-1.5 font-medium ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[10px]' : 'text-[13px]'}`}>{item.place}</div>
+            <div className={`font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[14px]' : 'text-[20px]'}`}>{item.title}</div>
+            <div className={`font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[14px]' : 'text-[20px]'}`}>{item.title2}</div>
           </div>
         </React.Fragment>
       ))}
 
       {/* Details Even */}
-      <div ref={detailsEvenRef} id="details-even" className="z-[22] absolute top-[240px] left-[60px]">
+      <div 
+        ref={detailsEvenRef} 
+        id="details-even" 
+        className={`z-[22] absolute ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'top-[80px] left-[20px]' : 'top-[240px] left-[60px]'}`}
+      >
         <div className="h-[46px] overflow-hidden">
           <div className="text pt-4 text-[20px] relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-[30px] before:h-1 before:rounded-full before:bg-white">
             {data[textIndices.even].place}
           </div>
         </div>
-        <div className="mt-0.5 h-[100px] overflow-hidden">
-          <div className="title-1 font-semibold text-[72px] font-['Oswald']">{data[textIndices.even].title}</div>
+        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[60px]' : 'h-[100px]'}`}>
+          <div className={`title-1 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[42px]' : 'text-[72px]'}`}>{data[textIndices.even].title}</div>
         </div>
-        <div className="mt-0.5 h-[100px] overflow-hidden">
-          <div className="title-2 font-semibold text-[72px] font-['Oswald']">{data[textIndices.even].title2}</div>
+        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[60px]' : 'h-[100px]'}`}>
+          <div className={`title-2 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[42px]' : 'text-[72px]'}`}>{data[textIndices.even].title2}</div>
         </div>
-        <div className="desc mt-4 w-[500px]">{data[textIndices.even].description}</div>
-        <div className="cta w-[500px] mt-6 flex items-center">
-            {/* CTA Buttons... */}
+        <div className={`desc mt-4 ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[300px] text-sm' : 'w-[500px]'}`}>{data[textIndices.even].description}</div>
+        <div className={`cta mt-6 flex items-center ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[300px]' : 'w-[500px]'}`}>
           <button className="bookmark border-none bg-[#ecad29] w-9 h-9 rounded-full text-white grid place-items-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
               <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z" clipRule="evenodd" />
@@ -637,21 +617,24 @@ export default function SliderType1() {
       </div>
 
       {/* Details Odd */}
-      <div ref={detailsOddRef} id="details-odd" className="z-[22] absolute top-[240px] left-[60px]">
+      <div 
+        ref={detailsOddRef} 
+        id="details-odd" 
+        className={`z-[22] absolute ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'top-[80px] left-[20px]' : 'top-[240px] left-[60px]'}`}
+      >
         <div className="h-[46px] overflow-hidden">
           <div className="text pt-4 text-[20px] relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-[30px] before:h-1 before:rounded-full before:bg-white">
             {data[textIndices.odd].place}
           </div>
         </div>
-        <div className="mt-0.5 h-[100px] overflow-hidden">
-          <div className="title-1 font-semibold text-[72px] font-['Oswald']">{data[textIndices.odd].title}</div>
+        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[60px]' : 'h-[100px]'}`}>
+          <div className={`title-1 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[42px]' : 'text-[72px]'}`}>{data[textIndices.odd].title}</div>
         </div>
-        <div className="mt-0.5 h-[100px] overflow-hidden">
-          <div className="title-2 font-semibold text-[72px] font-['Oswald']">{data[textIndices.odd].title2}</div>
+        <div className={`mt-0.5 overflow-hidden ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'h-[60px]' : 'h-[100px]'}`}>
+          <div className={`title-2 font-semibold font-['Oswald'] ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'text-[42px]' : 'text-[72px]'}`}>{data[textIndices.odd].title2}</div>
         </div>
-        <div className="desc mt-4 w-[500px]">{data[textIndices.odd].description}</div>
-        <div className="cta w-[500px] mt-6 flex items-center">
-           {/* CTA Buttons... */}
+        <div className={`desc mt-4 ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[300px] text-sm' : 'w-[500px]'}`}>{data[textIndices.odd].description}</div>
+        <div className={`cta mt-6 flex items-center ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[300px]' : 'w-[500px]'}`}>
           <button className="bookmark border-none bg-[#ecad29] w-9 h-9 rounded-full text-white grid place-items-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
               <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z" clipRule="evenodd" />
@@ -663,10 +646,10 @@ export default function SliderType1() {
         </div>
       </div>
 
-      <div ref={paginationRef} className="absolute left-0 top-0 inline-flex">
+      <div ref={paginationRef} className={`absolute inline-flex ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? '' : 'left-0 top-0'}`}>
         <div 
             onClick={handlePrevStep}
-            className="arrow-left z-[60] w-[50px] h-[50px] rounded-full border-2 border-[#ffffff55] grid place-items-center cursor-pointer hover:bg-[#ffffff22] transition-colors"
+            className={`arrow-left z-[60] w-[50px] h-[50px] rounded-full border-2 border-[#ffffff55] grid place-items-center cursor-pointer hover:bg-[#ffffff22] transition-colors`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6 stroke-[2] text-[#ffffff99]">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -680,12 +663,12 @@ export default function SliderType1() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
           </svg>
         </div>
-        <div className="ml-6 z-[60] w-[500px] h-[50px] flex items-center">
-          <div className="w-[500px] h-[3px] bg-[#ffffff33]">
+        <div className={`ml-6 z-[60] h-[50px] flex items-center ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[280px]' : 'w-[500px]'}`}>
+          <div className={`${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'w-[280px]' : 'w-[500px]'} h-[3px] bg-[#ffffff33]`}>
             <div ref={progressRef} className="h-[3px] bg-[#ecad29]" />
           </div>
         </div>
-        <div className="w-[50px] h-[50px] overflow-hidden z-[60] relative">
+        <div className={`w-[50px] h-[50px] overflow-hidden z-[60] relative ${(layoutMode === 'mobile' || layoutMode === 'landscape') ? 'hidden' : ''}`}> 
           {data.map((_, index) => (
             <div
               key={index}
