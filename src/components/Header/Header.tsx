@@ -20,7 +20,7 @@ export default function Header({ type = "popup" }: HeaderProps) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent">
+    <header className="fixed top-0 left-0 right-0 z-100 bg-transparent">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between relative z-50">
         {/* Logo */}
         <TransitionLink href="/" className="flex items-center gap-2 font-bold text-xl hover:opacity-80 transition-opacity">
