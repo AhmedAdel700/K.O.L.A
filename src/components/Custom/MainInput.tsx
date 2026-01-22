@@ -149,7 +149,7 @@ export const MainInput: React.FC<MainInputProps> = ({
           />
         ) : (
           <p className="text-red-500 text-xs">
-            Admin Error: Select input requires "control" prop.
+            Admin Error: Select input requires - control - prop.
           </p>
         )}
 
