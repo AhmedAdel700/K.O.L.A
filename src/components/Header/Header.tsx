@@ -20,10 +20,10 @@ export default function Header({ type = "popup" }: HeaderProps) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-100 bg-transparent">
+    <header className="fixed top-0 left-0 right-0 z-100 bg-transparent text-white">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between relative z-50">
         {/* Logo */}
-        <TransitionLink href="/" className="flex items-center gap-2 font-bold text-xl hover:opacity-80 transition-opacity">
+        <TransitionLink href="/" className="flex items-center gap-2 font-bold text-xl hover:opacity-80 transition-opacity text-black">
           <Sparkles className="h-6 w-6 text-primary" />
           <span>Brand</span>
         </TransitionLink>
@@ -35,7 +35,7 @@ export default function Header({ type = "popup" }: HeaderProps) {
                 <TransitionLink
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium transition-colors hover:text-primary"
+                className="text-sm font-medium transition-colors hover:text-black"
                 >
                 {item.name}
                 </TransitionLink>

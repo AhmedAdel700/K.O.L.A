@@ -1,7 +1,8 @@
 import SliderType1 from "./SliderType1";
 import SliderType2 from "./SilderType2";
+import SliderType3 from "./SilderType3";
 interface MainSliderProps {
-  type: "type1" | "type2";
+  type: "type1" | "type2" | "type3";
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
 }
@@ -11,6 +12,8 @@ export default function MainSlider({ type, data }: MainSliderProps) {
       return <SliderType1 data={data} />;
     case "type2":
       return <SliderType2 data={data} />;
+    case "type3":
+      return <SliderType3 data={data} />;
     default:
       return <SliderType1 data={data} />;
   }
