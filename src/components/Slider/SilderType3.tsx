@@ -19,10 +19,7 @@ export default function SliderType3({ data }: SliderType3Props) {
   const locale = useLocale();
   const isRTL = locale === "ar";
   const containerRef = useRef<HTMLDivElement>(null);
-  const mobileContainerRef = useRef<HTMLDivElement>(null);
-  const [activeIdx, setActiveIdx] = useState(0);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [mobileDimensions, setMobileDimensions] = useState({ width: 0, height: 0 });
   
   useEffect(() => {
     if (containerRef.current) {
@@ -39,20 +36,7 @@ export default function SliderType3({ data }: SliderType3Props) {
     }
   }, []);
 
-  useEffect(() => {
-    if (mobileContainerRef.current) {
-      const resizeObserver = new ResizeObserver((entries) => {
-        for (let entry of entries) {
-          setMobileDimensions({
-            width: entry.contentRect.width,
-            height: entry.contentRect.height,
-          });
-        }
-      });
-      resizeObserver.observe(mobileContainerRef.current);
-      return () => resizeObserver.disconnect();
-    }
-  }, []);
+  const [activeIdx, setActiveIdx] = useState(0);
 
   // Auto-play logic
   useEffect(() => {
@@ -93,11 +77,10 @@ export default function SliderType3({ data }: SliderType3Props) {
   };
 
   const bgDimensions = useMemo(() => calculateBgDimensions(dimensions), [dimensions]);
-  const mobileBgDimensions = useMemo(() => calculateBgDimensions(mobileDimensions), [mobileDimensions]);
 
-  const calculateBentoItemPosition = (idx: number, dims: { width: number; height: number }, bgDims: any, isMobile = false) => {
-    const gridCols = isMobile ? 2 : 3;
-    const gridRows = isMobile ? 4 : 3;
+  const calculateBentoItemPosition = (idx: number, dims: { width: number; height: number }, bgDims: any) => {
+    const gridCols = 3;
+    const gridRows = 3;
     const gap = 12;
 
     const cellWidth = (dims.width - (gridCols - 1) * gap) / gridCols;
@@ -106,22 +89,13 @@ export default function SliderType3({ data }: SliderType3Props) {
     let colPos = 0;
     let rowPos = 0;
 
-    if (isMobile) {
-      // Mobile bento layout
-      if (idx === 0) { colPos = 0; rowPos = 0; } // item-1
-      if (idx === 1) { colPos = 1; rowPos = 0; } // item-2
-      if (idx === 2) { colPos = 1; rowPos = 1; } // item-3
-      if (idx === 3) { colPos = 0; rowPos = 2; } // item-4
-      if (idx === 4) { colPos = 1; rowPos = 3; } // item-5
-    } else {
-      // Desktop bento layout
-      if (idx === 0) { colPos = 0; rowPos = 0; } // item-1
-      if (idx === 1) { colPos = 1; rowPos = 0; } // item-2
-      if (idx === 2) { colPos = 2; rowPos = 0; } // item-3
-      if (idx === 3) { colPos = 1; rowPos = 1; } // item-4
-      if (idx === 4) { colPos = 0; rowPos = 2; } // item-5
-      if (idx === 5) { colPos = 2; rowPos = 2; } // item-6
-    }
+    // Desktop bento layout
+    if (idx === 0) { colPos = 0; rowPos = 0; } // item-1
+    if (idx === 1) { colPos = 1; rowPos = 0; } // item-2
+    if (idx === 2) { colPos = 2; rowPos = 0; } // item-3
+    if (idx === 3) { colPos = 1; rowPos = 1; } // item-4
+    if (idx === 4) { colPos = 0; rowPos = 2; } // item-5
+    if (idx === 5) { colPos = 2; rowPos = 2; } // item-6
 
     const bgX = -(colPos * (cellWidth + gap)) - bgDims.offsetX;
     const bgY = -(rowPos * (cellHeight + gap)) - bgDims.offsetY;
@@ -165,18 +139,7 @@ export default function SliderType3({ data }: SliderType3Props) {
         .bento-item-5 { grid-column: 1 / 2; grid-row: 3 / 4; }
         .bento-item-6 { grid-column: 3 / 4; grid-row: 3 / 4; }
 
-        .bento-grid-mobile {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          grid-template-rows: repeat(4, 1fr);
-          gap: 0.5rem;
-        }
 
-        .bento-item-mobile-1 { grid-column: 1 / 2; grid-row: 1 / 3; }
-        .bento-item-mobile-2 { grid-column: 2 / 3; grid-row: 1 / 2; }
-        .bento-item-mobile-3 { grid-column: 2 / 3; grid-row: 2 / 4; }
-        .bento-item-mobile-4 { grid-column: 1 / 2; grid-row: 3 / 5; }
-        .bento-item-mobile-5 { grid-column: 2 / 3; grid-row: 4 / 5; }
 
         .diagonal-container {
           position: absolute;
@@ -195,63 +158,24 @@ export default function SliderType3({ data }: SliderType3Props) {
           .diagonal-container {
             display: none;
           }
-          .bento-grid-mobile {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            gap: 0.5rem;
-            padding: 0.5rem;
-          }
-          .puzzle-tile-mobile {
-            opacity: 1;
-          }
+
         }
       `}</style>
 
       <div className="relative z-10 w-full h-screen overflow-hidden">
-        {/* Mobile Background Grid (xl and smaller) */}
-        <div className="xl:hidden absolute inset-0 z-0">
-          <div 
-            ref={mobileContainerRef}
-            className="bento-grid-mobile w-full h-full"
-          >
-            {[
-              { class: "bento-item-mobile-1" },
-              { class: "bento-item-mobile-2" },
-              { class: "bento-item-mobile-3" },
-              { class: "bento-item-mobile-4" },
-              { class: "bento-item-mobile-5" },
-            ].map((item, idx) => {
-              const { bgX, bgY } = calculateBentoItemPosition(idx, mobileDimensions, mobileBgDimensions, true);
-
-              return (
-                <div
-                  key={idx}
-                  className={`puzzle-tile puzzle-tile-mobile ${item.class} rounded-2xl relative group overflow-hidden`}
-                  style={{
-                    "--bg-width": `${mobileBgDimensions.width}px`,
-                    "--bg-height": `${mobileBgDimensions.height}px`,
-                    "--bg-x": `${bgX}px`,
-                    "--bg-y": `${bgY}px`,
-                    "--bg-image": `url(${activeItem.image})`,
-                  } as React.CSSProperties}
-                >
-                  <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
-                  <div className="absolute inset-0 border-2 border-white/5 pointer-events-none rounded-2xl" />
-                </div>
-              );
-            })}
-          </div>
+        {/* Mobile Background (xl and smaller) */}
+        <div 
+          className="xl:hidden absolute inset-0 z-0 bg-cover bg-center transition-[background-image] duration-1000"
+          style={{ backgroundImage: `url(${activeItem.image})` }}
+        >
+          <div className="absolute inset-0 bg-black/40" />
         </div>
 
         {/* Content Section */}
         <div className={`absolute top-0 ${isRTL ? "right-0" : "left-0"} w-full xl:w-1/2 h-full flex flex-col gap-6 justify-center p-6 md:p-12 lg:p-20 ${isRTL ? "text-center xl:text-right" : "text-center xl:text-left"} xl:relative z-10 pointer-events-none`}>
           <div
             key={`${activeIdx}-metadata`}
-            className={`text-slide-up flex flex-col gap-2 pointer-events-auto items-center ${isRTL ? "xl:items-end" : "xl:items-start"}`}
+            className={`text-slide-up flex flex-col gap-2 pointer-events-auto items-center xl:items-start`}
           >
             <span className={`text-white/70 ${isRTL ? "xl:text-[#a1a1a1]" : "xl:text-[#a1a1a1]"} font-semibold tracking-widest uppercase text-sm`}>
               {activeItem.place}
@@ -262,7 +186,7 @@ export default function SliderType3({ data }: SliderType3Props) {
                 {activeItem.title2}
               </span>
             </h1>
-            <p className={`text-base md:text-lg text-white/80 ${isRTL ? "xl:text-neutral-600" : "xl:text-neutral-600"} max-w-md mt-4 leading-relaxed`}>
+            <p className={`text-base md:text-lg text-white/80 xl:text-neutral-600 max-w-lg mt-4 leading-relaxed`}>
               {activeItem.description}
             </p>
           </div>
@@ -282,7 +206,7 @@ export default function SliderType3({ data }: SliderType3Props) {
               { class: "bento-item-5" },
               { class: "bento-item-6" },
             ].map((item, idx) => {
-              const { bgX, bgY } = calculateBentoItemPosition(idx, dimensions, bgDimensions, false);
+              const { bgX, bgY } = calculateBentoItemPosition(idx, dimensions, bgDimensions);
 
               return (
                 <div
@@ -296,7 +220,7 @@ export default function SliderType3({ data }: SliderType3Props) {
                     "--bg-image": `url(${activeItem.image})`,
                   } as React.CSSProperties}
                 >
-                  <div className="absolute inset-0 bg-black/30 group-hover:bg-transparent transition-colors duration-500" />
+                  <div className="absolute inset-0 group-hover:bg-transparent transition-colors duration-500" />
                   <div className="absolute inset-0 border-2 border-white/10 pointer-events-none rounded-xl" />
                 </div>
               );
