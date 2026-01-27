@@ -48,7 +48,7 @@ export default function page() {
   
   return (
     <div>
-      <MainSlider type="type3" data={data} />
+      <MainSlider type="type1" data={data} />
 
       <div className="h-screen bg-green-500 flex justify-center items-center">
         section 2 home

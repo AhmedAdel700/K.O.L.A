@@ -42,9 +42,10 @@ import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import { usePageTransition } from "@/app/Providers/PageTransitionContext";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const TextEffect = ({
   text,
@@ -66,19 +67,31 @@ const TextEffect = ({
       if (!transitionDone) return; // ⛔ WAIT for routing to finish ** unable this if you will use page routing transition **
       if (!textRef.current) return;
 
-      const chars = textRef.current.querySelectorAll(".char");
-      const words = textRef.current.querySelectorAll(".word");
+      const split = new SplitText(textRef.current, {
+        type: "chars,words",
+        charsClass: "char inline-block cursor-pointer",
+        wordsClass: "word inline-block",
+      });
+
+      const chars = split.chars;
+      const words = split.words;
+
+      const createTimeline = () =>
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play reverse play reverse",
+          },
+          onComplete(self) {
+            split.revert();
+          },
+        });
 
       const animations = {
         matrix: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -108,14 +121,7 @@ const TextEffect = ({
         },
 
         neon: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -156,14 +162,7 @@ const TextEffect = ({
         },
 
         particle: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -194,14 +193,7 @@ const TextEffect = ({
         },
 
         liquid: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -235,14 +227,7 @@ const TextEffect = ({
         },
 
         fadeSlide: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             words,
@@ -269,14 +254,7 @@ const TextEffect = ({
         },
 
         wordWave: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             words,
@@ -305,14 +283,7 @@ const TextEffect = ({
         },
 
         glitch: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -353,14 +324,7 @@ const TextEffect = ({
         },
 
         typewriter: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           gsap.set(chars, { opacity: 0 });
 
@@ -390,14 +354,7 @@ const TextEffect = ({
         },
 
         morphIn: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -428,14 +385,7 @@ const TextEffect = ({
         },
 
         splitFlip: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -465,14 +415,7 @@ const TextEffect = ({
         },
 
         magneticPull: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           chars.forEach((char, i) => {
             const direction = i % 2 === 0 ? 1 : -1;
@@ -506,14 +449,7 @@ const TextEffect = ({
         },
 
         quantumShift: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -545,14 +481,7 @@ const TextEffect = ({
         },
 
         prismBreak: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -580,14 +509,7 @@ const TextEffect = ({
         },
 
         orbitalSpin: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           chars.forEach((char, i) => {
             const angle = (i / chars.length) * Math.PI * 2;
@@ -623,14 +545,7 @@ const TextEffect = ({
         },
 
         hologram: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -672,14 +587,7 @@ const TextEffect = ({
         },
 
         electricArc: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -711,14 +619,7 @@ const TextEffect = ({
         },
 
         vortexSwirl: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           chars.forEach((char, i) => {
             const progress = i / chars.length;
@@ -756,14 +657,7 @@ const TextEffect = ({
         },
 
         cascadeRipple: () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play reverse play reverse",
-            },
-          });
+          const tl = createTimeline();
 
           tl.fromTo(
             chars,
@@ -840,6 +734,10 @@ const TextEffect = ({
           char.addEventListener("mouseleave", onLeave);
         });
       }
+
+      return () => {
+        split.revert();
+      };
     },
     {
       scope: containerRef,
@@ -853,47 +751,6 @@ const TextEffect = ({
       ],
     }
   );
-
-  const renderText = () => {
-    const words = text.split(" ");
-
-    if (lang === "ar") {
-      return words.map((word, index) => (
-        <span
-          key={index}
-          className="word inline-block"
-          style={{ whiteSpace: "pre" }}
-        >
-          {word}
-          {index < words.length - 1 ? " " : ""}
-        </span>
-      ));
-    }
-
-    return words.map((word, wordIndex) => (
-      <span
-        key={wordIndex}
-        className="word inline-block"
-        style={{ whiteSpace: "pre" }}
-      >
-        {word.split("").map((char, charIndex) => (
-          <span
-            key={`${wordIndex}-${charIndex}`}
-            className="char inline-block cursor-pointer"
-            style={{
-              display: "inline-block",
-              transformOrigin: "center center",
-            }}
-          >
-            {char}
-          </span>
-        ))}
-        {wordIndex < words.length - 1 && (
-          <span className="char inline-block">&nbsp;</span>
-        )}
-      </span>
-    ));
-  };
 
   const marginStyle = {};
   if (mt !== 0) marginStyle.marginTop = `${mt}px`;
@@ -915,7 +772,7 @@ const TextEffect = ({
           textTransform: "none",
         }}
       >
-        {renderText()}
+        {text}
       </div>
     </div>
   );
