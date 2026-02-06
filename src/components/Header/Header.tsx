@@ -40,24 +40,7 @@ export default function Header({ type = "popup" }: HeaderProps) {
   // ─────────────────────────────────────────────
   useGSAP(() => {
     if (!headerRef.current) return;
-    
-    // ✨ Cool on-load animation - smooth fade-in with 1s delay
-    // Set initial states
-    gsap.set([logoRef.current, navRef.current, langRef.current], {
-      opacity: 0,
-      y: -20,
-    });
-    
-    // Animate all elements together smoothly after 1s delay
-    gsap.to([logoRef.current, navRef.current, langRef.current], {
-      opacity: 1,
-      y: 0,
-      duration: 1.5,
-      ease: "power4.inOut",
-      delay: 1,
-      stagger: 0.1, // Very subtle stagger for natural flow
-    });
-    
+
     // ✨ Smoother header background transition with backdrop blur effect
     ScrollTrigger.create({
       start: 1,

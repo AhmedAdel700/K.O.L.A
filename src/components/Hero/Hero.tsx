@@ -1,10 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import img1 from '@/assets/service1.jpg';
+import img2 from '@/assets/service2.jpg';
+import img3 from '@/assets/service3.jpg';
+import img4 from '@/assets/serivce4.jpg';
+import Image, { StaticImageData } from 'next/image';
 
 interface Project {
   id: number;
-  image: string;
+  image: string | StaticImageData;
   title: string;
 }
 
@@ -13,10 +18,10 @@ export default function HeroSection() {
   
   // Sample projects - replace with your actual project data
   const projects: Project[] = [
-    { id: 1, image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&h=800&fit=crop', title: 'Luxury Office' },
-    { id: 2, image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop', title: 'Modern Workspace' },
-    { id: 3, image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&h=800&fit=crop', title: 'Executive Suite' },
-    { id: 4, image: 'https://images.unsplash.com/photo-1497215842964-222b430dc094?w=1200&h=800&fit=crop', title: 'Corporate Lobby' },
+    { id: 1, image: img1, title: 'Luxury Office' },
+    { id: 2, image: img2, title: 'Modern Workspace' },
+    { id: 3, image: img3, title: 'Executive Suite' },
+    { id: 4, image: img4, title: 'Corporate Lobby' },
   ];
 
   useEffect(() => {
@@ -40,7 +45,7 @@ export default function HeroSection() {
             }`}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-dark-ui)]/65 via-[var(--color-dark-ui)]/75 to-[var(--color-dark-secondary)]/65 z-10" />
-            <img
+            <Image
               src={project.image}
               alt={project.title}
               className="w-full h-full object-cover"

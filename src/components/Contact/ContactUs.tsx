@@ -258,13 +258,13 @@ export default function KoiaContactSection() {
             <div className="contact-header-line h-0.5 w-full bg-gradient-to-r from-transparent via-[#c9a750] to-transparent mt-2"></div>
           </div>
           <h2 className="contact-title text-5xl md:text-7xl font-bold text-[#e6d5c0] leading-tight mb-4">
-            LET'S{" "}
+            LETS{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a750] via-[#b2913c] to-[#8c6d3b] animate-gradient">
               CONNECT
             </span>
           </h2>
           <p className="contact-description text-[#e6d5c0]/70 text-lg md:text-xl max-w-2xl mx-auto">
-            Ready to bring your project to life? Reach inOut and let's discuss how
+            Ready to bring your project to life? Reach inOut and lets discuss how
             we can help.
           </p>
         </div>
@@ -298,10 +298,10 @@ export default function KoiaContactSection() {
             {/* Decorative Quote */}
             <div className="contact-quote relative p-8 bg-gradient-to-br from-[#3b3121]/30 to-transparent rounded-xl border border-[#c9a750]/10">
               <div className="absolute top-4 left-4 text-6xl text-[#c9a750]/20">
-                "
+                &quot;
               </div>
               <p className="relative z-10 text-[#e6d5c0]/80 text-lg italic leading-relaxed pl-8">
-                Quality is not an act, it is a habit. Let's build something
+                Quality is not an act, it is a habit. Lets build something
                 exceptional together.
               </p>
             </div>
@@ -317,7 +317,7 @@ export default function KoiaContactSection() {
               {submitStatus === "success" && (
                 <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
                   <p className="text-green-400 text-center font-semibold">
-                    Message sent successfully! We'll get back to you soon.
+                    Message sent successfully! We will get back to you soon.
                   </p>
                 </div>
               )}
