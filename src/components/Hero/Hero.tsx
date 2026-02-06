@@ -32,7 +32,10 @@ export default function HeroSection() {
   }, [projects.length]);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-[var(--color-dark-ui)]">
+    <section
+      className="relative h-screen w-full overflow-hidden bg-[var(--color-dark-ui)]"
+      id="#hero"
+    >
       {/* Animated Background Slider */}
       <div className="absolute inset-0">
         {projects.map((project, index) => (
@@ -40,8 +43,8 @@ export default function HeroSection() {
             key={project.id}
             className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
               index === currentSlide
-                ? 'opacity-100 scale-100'
-                : 'opacity-0 scale-105'
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-105"
             }`}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-dark-ui)]/65 via-[var(--color-dark-ui)]/75 to-[var(--color-dark-secondary)]/65 z-10" />
@@ -77,8 +80,8 @@ export default function HeroSection() {
 
             {/* Description */}
             <p className="text-lg md:text-xl text-[var(--color-text-secondary)]/80 mb-10 max-w-2xl leading-relaxed animate-fade-in-up-delay-2">
-              K.O.I.A delivers high-end interior finishing with controlled execution,
-              ensuring predictable results and faster handover.
+              K.O.I.A delivers high-end interior finishing with controlled
+              execution, ensuring predictable results and faster handover.
             </p>
 
             {/* CTA Button */}
@@ -114,7 +117,7 @@ export default function HeroSection() {
                 >
                   <div
                     className={`absolute inset-0 bg-gradient-to-r from-[var(--color-primary-bg)] to-[var(--color-secondary-gold)] transition-all duration-300 ${
-                      index === currentSlide ? 'w-full' : 'w-0'
+                      index === currentSlide ? "w-full" : "w-0"
                     }`}
                   />
                 </button>
@@ -125,14 +128,14 @@ export default function HeroSection() {
       </div>
 
       <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap");
 
         section {
-          font-family: 'Inter', sans-serif;
+          font-family: "Inter", sans-serif;
         }
 
         h1 {
-          font-family: 'Playfair Display', serif;
+          font-family: "Playfair Display", serif;
           font-weight: 900;
         }
 
@@ -148,7 +151,8 @@ export default function HeroSection() {
         }
 
         @keyframes pulse-slow {
-          0%, 100% {
+          0%,
+          100% {
             opacity: 0.3;
           }
           50% {
@@ -157,7 +161,8 @@ export default function HeroSection() {
         }
 
         @keyframes pulse-slower {
-          0%, 100% {
+          0%,
+          100% {
             opacity: 0.2;
           }
           50% {
@@ -166,7 +171,8 @@ export default function HeroSection() {
         }
 
         @keyframes bounce-slow {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0);
           }
           50% {
