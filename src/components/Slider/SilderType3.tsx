@@ -20,11 +20,11 @@ export default function SliderType3({ data }: SliderType3Props) {
   const isRTL = locale === "ar";
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  
+
   useEffect(() => {
     if (containerRef.current) {
       const resizeObserver = new ResizeObserver((entries) => {
-        for (let entry of entries) {
+        for (const entry of entries) {
           setDimensions({
             width: entry.contentRect.width,
             height: entry.contentRect.height,
@@ -76,9 +76,17 @@ export default function SliderType3({ data }: SliderType3Props) {
     };
   };
 
-  const bgDimensions = useMemo(() => calculateBgDimensions(dimensions), [dimensions]);
+  const bgDimensions = useMemo(
+    () => calculateBgDimensions(dimensions),
+    [dimensions],
+  );
 
-  const calculateBentoItemPosition = (idx: number, dims: { width: number; height: number }, bgDims: any) => {
+  const calculateBentoItemPosition = (
+    idx: number,
+    dims: { width: number; height: number },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    bgDims: any,
+  ) => {
     const gridCols = 3;
     const gridRows = 3;
     const gap = 12;
@@ -90,12 +98,30 @@ export default function SliderType3({ data }: SliderType3Props) {
     let rowPos = 0;
 
     // Desktop bento layout
-    if (idx === 0) { colPos = 0; rowPos = 0; } // item-1
-    if (idx === 1) { colPos = 1; rowPos = 0; } // item-2
-    if (idx === 2) { colPos = 2; rowPos = 0; } // item-3
-    if (idx === 3) { colPos = 1; rowPos = 1; } // item-4
-    if (idx === 4) { colPos = 0; rowPos = 2; } // item-5
-    if (idx === 5) { colPos = 2; rowPos = 2; } // item-6
+    if (idx === 0) {
+      colPos = 0;
+      rowPos = 0;
+    } // item-1
+    if (idx === 1) {
+      colPos = 1;
+      rowPos = 0;
+    } // item-2
+    if (idx === 2) {
+      colPos = 2;
+      rowPos = 0;
+    } // item-3
+    if (idx === 3) {
+      colPos = 1;
+      rowPos = 1;
+    } // item-4
+    if (idx === 4) {
+      colPos = 0;
+      rowPos = 2;
+    } // item-5
+    if (idx === 5) {
+      colPos = 2;
+      rowPos = 2;
+    } // item-6
 
     const bgX = -(colPos * (cellWidth + gap)) - bgDims.offsetX;
     const bgY = -(rowPos * (cellHeight + gap)) - bgDims.offsetY;
@@ -104,7 +130,7 @@ export default function SliderType3({ data }: SliderType3Props) {
   };
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen overflow-hidden font-['Inter'] bg-white">
+    <div className="relative flex items-center justify-center min-h-screen overflow-hidden font-['Inter'] bg-gradient-to-br from-[#3b3121] via-[#c9a750]/80 to-[#8c6d3b]/90">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         
@@ -164,7 +190,7 @@ export default function SliderType3({ data }: SliderType3Props) {
 
       <div className="relative z-10 w-full h-screen overflow-hidden">
         {/* Mobile Background (xl and smaller) */}
-        <div 
+        <div
           className="xl:hidden absolute inset-0 z-0 bg-cover bg-center transition-[background-image] duration-1000"
           style={{ backgroundImage: `url(${activeItem.image})` }}
         >
@@ -172,21 +198,31 @@ export default function SliderType3({ data }: SliderType3Props) {
         </div>
 
         {/* Content Section */}
-        <div className={`absolute top-0 ${isRTL ? "right-0" : "left-0"} w-full xl:w-1/2 h-full flex flex-col gap-6 justify-center p-6 md:p-12 lg:p-20 ${isRTL ? "text-center xl:text-right" : "text-center xl:text-left"} xl:relative z-10 pointer-events-none`}>
+        <div
+          className={`absolute top-0 ${isRTL ? "right-0" : "left-0"} w-full xl:w-1/2 h-full flex flex-col gap-6 justify-center p-6 md:p-12 lg:p-20 ${isRTL ? "text-center xl:text-right" : "text-center xl:text-left"} xl:relative z-10 pointer-events-none`}
+        >
           <div
             key={`${activeIdx}-metadata`}
             className={`text-slide-up flex flex-col gap-2 pointer-events-auto items-center xl:items-start`}
           >
-            <span className={`text-white/70 ${isRTL ? "xl:text-[#a1a1a1]" : "xl:text-[#a1a1a1]"} font-semibold tracking-widest uppercase text-sm`}>
+            <span
+              className={`text-white/70 ${isRTL ? "xl:text-[#a1a1a1]" : "xl:text-[#a1a1a1]"} font-semibold tracking-widest uppercase text-sm`}
+            >
               {activeItem.place}
             </span>
-            <h1 className={`text-4xl md:text-5xl lg:text-7xl font-bold leading-tight text-white ${isRTL ? "xl:text-[#1a1a1a]" : "xl:text-[#1a1a1a]"}`}>
+            <h1
+              className={`text-4xl md:text-5xl lg:text-7xl font-bold leading-tight text-white ${isRTL ? "xl:text-[#1a1a1a]" : "xl:text-[#1a1a1a]"}`}
+            >
               {activeItem.title} <br />
-              <span className={`text-transparent bg-clip-text bg-gradient-to-r ${isRTL ? "from-white/60 to-white xl:from-[#a1a1a1] xl:to-[#1a1a1a]" : "from-white to-white/60 xl:from-[#1a1a1a] xl:to-[#a1a1a1]"}`}>
+              <span
+                className={`text-transparent bg-clip-text bg-gradient-to-r ${isRTL ? "from-white/60 to-white xl:from-[#a1a1a1] xl:to-[#1a1a1a]" : "from-white to-white/60 xl:from-[#1a1a1a] xl:to-[#a1a1a1]"}`}
+              >
                 {activeItem.title2}
               </span>
             </h1>
-            <p className={`text-base md:text-lg text-white/80 xl:text-neutral-600 max-w-lg mt-4 leading-relaxed`}>
+            <p
+              className={`text-base md:text-lg text-white/80 xl:text-neutral-600 max-w-lg mt-4 leading-relaxed`}
+            >
               {activeItem.description}
             </p>
           </div>
@@ -206,22 +242,28 @@ export default function SliderType3({ data }: SliderType3Props) {
               { class: "bento-item-5" },
               { class: "bento-item-6" },
             ].map((item, idx) => {
-              const { bgX, bgY } = calculateBentoItemPosition(idx, dimensions, bgDimensions);
+              const { bgX, bgY } = calculateBentoItemPosition(
+                idx,
+                dimensions,
+                bgDimensions,
+              );
 
               return (
                 <div
                   key={idx}
                   className={`puzzle-tile ${item.class} rounded-xl relative group overflow-hidden`}
-                  style={{
-                    "--bg-width": `${bgDimensions.width}px`,
-                    "--bg-height": `${bgDimensions.height}px`,
-                    "--bg-x": `${bgX}px`,
-                    "--bg-y": `${bgY}px`,
-                    "--bg-image": `url(${activeItem.image})`,
-                  } as React.CSSProperties}
+                  style={
+                    {
+                      "--bg-width": `${bgDimensions.width}px`,
+                      "--bg-height": `${bgDimensions.height}px`,
+                      "--bg-x": `${bgX}px`,
+                      "--bg-y": `${bgY}px`,
+                      "--bg-image": `url(${activeItem.image})`,
+                    } as React.CSSProperties
+                  }
                 >
                   <div className="absolute inset-0 group-hover:bg-transparent transition-colors duration-500" />
-                  <div className="absolute inset-0 border-2 border-white/10 pointer-events-none rounded-xl" />
+                  <div className="absolute inset-0 pointer-events-none rounded-xl" />
                 </div>
               );
             })}
@@ -230,4 +272,4 @@ export default function SliderType3({ data }: SliderType3Props) {
       </div>
     </div>
   );
-};
+}

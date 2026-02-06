@@ -1,7 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "../Custom/LanguageSwitcher";
 import {
   Sheet,
@@ -9,50 +9,124 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetDescription,
 } from "@/components/ui/sheet";
-import { Menu, Sparkles } from "lucide-react";
+import { Menu } from "lucide-react";
+import Image from "next/image";
+import logo from "@/assets/logo.png";
+import { ScrollSmoother } from "gsap/all";
 
 interface DrawerMenuProps {
   navItems: { name: string; href: string }[];
+  locale: string;
 }
 
-export default function DrawerMenu({ navItems }: DrawerMenuProps) {
+export default function DrawerMenu({ navItems, locale }: DrawerMenuProps) {
+  const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("");
+
+  // Update active section on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      navItems.forEach((item) => {
+        const el = document.querySelector(item.href);
+        if (!el) return;
+
+        const rect = el.getBoundingClientRect();
+        if (
+          rect.top <= window.innerHeight / 2 &&
+          rect.bottom >= window.innerHeight / 2
+        ) {
+          setActiveSection(item.href);
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // initialize
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [navItems]);
+
+  const HEADER_OFFSET = 64; // offset in px
+
+  const handleClick = (e: React.MouseEvent, target: string) => {
+    e.preventDefault();
+    const smoother = ScrollSmoother.get();
+    const section = document.querySelector(target);
+    if (!smoother || !section) return;
+
+    // Calculate target position minus header offset
+    const top =
+      section.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+
+    // Scroll to that position smoothly
+    smoother.scrollTo(top, true);
+
+    // Close drawer
+    setOpen(false);
+  };
+
+  const drawerSide = locale === "ar" ? "left" : "right";
+  const menuAlignment =
+    locale === "en" ? "items-start text-left" : "items-end text-right";
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
+      {/* Trigger Button */}
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="hover:bg-accent">
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Open menu</span>
-        </Button>
+        <Menu className="h-8 w-8 text-[var(--color-dark-ui)] cursor-pointer" />
       </SheetTrigger>
-      <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col p-6">
-        <SheetHeader className="mb-6 items-start text-left">
-          <div className="flex items-center gap-2 font-bold text-2xl mb-2">
-            <Sparkles className="h-7 w-7 text-primary" />
-            <span>Brand</span>
-          </div>
-          <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
-          <SheetDescription className="text-muted-foreground text-sm">
-            Navigate our features below.
-          </SheetDescription>
+
+      {/* Drawer Content */}
+      <SheetContent
+        side={drawerSide}
+        className={`w-[300px] sm:w-[400px] flex flex-col p-6 bg-gradient-to-b from-[var(--color-primary-bg)] to-[var(--color-accent-bronze)] text-[var(--color-text-primary)] z-[9999]`}
+      >
+        <SheetTitle>
+          <span className="sr-only">Navigation Menu</span>
+        </SheetTitle>
+
+        {/* Header with Logo */}
+        <SheetHeader className={`mb-6 flex flex-col ${menuAlignment}`}>
+          <Link
+            href="#hero"
+            onClick={(e) => handleClick(e, "#hero")}
+            className="flex items-center gap-2 font-bold text-xl hover:opacity-80 transition-opacity"
+          >
+            <Image src={logo} alt="Logo" width={200} height={60} />
+          </Link>
         </SheetHeader>
 
-        <div className="flex-1 flex flex-col gap-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="text-xl font-medium hover:text-primary transition-colors py-2 border-b border-border/50 last:border-0"
-            >
-              {item.name}
-            </Link>
-          ))}
+        {/* Navigation Links - scrollable */}
+        <div className="flex-1 overflow-y-auto">
+          <div className={`flex flex-col gap-4 ${menuAlignment} pr-2`}>
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={(e) => handleClick(e, item.href)}
+                className={`
+                  text-xl font-medium py-3 px-4 w-full text-center rounded-md
+                  border border-[var(--color-dark-secondary)]/50
+                  transition-all duration-200
+                  hover:bg-[var(--color-dark-secondary)]/20
+                  hover:text-[var(--color-secondary-gold)]
+                  active:bg-[var(--color-dark-secondary)]/40
+                  active:scale-95
+                  ${activeSection === item.href ? "bg-[var(--color-dark-secondary)]/40 text-[var(--color-secondary-gold)]" : ""}
+                `}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
         </div>
 
-        <div className="mt-auto pt-6 border-t">
+        {/* Language Switcher */}
+        <div className="mt-auto pt-6 border-t border-[var(--color-dark-secondary)]/50">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">Switch Language</span>
+            <span className="text-sm text-[var(--color-text-secondary)]">
+              Switch Language
+            </span>
             <LanguageSwitcher />
           </div>
         </div>

@@ -6,8 +6,6 @@ import { routing } from "@/i18n/routing";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import SmoothScrollProvider from "@/app/Providers/SmoothScrollProvider";
 import "@/styles/globals.css";
-import { PageTransitionProvider } from "../Providers/PageTransitionContext";
-import PageTransitionHandler from "@/app/Providers/PageTransitionHandler";
 import { Toaster } from "sonner";
 import Header from "@/components/Header/Header";
 
@@ -41,14 +39,9 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <PageTransitionProvider>
-            <PageTransitionHandler />
-            <SmoothScrollProvider>
-              <Header type="popup" />
-              {children}
-            </SmoothScrollProvider>
-            <Toaster position="top-center" />
-          </PageTransitionProvider>
+          <Header type="drawer" />
+          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+          <Toaster position="top-center" />
         </NextIntlClientProvider>
       </body>
     </html>

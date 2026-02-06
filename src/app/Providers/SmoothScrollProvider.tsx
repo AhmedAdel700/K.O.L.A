@@ -19,10 +19,9 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProps) {
     const smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper", // can be removed if using the default wrapper
       content: "#smooth-content", // can be removed if using the default content
-      smooth: 1.5, // 1.2
+      smooth: 1.5,
       effects: true,
-      ignoreMobileResize: true, // this make the scroll and scroll trigger ignore the moblie resuze so no more calcutions that makes jumps in the ui as i scroll in mobile
-      normalizeScroll: true, // you do this to make the scroll bar in mobiles always appears so no more resize
+      normalizeScroll: false, // Disabled to prevent hijacking native scroll behavior
     });
 
     return () => smoother.kill();

@@ -43,7 +43,6 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { usePageTransition } from "@/app/Providers/PageTransitionContext";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -60,11 +59,9 @@ const TextEffect = ({
 }) => {
   const containerRef = useRef(null);
   const textRef = useRef(null);
-  const { transitionDone } = usePageTransition();
 
   useGSAP(
     () => {
-      if (!transitionDone) return; // ⛔ WAIT for routing to finish ** unable this if you will use page routing transition **
       if (!textRef.current) return;
 
       const split = new SplitText(textRef.current, {
@@ -550,14 +547,14 @@ const TextEffect = ({
           tl.fromTo(
             chars,
             {
-              opacity: 0,
+              autoAlpha: 0,
               scaleY: 0.1,
               y: 100,
               filter: "blur(0px) brightness(3)",
               textShadow: "0 0 20px currentColor",
             },
             {
-              opacity: 1,
+              autoAlpha: 1,
               scaleY: 1,
               y: 0,
               filter: "blur(0px) brightness(1)",
@@ -568,7 +565,7 @@ const TextEffect = ({
               },
               ease: "power2.out",
               delay: delay,
-            }
+            },
           )
             .to(
               chars,
@@ -581,7 +578,7 @@ const TextEffect = ({
                   yoyo: true,
                 },
               },
-              "-=0.4"
+              "-=0.4",
             )
             .to(chars, { opacity: 1, duration: 0.2 });
         },
@@ -742,7 +739,6 @@ const TextEffect = ({
     {
       scope: containerRef,
       dependencies: [
-        transitionDone, // ⛔ WAIT for routing to finish ** unable this if you will use page routing transition **
         text,
         lang,
         animationType,
