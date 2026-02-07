@@ -73,7 +73,7 @@ export default function DrawerMenu({ navItems, locale }: DrawerMenuProps) {
     <Sheet open={open} onOpenChange={setOpen}>
       {/* Trigger Button */}
       <SheetTrigger asChild>
-        <Menu className="h-8 w-8 text-[var(--color-dark-ui)] cursor-pointer" />
+        <Menu className="h-8 w-8 text-[var(--color-secondary-gold)] cursor-pointer " />
       </SheetTrigger>
 
       {/* Drawer Content */}

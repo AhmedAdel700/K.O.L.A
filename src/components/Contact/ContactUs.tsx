@@ -39,7 +39,7 @@ export default function KoiaContactSection() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: "top 30%",
+        start: "top 50%",
         end: "bottom 80%",
         toggleActions: "play none none reverse",
       },

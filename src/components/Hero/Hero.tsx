@@ -1,11 +1,13 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import img1 from '@/assets/service1.jpg';
-import img2 from '@/assets/service2.jpg';
-import img3 from '@/assets/service3.jpg';
-import img4 from '@/assets/serivce4.jpg';
-import Image, { StaticImageData } from 'next/image';
+import { useState, useEffect } from "react";
+import img1 from "@/assets/service1.jpg";
+import img2 from "@/assets/service2.jpg";
+import img3 from "@/assets/service3.jpg";
+import img4 from "@/assets/serivce4.jpg";
+import Image, { StaticImageData } from "next/image";
+import gsap from "gsap";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 interface Project {
   id: number;
@@ -13,15 +15,17 @@ interface Project {
   title: string;
 }
 
+const HEADER_HEIGHT = 64;
+
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  
+
   // Sample projects - replace with your actual project data
   const projects: Project[] = [
-    { id: 1, image: img1, title: 'Luxury Office' },
-    { id: 2, image: img2, title: 'Modern Workspace' },
-    { id: 3, image: img3, title: 'Executive Suite' },
-    { id: 4, image: img4, title: 'Corporate Lobby' },
+    { id: 1, image: img1, title: "Luxury Office" },
+    { id: 2, image: img2, title: "Modern Workspace" },
+    { id: 3, image: img3, title: "Executive Suite" },
+    { id: 4, image: img4, title: "Corporate Lobby" },
   ];
 
   useEffect(() => {
@@ -31,10 +35,30 @@ export default function HeroSection() {
     return () => clearInterval(timer);
   }, [projects.length]);
 
+  const handleScroll = (e: React.MouseEvent, target: string) => {
+    e.preventDefault();
+    const smoother = ScrollSmoother.get();
+    const section = document.querySelector(target);
+    if (!smoother || !section) return;
+
+    const top =
+      section.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
+    const scrollProxy = { y: smoother.scrollTop() };
+
+    gsap.to(scrollProxy, {
+      y: top,
+      duration: 1.5,
+      ease: "power3.inOut",
+      onUpdate: () => {
+        smoother.scrollTo(scrollProxy.y, false);
+      },
+    });
+  };
+
   return (
     <section
-      className="relative h-screen w-full overflow-hidden bg-[var(--color-dark-ui)]"
-      id="#hero"
+      className="relative flex flex-col py-20 min-h-[100svh] xl:h-screen w-full overflow-hidden bg-[var(--color-dark-ui)]"
+      id="home"
     >
       {/* Animated Background Slider */}
       <div className="absolute inset-0">
@@ -57,16 +81,12 @@ export default function HeroSection() {
         ))}
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--color-primary-bg)]/10 rounded-full blur-3xl animate-pulse-slow z-20" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[var(--color-accent-bronze)]/10 rounded-full blur-3xl animate-pulse-slower z-20" />
-
       {/* Content Container */}
-      <div className="relative z-30 h-full flex items-center">
+      <div className="relative z-30 flex-1 flex items-center w-full">
         <div className="container mx-auto px-6 md:px-12 lg:px-20">
           <div className="max-w-4xl">
             {/* Main Heading */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 animate-fade-in-up-delay-1">
+            <h1 className="text-[clamp(2.4rem,6vw,6rem)] font-bold mb-6 animate-fade-in-up-delay-1 opacity-0">
               <span className="block text-[var(--color-text-secondary)] leading-tight mb-2">
                 Make Your
               </span>
@@ -79,41 +99,33 @@ export default function HeroSection() {
             </h1>
 
             {/* Description */}
-            <p className="text-lg md:text-xl text-[var(--color-text-secondary)]/80 mb-10 max-w-2xl leading-relaxed animate-fade-in-up-delay-2">
+            <p className="text-lg md:text-xl text-[var(--color-text-secondary)]/80 mb-5 xl:mb-10 max-w-2xl leading-relaxed animate-fade-in-up-delay-2 opacity-0">
               K.O.I.A delivers high-end interior finishing with controlled
               execution, ensuring predictable results and faster handover.
             </p>
 
             {/* CTA Button */}
-            <div className="flex flex-wrap gap-4 animate-fade-in-up-delay-3">
-              <button className="group relative px-8 py-4 bg-gradient-to-r from-[var(--color-primary-bg)] to-[var(--color-secondary-gold)] rounded-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-primary-bg)]/50">
-                <span className="relative z-10 text-[var(--color-text-primary)] font-semibold text-lg tracking-wide flex items-center gap-2">
+            <div className="flex flex-wrap gap-4 animate-fade-in-up-delay-3 opacity-0">
+              <button
+                suppressHydrationWarning
+                onClick={(e) => handleScroll(e, "#projects")}
+                className="group cursor-pointer relative px-10 py-4 bg-gradient-to-r from-[var(--color-primary-bg)] to-[var(--color-secondary-gold)] rounded-md overflow-hidden transition-all duration-300 hover:scale-105"
+              >
+                <span className="relative z-10 text-[var(--color-dark-secondary)] font-semibold text-xl tracking-wide flex items-center gap-2">
                   View Projects
-                  <svg
-                    className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-secondary-gold)] to-[var(--color-accent-bronze)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
             </div>
 
             {/* Slide Indicators */}
-            <div className="flex gap-2 mt-16 animate-fade-in-up-delay-4">
+            <div className="flex gap-2 mt-8 xl:mt-12 animate-fade-in-up-delay-4 opacity-0">
               {projects.map((_, index) => (
                 <button
                   key={index}
+                  suppressHydrationWarning
                   onClick={() => setCurrentSlide(index)}
-                  className="group relative h-1 w-12 bg-[var(--color-text-secondary)]/20 rounded-full overflow-hidden transition-all duration-300 hover:bg-[var(--color-text-secondary)]/30"
+                  className="group relative cursor-pointer h-1 w-12 bg-[var(--color-text-secondary)]/20 rounded-full overflow-hidden transition-all duration-300 hover:bg-[var(--color-text-secondary)]/30"
                 >
                   <div
                     className={`absolute inset-0 bg-gradient-to-r from-[var(--color-primary-bg)] to-[var(--color-secondary-gold)] transition-all duration-300 ${
@@ -181,27 +193,33 @@ export default function HeroSection() {
         }
 
         .animate-fade-in-up {
+          opacity: 0;
           animation: fade-in-up 0.8s ease-out forwards;
+          animation-fill-mode: both;
         }
 
         .animate-fade-in-up-delay-1 {
-          animation: fade-in-up 0.8s ease-out 0.2s forwards;
           opacity: 0;
+          animation: fade-in-up 0.8s ease-out 0.2s forwards;
+          animation-fill-mode: both;
         }
 
         .animate-fade-in-up-delay-2 {
-          animation: fade-in-up 0.8s ease-out 0.4s forwards;
           opacity: 0;
+          animation: fade-in-up 0.8s ease-out 0.4s forwards;
+          animation-fill-mode: both;
         }
 
         .animate-fade-in-up-delay-3 {
-          animation: fade-in-up 0.8s ease-out 0.6s forwards;
           opacity: 0;
+          animation: fade-in-up 0.8s ease-out 0.6s forwards;
+          animation-fill-mode: both;
         }
 
         .animate-fade-in-up-delay-4 {
-          animation: fade-in-up 0.8s ease-out 0.8s forwards;
           opacity: 0;
+          animation: fade-in-up 0.8s ease-out 0.8s forwards;
+          animation-fill-mode: both;
         }
 
         .animate-pulse-slow {

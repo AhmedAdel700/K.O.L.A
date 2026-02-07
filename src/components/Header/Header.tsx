@@ -25,13 +25,14 @@ export default function Header({ type = "popup" }: HeaderProps) {
   const logoRef = useRef<HTMLAnchorElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
-  const [activeSection, setActiveSection] = useState<string>("#hero");
+  const [activeSection, setActiveSection] = useState<string>("#home");
   const locale = useLocale();
 
   const navItems = [
-    { name: "Home", href: "#hero" },
+    { name: "Home", href: "#home" },
     { name: "About", href: "#about" },
     { name: "Services", href: "#services" },
+    { name: "Projects", href: "#projects" },
     { name: "Contact", href: "#contact-us" },
   ];
 
@@ -109,23 +110,23 @@ export default function Header({ type = "popup" }: HeaderProps) {
     <header
       ref={headerRef}
       data-fixed
-      className="fixed top-0 left-0 right-0 z-[999] text-[#171410] transition-all duration-300"
+      className="fixed top-0 left-0 right-0 z-[999] text-[#171410] transition-all duration-300 md:py-2 animate-header-fade-in opacity-0"
       style={{ backdropFilter: "blur(0px)" }}
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between relative">
         {/* Logo with hover effect */}
         <Link
           ref={logoRef}
-          href="#hero"
-          onClick={(e) => handleScroll(e, "#hero")}
-          className="flex items-center gap-2 font-bold text-xl hover:opacity-80 transition-all duration-300 hover:scale-105"
+          href="#home"
+          onClick={(e) => handleScroll(e, "#home")}
+          className="flex items-center gap-2 font-bold transition-all duration-300 hover:scale-105"
         >
           <Image
             src={logo}
             alt="Logo"
             width={120}
-            height={40}
-            className="w-[100px] md:w-full cursor-pointer"
+            height={50}
+            className="w-[100px] md:w-[140px] cursor-pointer drop-shadow-[0_0_1px_rgba(255,255,255,1)]"
           />
         </Link>
 
