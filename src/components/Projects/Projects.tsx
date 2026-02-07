@@ -400,141 +400,159 @@ export default function Projects() {
         </div>
       </section>
 
-      {mounted && selectedProject && createPortal(
-        <div 
-          className="fixed top-0 left-0 w-full h-full z-[1100] flex items-center justify-center p-4 bg-[#171410]/90"
-          onClick={closeModal}
-        >
+      {mounted &&
+        selectedProject &&
+        createPortal(
           <div
-            ref={modalRef}
-            className="modal-content relative w-full max-w-6xl max-h-[90vh] bg-[#1f1b16] rounded-[2rem] border border-[#c9a750]/20 overflow-hidden shadow-[0_0_80px_rgba(201,167,80,0.15)] flex flex-col"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed top-0 left-0 w-full h-full z-[1100] flex items-center justify-center p-4 bg-[#171410]/90"
+            onClick={closeModal}
           >
-            {/* Close Button */}
-            <button
-              onClick={closeModal}
-              className="absolute cursor-pointer top-6 right-6 z-[1110] w-12 h-12 flex items-center justify-center bg-[#171410]/80 hover:bg-[#c9a750] border border-[#c9a750]/30 rounded-full transition-all duration-500 group"
+            <div
+              ref={modalRef}
+              className="modal-content relative w-full max-w-6xl max-h-[90vh] bg-[#1f1b16] rounded-[2rem] border border-[#c9a750]/20 overflow-hidden shadow-[0_0_80px_rgba(201,167,80,0.15)] flex flex-col"
+              onClick={(e) => e.stopPropagation()}
             >
-              <X className="w-6 h-6 text-[#c9a750] group-hover:text-[#171410] group-hover:rotate-90 transition-all duration-500" />
-            </button>
+              {/* Close Button */}
+              <button
+                onClick={closeModal}
+                className="absolute cursor-pointer top-6 right-6 z-[1110] w-12 h-12 flex items-center justify-center bg-[#171410]/80 hover:bg-[#c9a750] border border-[#c9a750]/30 rounded-full transition-all duration-500 group"
+              >
+                <X className="w-6 h-6 text-[#c9a750] group-hover:text-[#171410] group-hover:rotate-90 transition-all duration-500" />
+              </button>
 
-            {/* Scrollable Content */}
-            <div className="overflow-y-auto custom-scrollbar">
-              <div className="flex flex-col md:flex-row">
-                {/* Left: Image Gallery Section */}
-                <div className="w-full md:w-[45%] bg-[#171410]">
-                  <div className="sticky top-0 p-8">
-                    {/* Main Image */}
-                    <div className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden mb-4">
-                      <Image
-                        src={activeImage || selectedProject.image}
-                        alt={selectedProject.title}
-                        fill
-                        className="object-cover transition-all duration-500"
-                      />
-                      {/* Floating Number */}
-                      <div className="absolute bottom-6 left-6">
-                        <span className="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-[#c9a750]/60 to-[#8c6d3b]/40 leading-none select-none">
-                          {selectedProject.number}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* Gallery Images */}
-                    <div className="grid grid-cols-3 gap-3">
-                      {selectedProject.galleryImages.map((img, idx) => (
-                        <div 
-                          key={idx} 
-                          onClick={() => setActiveImage(img)}
-                          className={`relative h-24 rounded-lg overflow-hidden border-2 cursor-pointer transition-all duration-300 ${
-                            activeImage === img 
-                              ? "border-[#c9a750] scale-95 shadow-[0_0_15px_rgba(201,167,80,0.3)]" 
-                              : "border-[#c9a750]/10 hover:border-[#c9a750]/40"
-                          }`}
-                        >
-                          <Image
-                            src={img}
-                            alt={`${selectedProject.title} - Image ${idx + 1}`}
-                            fill
-                            className="object-cover hover:scale-110 transition-transform duration-500"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right: Content Section */}
-                <div className="flex-1 p-8 md:p-12 lg:p-16">
-                  <div className="max-w-2xl">
-                    {/* Header */}
-                    <div className="mb-10">
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="h-px w-8 bg-[#c9a750]"></span>
-                        <span className="text-[#c9a750] text-sm font-bold tracking-[0.2em] uppercase">
-                          {selectedProject.category}
-                        </span>
-                      </div>
-                      <h2 className="text-4xl md:text-5xl font-bold text-[#e6d5c0] mb-6 tracking-tight leading-tight">
-                        {selectedProject.title}
-                      </h2>
-                      <div className="flex flex-wrap items-center gap-6 text-[#e6d5c0]/60">
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-[#c9a750]" />
-                          <span className="text-sm uppercase tracking-wider">{selectedProject.location}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-[#c9a750]" />
-                          <span className="text-sm uppercase tracking-wider">{selectedProject.year}</span>
+              {/* Scrollable Content */}
+              <div className="overflow-y-auto custom-scrollbar">
+                <div className="flex flex-col md:flex-row">
+                  {/* Left: Image Gallery Section */}
+                  <div className="w-full md:w-[45%] bg-[#171410]">
+                    <div className="sticky top-0 p-8">
+                      {/* Main Image */}
+                      <div className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden mb-4">
+                        <Image
+                          src={activeImage || selectedProject.image}
+                          alt={selectedProject.title}
+                          fill
+                          className="object-cover transition-all duration-500"
+                        />
+                        {/* Floating Number */}
+                        <div className="absolute bottom-6 left-6">
+                          <span className="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-[#c9a750]/60 to-[#8c6d3b]/40 leading-none select-none">
+                            {selectedProject.number}
+                          </span>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Description */}
-                    <div className="mb-12">
-                      <p className="text-[#e6d5c0]/80 text-lg leading-relaxed italic">
-                        "{selectedProject.description}"
-                      </p>
-                    </div>
-
-                    {/* Info Grid */}
-                    <div className="grid grid-cols-2 gap-8 mb-12 py-8 border-y border-[#c9a750]/10">
-                      <div>
-                        <h4 className="text-[#c9a750]/50 text-xs font-bold tracking-[0.2em] uppercase mb-2">Client</h4>
-                        <p className="text-[#e6d5c0] font-medium">{selectedProject.details.client}</p>
-                      </div>
-                      <div>
-                        <h4 className="text-[#c9a750]/50 text-xs font-bold tracking-[0.2em] uppercase mb-2">Area</h4>
-                        <p className="text-[#e6d5c0] font-medium">{selectedProject.details.area}</p>
-                      </div>
-                    </div>
-
-                    {/* Highlights */}
-                    <div className="mb-12">
-                      <h4 className="text-[#c9a750] text-sm font-bold tracking-[0.2em] uppercase mb-6 flex items-center gap-3">
-                        Key Highlights
-                        <span className="flex-1 h-px bg-gradient-to-r from-[#c9a750]/20 to-transparent"></span>
-                      </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {selectedProject.details.highlights.map((highlight, index) => (
+                      {/* Gallery Images */}
+                      <div className="grid grid-cols-3 gap-3">
+                        {selectedProject.galleryImages.map((img, idx) => (
                           <div
-                            key={index}
-                            className="flex items-start gap-3 p-4 bg-[#171410]/30 border border-[#c9a750]/5 rounded-2xl hover:border-[#c9a750]/20 transition-all duration-300"
+                            key={idx}
+                            onClick={() => setActiveImage(img)}
+                            className={`relative h-24 rounded-lg overflow-hidden border-2 cursor-pointer transition-all duration-300 ${
+                              activeImage === img
+                                ? "border-[#c9a750] scale-95 shadow-[0_0_15px_rgba(201,167,80,0.3)]"
+                                : "border-[#c9a750]/10 hover:border-[#c9a750]/40"
+                            }`}
                           >
-                            <div className="w-1.5 h-1.5 mt-2 bg-[#c9a750] rounded-full"></div>
-                            <p className="text-[#e6d5c0]/70 text-sm leading-relaxed">{highlight}</p>
+                            <Image
+                              src={img}
+                              alt={`${selectedProject.title} - Image ${idx + 1}`}
+                              fill
+                              className="object-cover hover:scale-110 transition-transform duration-500"
+                            />
                           </div>
                         ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Content Section */}
+                  <div className="flex-1 p-8 md:p-12 lg:p-16">
+                    <div className="max-w-2xl">
+                      {/* Header */}
+                      <div className="mb-10">
+                        <div className="flex items-center gap-3 mb-4">
+                          <span className="h-px w-8 bg-[#c9a750]"></span>
+                          <span className="text-[#c9a750] text-sm font-bold tracking-[0.2em] uppercase">
+                            {selectedProject.category}
+                          </span>
+                        </div>
+                        <h2 className="text-4xl md:text-5xl font-bold text-[#e6d5c0] mb-6 tracking-tight leading-tight">
+                          {selectedProject.title}
+                        </h2>
+                        <div className="flex flex-wrap items-center gap-6 text-[#e6d5c0]/60">
+                          <div className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4 text-[#c9a750]" />
+                            <span className="text-sm uppercase tracking-wider">
+                              {selectedProject.location}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-[#c9a750]" />
+                            <span className="text-sm uppercase tracking-wider">
+                              {selectedProject.year}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Description */}
+                      <div className="mb-12">
+                        <p className="text-[#e6d5c0]/80 text-lg leading-relaxed italic">
+                          &quot;{selectedProject.description}&quot;
+                        </p>
+                      </div>
+
+                      {/* Info Grid */}
+                      <div className="grid grid-cols-2 gap-8 mb-12 py-8 border-y border-[#c9a750]/10">
+                        <div>
+                          <h4 className="text-[#c9a750]/50 text-xs font-bold tracking-[0.2em] uppercase mb-2">
+                            Client
+                          </h4>
+                          <p className="text-[#e6d5c0] font-medium">
+                            {selectedProject.details.client}
+                          </p>
+                        </div>
+                        <div>
+                          <h4 className="text-[#c9a750]/50 text-xs font-bold tracking-[0.2em] uppercase mb-2">
+                            Area
+                          </h4>
+                          <p className="text-[#e6d5c0] font-medium">
+                            {selectedProject.details.area}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Highlights */}
+                      <div className="mb-12">
+                        <h4 className="text-[#c9a750] text-sm font-bold tracking-[0.2em] uppercase mb-6 flex items-center gap-3">
+                          Key Highlights
+                          <span className="flex-1 h-px bg-gradient-to-r from-[#c9a750]/20 to-transparent"></span>
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {selectedProject.details.highlights.map(
+                            (highlight, index) => (
+                              <div
+                                key={index}
+                                className="flex items-start gap-3 p-4 bg-[#171410]/30 border border-[#c9a750]/5 rounded-2xl hover:border-[#c9a750]/20 transition-all duration-300"
+                              >
+                                <div className="w-1.5 h-1.5 mt-2 bg-[#c9a750] rounded-full"></div>
+                                <p className="text-[#e6d5c0]/70 text-sm leading-relaxed">
+                                  {highlight}
+                                </p>
+                              </div>
+                            ),
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body,
+        )}
 
       <style jsx>{`
         @keyframes gradient {
