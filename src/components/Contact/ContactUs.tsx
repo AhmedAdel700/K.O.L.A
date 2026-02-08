@@ -59,8 +59,8 @@ export default function KoiaContactSection() {
       {
         scaleX: 0,
         transformOrigin: "center",
-        duration: 1.2,
-        ease: "power2.ininOut",
+        duration: 1,
+        ease: "power2.inOut",
       },
       "-=0.4",
     );
