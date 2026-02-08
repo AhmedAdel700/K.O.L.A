@@ -5,7 +5,7 @@ import { z } from "zod";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,6 +36,7 @@ export default function KoiaContactSection() {
   >("idle");
   const sectionRef = useRef<HTMLElement>(null);
   const t = useTranslations("home");
+  const locale = useLocale();
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -260,13 +261,15 @@ export default function KoiaContactSection() {
             <div className="contact-header-line h-0.5 w-full bg-gradient-to-r from-transparent via-[#c9a750] to-transparent mt-2"></div>
           </div>
           <h2 className="contact-title text-5xl md:text-7xl font-bold text-[#e6d5c0] leading-tight mb-4">
-            {t("LETS")}
+            {t("LETS")}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a750] via-[#b2913c] to-[#8c6d3b] animate-gradient">
-              {t("CONNECT")}
+              {t("CONNECT-section")}
             </span>
           </h2>
           <p className="contact-description text-[#e6d5c0]/70 text-lg md:text-xl max-w-2xl mx-auto">
-            {t("Ready to bring your project to life? Reach inOut and lets discusshow we can help")}
+            {t(
+              "Ready to bring your project to life? Reach inOut and lets discusshow we can help",
+            )}
           </p>
         </div>
 
@@ -297,12 +300,15 @@ export default function KoiaContactSection() {
 
             {/* Decorative Quote */}
             <div className="contact-quote relative p-8 bg-gradient-to-br from-[#3b3121]/30 to-transparent rounded-xl border border-[#c9a750]/10">
-              <div className="absolute top-4 left-4 text-6xl text-[#c9a750]/20">
+              <div
+                className={`absolute ${locale === "en" ? "left-4 top-4" : "right-4 top-4.5"} text-6xl text-[#c9a750]/20`}
+              >
                 &quot;
               </div>
-              <p className="relative z-10 text-[#e6d5c0]/80 text-lg italic leading-relaxed pl-8">
-                Quality is not an act, it is a habit. Lets build something
-                exceptional together.
+              <p className="relative z-10 text-[#e6d5c0]/80 text-lg italic leading-relaxed ps-5">
+                {t(
+                  "Quality is not an act, it is a habit Lets build something exceptional together",
+                )}
               </p>
             </div>
           </div>
@@ -317,7 +323,9 @@ export default function KoiaContactSection() {
               {submitStatus === "success" && (
                 <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
                   <p className="text-green-400 text-center font-semibold">
-                    Message sent successfully! We will get back to you soon.
+                    {t(
+                      "Message sent successfully! We will get back to you soon",
+                    )}
                   </p>
                 </div>
               )}
@@ -327,13 +335,13 @@ export default function KoiaContactSection() {
                 <div className="relative">
                   <label
                     htmlFor="name"
-                    className={`absolute left-4 transition-all duration-300 pointer-events-none ${
+                    className={`absolute ${locale === "en" ? "left-4" : "right-4"} transition-all duration-300 pointer-events-none ${
                       focusedField === "name" || formData.name
                         ? "-top-6 text-[#c9a750]"
                         : "top-4 text-base text-[#e6d5c0]/50"
                     }`}
                   >
-                    Full Name *
+                    {t("Full Name")} *
                   </label>
                   <input
                     type="text"
@@ -359,13 +367,13 @@ export default function KoiaContactSection() {
                   <div className="relative">
                     <label
                       htmlFor="email"
-                      className={`absolute left-4 transition-all duration-300 pointer-events-none ${
+                      className={`absolute ${locale === "en" ? "left-4" : "right-4"} transition-all duration-300 pointer-events-none ${
                         focusedField === "email" || formData.email
                           ? "-top-6 text-[#c9a750]"
                           : "top-4 text-base text-[#e6d5c0]/50"
                       }`}
                     >
-                      Email Address *
+                      {t("Email Address")} *
                     </label>
                     <input
                       type="email"
@@ -391,13 +399,13 @@ export default function KoiaContactSection() {
                   <div className="relative">
                     <label
                       htmlFor="phone"
-                      className={`absolute left-4 transition-all duration-300 pointer-events-none ${
+                      className={`absolute ${locale === "en" ? "left-4" : "right-4"} transition-all duration-300 pointer-events-none ${
                         focusedField === "phone" || formData.phone
                           ? "-top-6 text-[#c9a750]"
                           : "top-4 text-base text-[#e6d5c0]/50"
                       }`}
                     >
-                      Phone Number *
+                      {t("Phone Number")} *
                     </label>
                     <input
                       type="tel"
@@ -424,13 +432,13 @@ export default function KoiaContactSection() {
                 <div className="relative">
                   <label
                     htmlFor="message"
-                    className={`absolute left-4 transition-all duration-300 pointer-events-none ${
+                    className={`absolute ${locale === "en" ? "left-4" : "right-4"} transition-all duration-300 pointer-events-none ${
                       focusedField === "message" || formData.message
                         ? "-top-6 text-[#c9a750]"
                         : "top-4 text-base text-[#e6d5c0]/50"
                     }`}
                   >
-                    Your Message *
+                    {t("Message")} *
                   </label>
                   <textarea
                     id="message"
@@ -483,10 +491,10 @@ export default function KoiaContactSection() {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           ></path>
                         </svg>
-                        SENDING...
+                        {t("SENDING")}...
                       </>
                     ) : (
-                      <>SEND MESSAGE</>
+                      <>{t("SEND MESSAGE")}</>
                     )}
                   </span>
                 </button>

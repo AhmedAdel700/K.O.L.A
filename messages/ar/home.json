@@ -23,7 +23,8 @@
   "View Projects": "عرض المشاريع",
   "Ready to bring your project to life? Reach inOut and lets discusshow we can help": "هل أنت مستعد لتحويل مشروعك إلى حقيقة؟ تواصل معنا وسنناقش كيف يمكننا مساعدتك",
   "Get In Touch": "تواصل معنا",
-  "LETS": "لنتحدث",
+  "LETS": "دعنا",
+  "CONNECT-section": "نتواصل",
   "CONNECT": "تواصل",
   "QUALITY": "الجودة",
   "CLARITY": "الوضوح",
@@ -31,5 +32,13 @@
   "Make Your": "اجعل",
   "Commercial Space": "مساحتك التجارية",
   "Stand Out": "تتميز",
-  "VIEW PROJECT": "عرض المشروع"
+  "VIEW PROJECT": "عرض المشروع",
+  "Message sent successfully! We will get back to you soon": "تم إرسال الرسالة بنجاح! سنعود إليك قريبًا",
+  "Full Name": "الاسم الكامل",
+  "Email Address": "البريد الإلكتروني",
+  "Phone Number": "رقم الهاتف",
+  "Message": "الرسالة",
+  "SENDING": "جارٍ الإرسال",
+  "SEND MESSAGE": "إرسال الرسالة",
+  "Quality is not an act, it is a habit Lets build something exceptional together": "الجودة ليست فعلًا، بل عادة. دعنا نبني شيئًا استثنائيًا معاً"
 }
