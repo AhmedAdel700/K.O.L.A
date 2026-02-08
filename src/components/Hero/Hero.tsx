@@ -8,6 +8,7 @@ import img4 from "@/assets/serivce4.jpg";
 import Image, { StaticImageData } from "next/image";
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { useTranslations } from "next-intl";
 
 interface Project {
   id: number;
@@ -19,6 +20,7 @@ const HEADER_HEIGHT = 64;
 
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const t = useTranslations("home");
 
   // Sample projects - replace with your actual project data
   const projects: Project[] = [
@@ -88,13 +90,13 @@ export default function HeroSection() {
             {/* Main Heading */}
             <h1 className="text-[clamp(2.4rem,6vw,6rem)] font-bold mb-6 animate-fade-in-up-delay-1 opacity-0">
               <span className="block text-[var(--color-text-secondary)] leading-tight mb-2">
-                Make Your
+                {t("Make Your")}
               </span>
               <span className="block bg-gradient-to-r from-[var(--color-primary-bg)] via-[var(--color-secondary-gold)] to-[var(--color-accent-bronze)] bg-clip-text text-transparent leading-tight">
-                Commercial Space
+                {t("Commercial Space")}
               </span>
               <span className="block text-[var(--color-text-secondary)] leading-tight">
-                Stand Out
+                {t("Stand Out")}
               </span>
             </h1>
 
@@ -112,7 +114,7 @@ export default function HeroSection() {
                 className="group cursor-pointer relative px-10 py-4 bg-gradient-to-r from-[var(--color-primary-bg)] to-[var(--color-secondary-gold)] rounded-md overflow-hidden transition-all duration-300 hover:scale-105"
               >
                 <span className="relative z-10 text-[var(--color-dark-secondary)] font-semibold text-xl tracking-wide flex items-center gap-2">
-                  View Projects
+                  {t("View Projects")}
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-secondary-gold)] to-[var(--color-accent-bronze)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>

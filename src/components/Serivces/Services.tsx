@@ -8,12 +8,14 @@ import serviceImg1 from "@/assets/service1.jpg";
 import serviceImg2 from "@/assets/service2.jpg";
 import serviceImg3 from "@/assets/service3.jpg";
 import serviceImg4 from "@/assets/serivce4.jpg";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function KoiaServicesSection() {
   const sectionRef = useRef<HTMLElement>(null);
-
+  const t = useTranslations("home");
+  const locale = useLocale();
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -116,14 +118,14 @@ export default function KoiaServicesSection() {
         <div className="services-header text-center mb-8">
           <div className="inline-block">
             <span className="text-[#c9a750] text-sm font-semibold tracking-[0.3em] uppercase">
-              Our Expertise
+              {t("Our Expertise")}
             </span>
             <div className="services-header-line h-0.5 w-full bg-gradient-to-r from-transparent via-[#c9a750] to-transparent mt-2"></div>
           </div>
           <h2 className="text-6xl md:text-8xl font-bold text-[#e6d5c0] leading-tight">
-            OUR{" "}
+            {t("OUR")}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a750] via-[#b2913c] to-[#8c6d3b] animate-gradient">
-              SERVICES
+              {locale === "en" ? "SERVICES" : ""}
             </span>
           </h2>
         </div>

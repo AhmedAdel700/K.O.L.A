@@ -5,6 +5,7 @@ import { z } from "zod";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -34,6 +35,7 @@ export default function KoiaContactSection() {
     "idle" | "success" | "error"
   >("idle");
   const sectionRef = useRef<HTMLElement>(null);
+  const t = useTranslations("home");
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -253,26 +255,24 @@ export default function KoiaContactSection() {
         <div className="text-center mb-20">
           <div className="contact-header inline-block mb-6">
             <span className="text-[#c9a750] text-sm font-semibold tracking-[0.3em] uppercase">
-              Get In Touch
+              {t("Get In Touch")}
             </span>
             <div className="contact-header-line h-0.5 w-full bg-gradient-to-r from-transparent via-[#c9a750] to-transparent mt-2"></div>
           </div>
           <h2 className="contact-title text-5xl md:text-7xl font-bold text-[#e6d5c0] leading-tight mb-4">
-            LETS 
+            {t("LETS")}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a750] via-[#b2913c] to-[#8c6d3b] animate-gradient">
-              CONNECT
+              {t("CONNECT")}
             </span>
           </h2>
           <p className="contact-description text-[#e6d5c0]/70 text-lg md:text-xl max-w-2xl mx-auto">
-            Ready to bring your project to life? Reach inOut and lets discuss how
-            we can help.
+            {t("Ready to bring your project to life? Reach inOut and lets discusshow we can help")}
           </p>
         </div>
 
         <div className="grid lg:grid-cols-5 gap-12">
           {/* Contact Info - Left Side */}
-          <div className="lg:col-span-2 space-y-8"
-          >
+          <div className="lg:col-span-2 space-y-8">
             <div className="space-y-6">
               {contactInfo.map((info, index) => (
                 <div
@@ -361,8 +361,8 @@ export default function KoiaContactSection() {
                       htmlFor="email"
                       className={`absolute left-4 transition-all duration-300 pointer-events-none ${
                         focusedField === "email" || formData.email
-                        ? "-top-6 text-[#c9a750]"
-                        : "top-4 text-base text-[#e6d5c0]/50"
+                          ? "-top-6 text-[#c9a750]"
+                          : "top-4 text-base text-[#e6d5c0]/50"
                       }`}
                     >
                       Email Address *
@@ -393,8 +393,8 @@ export default function KoiaContactSection() {
                       htmlFor="phone"
                       className={`absolute left-4 transition-all duration-300 pointer-events-none ${
                         focusedField === "phone" || formData.phone
-                        ? "-top-6 text-[#c9a750]"
-                        : "top-4 text-base text-[#e6d5c0]/50"
+                          ? "-top-6 text-[#c9a750]"
+                          : "top-4 text-base text-[#e6d5c0]/50"
                       }`}
                     >
                       Phone Number *
@@ -486,9 +486,7 @@ export default function KoiaContactSection() {
                         SENDING...
                       </>
                     ) : (
-                      <>
-                        SEND MESSAGE
-                      </>
+                      <>SEND MESSAGE</>
                     )}
                   </span>
                 </button>

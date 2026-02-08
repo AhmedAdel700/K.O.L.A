@@ -5,10 +5,12 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap/all";
 import aboutImg from "@/assets/3.jpg";
+import { useTranslations } from "next-intl";
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const statRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const t = useTranslations("home");
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -134,7 +136,7 @@ export default function AboutSection() {
     { number: 50, label: "Projects Per Year" },
   ];
 
-  const values = ["QUALITY", "CLARITY", "TIME SAVING"];
+  const values = [t("QUALITY"), t("CLARITY"), t("TIME SAVING")];
 
   return (
     <section
@@ -152,12 +154,12 @@ export default function AboutSection() {
               <div className="about-header mb-8">
                 <div className="inline-block mb-4">
                   <span className="text-[#c9a750] text-sm font-semibold tracking-[0.3em] uppercase">
-                    About Us
+                    {t("About Us")}
                   </span>
                   <div className="about-header-line h-0.5 w-full bg-gradient-to-r from-[#c9a750] to-transparent mt-2"></div>
                 </div>
                 <h2 className="text-5xl md:text-7xl font-bold text-[#e6d5c0] leading-tight">
-                  About{" "}
+                  {t("About-section")}{" "}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a750] via-[#b2913c] to-[#8c6d3b] animate-gradient">
                     K.O.I.A
                   </span>

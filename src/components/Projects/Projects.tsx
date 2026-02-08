@@ -5,13 +5,14 @@ import { createPortal } from "react-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image, { StaticImageData } from "next/image";
-import { X, ArrowRight, Calendar, MapPin } from "lucide-react";
+import { X, ArrowRight, Calendar, MapPin, ArrowLeft } from "lucide-react";
 import img1 from "@/assets/service1.jpg";
 import img2 from "@/assets/service2.jpg";
 import img3 from "@/assets/service3.jpg";
 import img4 from "@/assets/serivce4.jpg";
 import img5 from "@/assets/1.jpg";
 import img6 from "@/assets/2.jpg";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -169,6 +170,8 @@ export default function Projects() {
   const [activeImage, setActiveImage] = useState<StaticImageData | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const t = useTranslations("home");
+  const locale = useLocale();
 
   useEffect(() => {
     setMounted(true);
@@ -297,14 +300,14 @@ export default function Projects() {
           <div className="projects-header text-center mb-16">
             <div className="inline-block">
               <span className="text-[#c9a750] text-sm font-semibold tracking-[0.3em] uppercase">
-                Portfolio
+                {t("Portfolio")}
               </span>
               <div className="projects-header-line h-0.5 w-full bg-gradient-to-r from-transparent via-[#c9a750] to-transparent mt-2"></div>
             </div>
             <h2 className="text-6xl md:text-8xl font-bold text-[#e6d5c0] leading-tight mt-4">
-              FEATURED{" "}
+              {t("FEATURED")}{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a750] via-[#b2913c] to-[#8c6d3b] animate-gradient">
-                PROJECTS
+                {t("PROJECTS")}
               </span>
             </h2>
           </div>
@@ -384,9 +387,13 @@ export default function Projects() {
                       {/* View More Indicator */}
                       <div className="mt-4 flex items-center gap-2 text-[#c9a750] opacity-0 group-hover:opacity-100 transition-all duration-700 delay-200">
                         <span className="text-sm font-semibold tracking-wider">
-                          VIEW PROJECT
+                          {t("VIEW PROJECT")}
                         </span>
-                        <ArrowRight className="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300" />
+                        {locale === "en" ? (
+                          <ArrowRight className="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300" />
+                        ) : (
+                          <ArrowLeft className="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300 mt-1 ms-2" />
+                        )}
                       </div>
                     </div>
                   </div>

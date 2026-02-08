@@ -5,12 +5,15 @@ import logo from "@/assets/logo.png";
 import { Link } from "@/i18n/navigation";
 import ScrollSmoother from "gsap/ScrollSmoother";
 import gsap from "gsap";
+import { useTranslations } from "next-intl";
 
 const HEADER_HEIGHT = 64;
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const elementsRef = useRef<HTMLDivElement>(null);
+
+  const t = useTranslations("home");
 
   const handleScroll = (e: React.MouseEvent, target: string) => {
     e.preventDefault();
@@ -41,11 +44,12 @@ export default function Footer() {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (elementsRef.current) {
-      const animatedElements = elementsRef.current.querySelectorAll(".animate-on-scroll");
+      const animatedElements =
+        elementsRef.current.querySelectorAll(".animate-on-scroll");
       animatedElements.forEach((el) => observer.observe(el));
     }
 
@@ -54,17 +58,17 @@ export default function Footer() {
 
   const footerLinks = {
     company: [
-      { name: "Home", href: "#hero" },
-      { name: "About", href: "#about" },
-      { name: "Services", href: "#services" },
-      {name: "Projects", href: "#projects" },
-      { name: "Contact", href: "#contact-us" },
+      { name: t("Home"), href: "#hero" },
+      { name: t("About"), href: "#about" },
+      { name: t("Services"), href: "#services" },
+      { name: t("Projects"), href: "#projects" },
+      { name: t("Contact"), href: "#contact-us" },
     ],
     services: [
-      { name: "Design" },
-      { name: "Contracting" },
-      { name: "Project Management" },
-      { name: "Fit-Out & Execution" },
+      { name: t("Design") },
+      { name: t("Contracting") },
+      { name: t("Project Management") },
+      { name: t("Fit-Out & Execution") },
     ],
   };
 
@@ -153,7 +157,8 @@ export default function Footer() {
         }
 
         @keyframes pulse-glow {
-          0%, 100% {
+          0%,
+          100% {
             box-shadow: 0 0 5px rgba(201, 167, 80, 0.2);
           }
           50% {
@@ -204,14 +209,20 @@ export default function Footer() {
       >
         {/* Animated Background Pattern */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, #c9a750 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }}></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, #c9a750 1px, transparent 0)`,
+              backgroundSize: "40px 40px",
+            }}
+          ></div>
         </div>
 
         {/* Main Footer Content */}
-        <div ref={elementsRef} className="relative max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pt-20 pb-6">
+        <div
+          ref={elementsRef}
+          className="relative max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pt-20 pb-6"
+        >
           <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-16">
             {/* Brand Section */}
             <div className="lg:col-span-4 animate-on-scroll">
@@ -222,8 +233,9 @@ export default function Footer() {
                 <div className="h-1 w-20 bg-gradient-to-r from-[#c9a750] to-transparent mt-2 animate-on-scroll delay-1"></div>
               </div>
               <p className="text-[#e6d5c0]/70 text-base leading-relaxed mb-6 animate-on-scroll delay-2">
-                Delivering high-end interior finishing with controlled execution
-                across commercial, residential, and branded environments.
+                {t(
+                  "Delivering high-end interior finishing with controlled execution across commercial, residential, and branded environments",
+                )}
               </p>
               {/* Social Links */}
               <div className="flex gap-4 animate-on-scroll delay-3">
@@ -246,12 +258,12 @@ export default function Footer() {
             {/* Company Links */}
             <div className="lg:col-span-4 animate-on-scroll delay-2">
               <h4 className="text-[#e6d5c0] text-lg font-bold mb-6 uppercase tracking-wider relative inline-block">
-                Company
+                {t("Sections")}
                 <div className="absolute -bottom-2 left-0 h-0.5 w-12 bg-[#c9a750] shimmer-line"></div>
               </h4>
               <ul className="space-y-3">
                 {footerLinks.company.map((link, index) => (
-                  <li 
+                  <li
                     key={link.name}
                     className="animate-on-scroll"
                     style={{ animationDelay: `${0.3 + index * 0.1}s` }}
@@ -274,21 +286,19 @@ export default function Footer() {
             {/* Services Links */}
             <div className="lg:col-span-4 animate-on-scroll delay-3">
               <h4 className="text-[#e6d5c0] text-lg font-bold mb-6 uppercase tracking-wider relative inline-block">
-                Services
+                {t("Services")}
                 <div className="absolute -bottom-2 left-0 h-0.5 w-12 bg-[#c9a750] shimmer-line"></div>
               </h4>
               <ul className="space-y-3">
                 {footerLinks.services.map((link, index) => (
-                  <li 
+                  <li
                     key={link.name}
                     className="animate-on-scroll"
                     style={{ animationDelay: `${0.4 + index * 0.1}s` }}
                   >
                     <div className="text-[#e6d5c0]/70 flex items-center gap-2 py-1">
                       <span className="w-1 h-px bg-[#c9a750]/30"></span>
-                      <span>
-                        {link.name}
-                      </span>
+                      <span>{link.name}</span>
                     </div>
                   </li>
                 ))}
@@ -302,7 +312,7 @@ export default function Footer() {
           {/* Bottom Bar */}
           <div className="flex flex-col md:flex-row justify-center items-center gap-4 animate-on-scroll delay-4">
             <p className="text-[#e6d5c0]/60 text-sm">
-              All Rights Reserved{" "}
+              {t("All Rights Reserved")}{" "}
               <span className="text-orange-400 font-medium hover:text-[#c9a750] transition-colors duration-300 cursor-default">
                 Be Group
               </span>{" "}

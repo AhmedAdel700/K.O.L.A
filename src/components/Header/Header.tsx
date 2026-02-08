@@ -10,7 +10,7 @@ import gsap from "gsap";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useGSAP } from "@gsap/react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,13 +27,14 @@ export default function Header({ type = "popup" }: HeaderProps) {
   const langRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState<string>("#home");
   const locale = useLocale();
+   const t = useTranslations("home");
 
   const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Services", href: "#services" },
-    { name: "Projects", href: "#projects" },
-    { name: "Contact", href: "#contact-us" },
+    { name: t("Home"), href: "#home" },
+    { name: t("About"), href: "#about" },
+    { name: t("Services"), href: "#services" },
+    { name: t("Projects"), href: "#projects" },
+    { name: t("Contact"), href: "#contact-us" },
   ];
 
   // ─────────────────────────────────────────────
