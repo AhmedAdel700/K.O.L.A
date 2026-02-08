@@ -1,38 +1,54 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { type ReactNode, useRef } from "react";
 import gsap from "gsap";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { useGSAP } from "@gsap/react";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import ScrollSmoother from "gsap/ScrollSmoother";
 import { Observer } from "gsap/all";
 
-gsap.registerPlugin(Observer, ScrollSmoother);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother, Observer);
 
-export default function ScrollSnapManager() {
+interface SmoothScrollProps {
+  children: ReactNode;
+}
+
+export default function SmoothScrollProvider({ children }: SmoothScrollProps) {
   const isAnimating = useRef(false);
 
-  useEffect(() => {
-    const smoother = ScrollSmoother.get();
-    if (!smoother) return;
+  useGSAP(() => {
+    // Prevent double init
+    if (ScrollSmoother.get()) return;
+
+    const HEADER_HEIGHT = 80;
+
+    const smoother = ScrollSmoother.create({
+      wrapper: "#smooth-wrapper",
+      content: "#smooth-content",
+      smooth: 1.5,
+      effects: true,
+      normalizeScroll: false,
+    });
 
     const sections = gsap.utils.toArray<HTMLElement>(".snap-section");
-    if (sections.length === 0) return;
+    if (!sections.length) return;
 
     let currentIndex = -1;
 
-    // Function to calculate current index based on scroll position
     const updateCurrentIndex = () => {
       const scrollY = smoother.scrollTop();
-      let closestIndex = 0;
-      let minDistance = Math.abs(scrollY - sections[0].offsetTop);
+      let closest = 0;
+      let min = Math.abs(scrollY - sections[0].offsetTop);
 
-      sections.forEach((section, index) => {
-        const distance = Math.abs(scrollY - section.offsetTop);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = index;
+      sections.forEach((section, i) => {
+        const dist = Math.abs(scrollY - section.offsetTop);
+        if (dist < min) {
+          min = dist;
+          closest = i;
         }
       });
-      currentIndex = closestIndex;
+
+      currentIndex = closest;
     };
 
     updateCurrentIndex();
@@ -43,39 +59,38 @@ export default function ScrollSnapManager() {
       isAnimating.current = true;
       currentIndex = index;
 
-      const targetY = sections[index].offsetTop;
-
       gsap.to(smoother, {
-        scrollTop: targetY,
+        scrollTop: sections[index].offsetTop - HEADER_HEIGHT,
         duration: 1.2,
-        ease: "power2.inOut",
+        ease: "circ.in",
         onComplete: () => {
           isAnimating.current = false;
         },
       });
     };
 
-    const obs = Observer.create({
+    const observer = Observer.create({
       type: "wheel,touch,pointer",
       wheelSpeed: -1,
-      onDown: () => !isAnimating.current && goToSection(currentIndex - 1),
-      onUp: () => !isAnimating.current && goToSection(currentIndex + 1),
       tolerance: 10,
       preventDefault: true,
+      onUp: () => !isAnimating.current && goToSection(currentIndex + 1),
+      onDown: () => !isAnimating.current && goToSection(currentIndex - 1),
     });
 
-    // Handle window resize
-    const handleResize = () => {
-        updateCurrentIndex();
-    };
-
+    const handleResize = () => updateCurrentIndex();
     window.addEventListener("resize", handleResize);
 
     return () => {
-      obs.kill();
+      observer.kill();
       window.removeEventListener("resize", handleResize);
+      smoother.kill();
     };
   }, []);
 
-  return null;
+  return (
+    <div id="smooth-wrapper" className="bg-[#171410]">
+      <div id="smooth-content">{children}</div>
+    </div>
+  );
 }
