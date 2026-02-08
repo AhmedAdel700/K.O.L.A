@@ -293,7 +293,7 @@ export default function Projects() {
       <section
         id="projects"
         ref={sectionRef}
-        className="relative min-h-screen bg-[#171410] overflow-hidden pb-20 pt-5 px-6 md:px-12 lg:px-20"
+        className="relative min-h-screen overflow-hidden pb-20 pt-5 px-6 md:px-12 lg:px-20"
       >
         <div className="relative max-w-[1600px] mx-auto">
           {/* Header */}
@@ -533,7 +533,7 @@ export default function Projects() {
                       {/* Highlights */}
                       <div className="mb-12">
                         <h4 className="text-[#c9a750] text-sm font-bold tracking-[0.2em] uppercase mb-6 flex items-center gap-3">
-                          Key Highlights
+                          {t("Key Highlights")}
                           <span className="flex-1 h-px bg-gradient-to-r from-[#c9a750]/20 to-transparent"></span>
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

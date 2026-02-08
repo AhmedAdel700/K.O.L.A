@@ -142,7 +142,7 @@ export default function AboutSection() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative min-h-screen bg-[#171410] overflow-hidden pt-16 px-6 md:px-12 lg:px-20"
+      className="relative min-h-screen overflow-hidden pt-16 px-6 md:px-12 lg:px-20"
     >
       <div className="relative max-w-7xl mx-auto">
         {/* Main Content */}

@@ -205,7 +205,7 @@ export default function Footer() {
       <footer
         ref={footerRef}
         id="footer"
-        className="relative bg-[#171410] border-t border-[#c9a750]/20 overflow-hidden"
+        className="relative border-t border-[#c9a750]/20 overflow-hidden"
       >
         {/* Animated Background Pattern */}
         <div className="absolute inset-0 opacity-5">
@@ -261,7 +261,7 @@ export default function Footer() {
                 {t("Sections")}
                 <div className="absolute -bottom-2 left-0 h-0.5 w-12 bg-[#c9a750] shimmer-line"></div>
               </h4>
-              <ul className="space-y-3">
+              <ul className="grid grid-cols-3">
                 {footerLinks.company.map((link, index) => (
                   <li
                     key={link.name}

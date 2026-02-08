@@ -59,7 +59,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative flex flex-col py-20 min-h-[100svh] xl:h-screen w-full overflow-hidden bg-[var(--color-dark-ui)]"
+      className="relative flex flex-col py-20 min-h-[100svh] xl:h-screen w-full overflow-hidden"
       id="home"
     >
       {/* Animated Background Slider */}
@@ -73,7 +73,7 @@ export default function HeroSection() {
                 : "opacity-0 scale-105"
             }`}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-dark-ui)]/65 via-[var(--color-dark-ui)]/75 to-[var(--color-dark-secondary)]/65 z-10" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-dark-ui)]/75 via-[var(--color-dark-ui)]/85 to-[var(--color-dark-secondary)]/75 z-10" />
             <Image
               src={project.image}
               alt={project.title}

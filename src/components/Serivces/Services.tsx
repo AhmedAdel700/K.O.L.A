@@ -111,7 +111,7 @@ export default function KoiaServicesSection() {
     <section
       id="services"
       ref={sectionRef}
-      className="relative min-h-fit bg-[#171410] overflow-hidden pb-6 pt-10 pb-32 px-6 md:px-12 lg:px-20"
+      className="relative min-h-fit overflow-hidden pt-10 pb-32 px-6 md:px-12 lg:px-20"
     >
       <div className="relative max-w-[1600px] mx-auto">
         {/* Header */}

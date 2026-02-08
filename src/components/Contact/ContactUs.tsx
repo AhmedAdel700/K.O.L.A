@@ -80,18 +80,6 @@ export default function KoiaContactSection() {
       "-=0.6",
     );
 
-    // Description Animation
-    tl.from(
-      ".contact-description",
-      {
-        y: 15,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power2.inOut",
-      },
-      "-=0.5",
-    );
-
     // Contact Info Cards (Left Side) and Form (Right Side) - simultaneous
     tl.from(
       ".contact-info-card",
@@ -102,7 +90,7 @@ export default function KoiaContactSection() {
         stagger: 0.1,
         ease: "power2.inOut",
       },
-      "-=0.3",
+      "-=0.6",
     );
 
     // Contact Form (Right Side) - starts at same time as cards
@@ -111,10 +99,10 @@ export default function KoiaContactSection() {
       {
         x: 30,
         opacity: 0,
-        duration: 1,
-        ease: "power2.inOut",
+        duration: 0.9,
+        ease: "power4.inOut",
       },
-      "-=1",
+      "-=1.3",
     );
 
     // Decorative Quote - comes in last
@@ -124,9 +112,9 @@ export default function KoiaContactSection() {
         y: 20,
         opacity: 0,
         duration: 0.8,
-        ease: "power2.inOut",
+        ease: "power3.inOut",
       },
-      "-=0.7",
+      "-=0.6",
     );
   }, { scope: sectionRef });
 
@@ -249,7 +237,7 @@ export default function KoiaContactSection() {
     <section
       id="contact-us"
       ref={sectionRef}
-      className="relative min-h-screen bg-[#171410] overflow-hidden pt-6 pb-12 px-6 md:px-12 lg:px-20"
+      className="relative min-h-screen overflow-hidden pt-6 pb-12 px-6 md:px-12 lg:px-20"
     >
       <div className="relative max-w-7xl mx-auto">
         {/* Header */}
@@ -266,11 +254,6 @@ export default function KoiaContactSection() {
               {t("CONNECT-section")}
             </span>
           </h2>
-          <p className="contact-description text-[#e6d5c0]/70 text-lg md:text-xl max-w-2xl mx-auto">
-            {t(
-              "Ready to bring your project to life? Reach inOut and lets discusshow we can help",
-            )}
-          </p>
         </div>
 
         <div className="grid lg:grid-cols-5 gap-12">
