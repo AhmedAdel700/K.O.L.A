@@ -414,7 +414,7 @@ export default function Projects() {
               </h3> */}
 
               <h4 className="text-xl md:text-2xl font-semibold text-[#e6d5c0]/80 tracking-[0.2em]">
-                COLLABORATION
+                {t("COLLABORATION")}
               </h4>
 
               {/* Divider */}
