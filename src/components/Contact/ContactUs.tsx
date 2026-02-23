@@ -239,7 +239,7 @@ export default function KoiaContactSection() {
     <section
       id="contact-us"
       ref={sectionRef}
-      className="relative min-h-screen overflow-hidden pb-12 px-6 md:px-12 lg:px-20"
+      className="relative min-h-fit overflow-hidden py-12 px-6 md:px-12 lg:px-20"
     >
       <div className="relative max-w-7xl mx-auto">
         {/* Header */}
@@ -284,7 +284,7 @@ export default function KoiaContactSection() {
             </div>
 
             {/* Decorative Quote */}
-            <div className="contact-quote relative p-8 bg-gradient-to-br from-[#3b3121]/30 to-transparent rounded-xl border border-[#c9a750]/10">
+            <div className="contact-quote relative p-7 bg-gradient-to-br from-[#3b3121]/30 to-transparent rounded-xl border border-[#c9a750]/10">
               <div
                 className={`absolute ${locale === "en" ? "left-4 top-4" : "right-4 top-4.5"} text-6xl text-[#c9a750]/20`}
               >
@@ -315,7 +315,7 @@ export default function KoiaContactSection() {
                 </div>
               )}
 
-              <div className="space-y-6">
+              <div className="space-y-7">
                 {/* Name Field */}
                 <div className="relative">
                   <label
