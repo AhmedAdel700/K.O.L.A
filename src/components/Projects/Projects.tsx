@@ -404,6 +404,42 @@ export default function Projects() {
               </div>
             ))}
           </div>
+          {/* Section Footer Text — Stacked */}
+          <div className="mt-12">
+            <div className="mx-auto flex flex-col items-center text-center gap-4">
+
+              {/* Headline */}
+              {/* <h3 className="text-4xl font-bold text-[#e6d5c0] tracking-wide leading-tight">
+                END TO END EXECUTION
+              </h3> */}
+
+              <h4 className="text-xl md:text-2xl font-semibold text-[#e6d5c0]/80 tracking-[0.2em]">
+                {t("END TO END EXECUTION COLLABORATION WITH OTHER COMPANIES")}
+              </h4>
+
+              {/* Divider */}
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-[#c9a750] to-transparent"></div>
+
+              <div className="text-[#e6d5c0]/70 text-sm md:text-base flex flex-wrap justify-center gap-x-2 gap-y-2">
+                <span>Magrabi</span>
+                <span>-</span>
+                <span>PAUL Restaurant & Cafe</span>
+                <span>-</span>
+                <span>DREAM 2000</span>
+                <span>-</span>
+                <span>FEROZAH Jewelry Shop</span>
+                <span>-</span>
+                <span>American Eagle — Magenta</span>
+                <span>-</span>
+                <span>Butcher’s Burger & Chicken & Ribs</span>
+              </div>
+
+              {/* Divider */}
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-[#c9a750] to-transparent"></div>
+            </div>
+          </div>
+
+
         </div>
       </section>
 
@@ -455,11 +491,10 @@ export default function Projects() {
                           <div
                             key={idx}
                             onClick={() => setActiveImage(img)}
-                            className={`relative h-24 rounded-lg overflow-hidden border-2 cursor-pointer transition-all duration-300 ${
-                              activeImage === img
-                                ? "border-[#c9a750] scale-95 shadow-[0_0_15px_rgba(201,167,80,0.3)]"
-                                : "border-[#c9a750]/10 hover:border-[#c9a750]/40"
-                            }`}
+                            className={`relative h-24 rounded-lg overflow-hidden border-2 cursor-pointer transition-all duration-300 ${activeImage === img
+                              ? "border-[#c9a750] scale-95 shadow-[0_0_15px_rgba(201,167,80,0.3)]"
+                              : "border-[#c9a750]/10 hover:border-[#c9a750]/40"
+                              }`}
                           >
                             <Image
                               src={img}

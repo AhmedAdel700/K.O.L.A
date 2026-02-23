@@ -239,7 +239,7 @@ export default function KoiaContactSection() {
     <section
       id="contact-us"
       ref={sectionRef}
-      className="relative min-h-screen overflow-hidden pt-6 pb-12 px-6 md:px-12 lg:px-20"
+      className="relative min-h-screen overflow-hidden pb-12 px-6 md:px-12 lg:px-20"
     >
       <div className="relative max-w-7xl mx-auto">
         {/* Header */}
