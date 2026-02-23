@@ -185,7 +185,7 @@ export default function KoiaContactSection() {
         </svg>
       ),
       title: "Phone",
-      value: "+1 (555) 123-4567",
+      value: "01120149797",
     },
     {
       icon: (
@@ -204,7 +204,7 @@ export default function KoiaContactSection() {
         </svg>
       ),
       title: "Email",
-      value: "info@koiaconstruction.com",
+      value: "Info@koia-eg.com",
     },
     {
       icon: (
@@ -229,7 +229,9 @@ export default function KoiaContactSection() {
         </svg>
       ),
       title: "Location",
-      value: "123 Construction Ave, City, State",
+      value: t(
+        "zahraa nasr city - Build 2013 - office no 1 - in front of jewel sport city Hotel",
+      ),
     },
   ];
 

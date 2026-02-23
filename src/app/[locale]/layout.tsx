@@ -17,8 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "K.O.L.A - Constructions & Interior Finishing",
-  description: "K.O.L.A is a leading construction and interior finishing company specializing in high-end commercial spaces. With a commitment to quality and innovation, we transform ordinary spaces into extraordinary environments that inspire and captivate. Our team of experts delivers exceptional craftsmanship and attention to detail, ensuring every project exceeds expectations. From concept to completion, K.O.L.A is your trusted partner for creating stunning commercial interiors that leave a lasting impression.",
+  title: " K.O.I.A - Constructions & Interior Finishing",
+  description:
+    " K.O.I.A is a leading construction and interior finishing company specializing in high-end commercial spaces. With a commitment to quality and innovation, we transform ordinary spaces into extraordinary environments that inspire and captivate. Our team of experts delivers exceptional craftsmanship and attention to detail, ensuring every project exceeds expectations. From concept to completion, K.O.L.A is your trusted partner for creating stunning commercial interiors that leave a lasting impression.",
 };
 
 export default async function Layout({
