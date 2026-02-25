@@ -55,14 +55,15 @@ export default function ExecutionProcess() {
 
       // Individual Standard Items
       const stdItems = gsap.utils.toArray(".std-item");
-      stdItems.forEach((item: any) => {
-        gsap.from(item, {
+      stdItems.forEach((item) => {
+        const el = item as HTMLElement;
+        gsap.from(el, {
           y: 60,
           opacity: 0,
           duration: 1,
           ease: "power3.out",
           scrollTrigger: {
-            trigger: item,
+            trigger: el,
             start: "top 90%",
             toggleActions: "play none none none"
           }
