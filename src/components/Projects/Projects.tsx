@@ -304,10 +304,10 @@ export default function Projects() {
               </span>
               <div className="projects-header-line h-0.5 w-full bg-gradient-to-r from-transparent via-[#c9a750] to-transparent mt-2"></div>
             </div>
-            <h2 className="text-6xl md:text-8xl font-bold text-[#e6d5c0] leading-tight mt-4">
-              {t("FEATURED")}{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a750] via-[#b2913c] to-[#8c6d3b] animate-gradient">
-                {t("PROJECTS")}
+            <h2 className="text-6xl md:text-8xl font-bold text-[#e6d5c0] leading-tight mt-4 uppercase">
+              {t("Selected")}{" "}
+              <span className="text-transparent uppercase bg-clip-text bg-gradient-to-r from-[#c9a750] via-[#b2913c] to-[#8c6d3b] animate-gradient">
+                {t("Projects")}
               </span>
             </h2>
           </div>

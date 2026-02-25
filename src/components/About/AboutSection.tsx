@@ -158,7 +158,7 @@ export default function AboutSection() {
                   </span>
                   <div className="about-header-line h-0.5 w-full bg-gradient-to-r from-[#c9a750] to-transparent mt-2"></div>
                 </div>
-                <h2 className="text-5xl md:text-7xl font-bold text-[#e6d5c0] leading-tight">
+                <h2 className="text-6xl md:text-8xl font-bold text-[#e6d5c0] leading-tight">
                   {t("About-section")}{" "}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a750] via-[#b2913c] to-[#8c6d3b] animate-gradient">
                     K.O.I.A

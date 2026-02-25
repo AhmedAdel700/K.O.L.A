@@ -33,6 +33,7 @@ export default function Header({ type = "popup" }: HeaderProps) {
     { name: t("Home"), href: "#home" },
     { name: t("About"), href: "#about" },
     { name: t("Services"), href: "#services" },
+    { name: t("Execution Process"), href: "#execution-process" },
     { name: t("Projects"), href: "#projects" },
     { name: t("Contact"), href: "#contact-us" },
   ];
