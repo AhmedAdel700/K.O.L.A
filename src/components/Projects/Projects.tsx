@@ -16,153 +16,164 @@ import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Sample project data - replace with your actual images
 const projects = [
   {
     id: 1,
     number: "01",
-    title: "LUXURY VILLA",
-    category: "RESIDENTIAL",
-    location: "Dubai Hills",
+    title: "Be group – Full Fit-Out Execution",
+    category: "Administrative office",
+    location: "Saudi Arabia",
     year: "2024",
-    description:
-      "A contemporary luxury villa featuring minimalist design principles and sustainable materials. Spanning 8,500 sq ft, this residence seamlessly blends indoor and outdoor living spaces.",
+    clientObjective: "Implementation constraints for the Saudi Arabian branch due to high operating costs and the need to maintain maximum productivity.",
+    result: "Delivered on schedule with full operational readiness and zero post-handover corrections.",
     image: img1,
     galleryImages: [img1, img2, img3],
-    tags: ["Architecture", "Interior", "Landscape"],
+    tags: ["Full Fit-Out", "Administrative Office", "Interior Execution"],
     details: {
-      client: "Private Client",
-      duration: "18 months",
-      area: "8,500 sq ft",
+      client: "Be group",
+      scope: "Complete Interior Execution",
+      duration: "6 Weeks",
+      area: "780 sqm",
       highlights: [
-        "Sustainable building materials",
-        "Smart home integration",
-        "Infinity pool with panoramic views",
-        "Custom Italian fixtures",
+        "Structured timeline planning",
+        "Daily on-site supervision",
+        "Stage by stage quality approvals",
+        "Parallel milestone coordination",
       ],
     },
   },
   {
     id: 2,
     number: "02",
-    title: "CORPORATE HEADQUARTERS",
-    category: "COMMERCIAL",
-    location: "Business Bay",
+    title: "Clean Rooms – Interior Execution",
+    category: "Controlled Environment Facilities",
+    location: "Badr City",
     year: "2023",
-    description:
-      "Modern corporate office design emphasizing collaboration and wellness. Features include biophilic design elements, flexible workspaces, and cutting-edge technology integration.",
+    clientObjective: "Develop a controlled environment compliant with operational and technical requirements, ensuring stability of performance, process integrity, and long-term reliability.",
+    result: "Stable and compliant clean room environment delivered through disciplined execution and validated performance readiness.",
     image: img2,
     galleryImages: [img2, img4, img5],
-    tags: ["Commercial", "Workplace", "Sustainable"],
+    tags: ["Clean Room", "Controlled Environment", "Technical"],
     details: {
-      client: "Tech Corporation",
-      duration: "24 months",
-      area: "45,000 sq ft",
+      client: "Specialized Facility",
+      scope: "Specialized Clean Room Fit-Out",
+      duration: "70 Days",
+      area: "800 sqm",
       highlights: [
-        "LEED Gold certification",
-        "Collaborative work zones",
-        "Wellness-focused amenities",
-        "Advanced AV systems",
+        "pre-defined technical specifications aligned with clean room standards",
+        "Detailed technical coordination prior to installation",
+        "Controlled installation procedures to ensure system integrity",
+        "Integrated execution of architectural and technical components",
+        "Structured inspection and verification before final handover",
       ],
     },
   },
   {
     id: 3,
     number: "03",
-    title: "BOUTIQUE HOTEL",
-    category: "HOSPITALITY",
-    location: "Downtown Dubai",
+    title: "Medical Facility – Full Fit-Out Execution",
+    category: "Healthcare",
+    location: "New Cairo",
     year: "2024",
-    description:
-      "An intimate 50-room boutique hotel combining local cultural elements with contemporary luxury. Each space tells a story through carefully curated art and bespoke furnishings.",
+    clientObjective: "Launch ready medical facility within a strict operational deadline.",
+    result: "Delivered on schedule with full operational readiness and zero post-handover corrections.",
     image: img3,
     galleryImages: [img3, img6, img1],
-    tags: ["Hospitality", "Luxury", "Cultural"],
+    tags: ["Healthcare", "Medical Fit-Out", "Full Fit-Out"],
     details: {
-      client: "Hospitality Group",
-      duration: "30 months",
-      area: "65,000 sq ft",
+      client: "Medical Facility",
+      scope: "Complete Interior Execution",
+      duration: "8 Weeks",
+      area: "120 sqm",
       highlights: [
-        "50 uniquely designed rooms",
-        "Rooftop restaurant & bar",
-        "Spa & wellness center",
-        "Art gallery integration",
+        "Structured timeline planning",
+        "Daily on-site supervision",
+        "Stage-by-stage quality approvals",
+        "Parallel milestone coordination",
       ],
     },
   },
   {
     id: 4,
     number: "04",
-    title: "CONTEMPORARY PENTHOUSE",
-    category: "RESIDENTIAL",
-    location: "Palm Jumeirah",
+    title: "Corporate Administrative Office – Interior Execution",
+    category: "Corporate Workspace",
+    location: "Cairo",
     year: "2023",
-    description:
-      "Sky-high luxury living with breathtaking panoramic views. This penthouse showcases bold architectural gestures and premium finishes throughout its expansive layout.",
+    clientObjective: "Develop a structured workspace aligned with corporate functionality and operational flow.",
+    result: "Timeline protected delivery with structured final approval process.",
     image: img4,
     galleryImages: [img4, img2, img6],
-    tags: ["Luxury", "Interior", "High-end"],
+    tags: ["Corporate Workspace", "Interior Fit-Out", "Admin Office"],
     details: {
-      client: "Private Client",
-      duration: "12 months",
-      area: "12,000 sq ft",
+      client: "Corporate Office",
+      scope: "Full Interior Fit-Out",
+      duration: "10 Weeks",
+      area: "500 sqm",
       highlights: [
-        "360-degree views",
-        "Private elevator access",
-        "Wine cellar & cinema",
-        "Outdoor terraces",
+        "pre aligned budget structure",
+        "Technical documentation before site activation",
+        "Controlled execution under milestone supervision",
+        "Formal quality inspection prior to handover",
       ],
     },
   },
   {
     id: 5,
     number: "05",
-    title: "RETAIL CONCEPT STORE",
-    category: "COMMERCIAL",
-    location: "Dubai Mall",
+    title: "Optical Store – MEP Execution",
+    category: "Retail",
+    location: "Mall District 5",
     year: "2024",
-    description:
-      "An immersive retail experience blending physical and digital touchpoints. The design creates an engaging journey through innovative material use and interactive displays.",
+    clientObjective: "Deliver a fully integrated MEP system to support retail operations, ensuring efficient performance, safety compliance, and optimal customer comfort within the allocated timeline.",
+    result: "Successfully delivered a fully operational MEP system within 30 days, ensuring readiness for store opening and smooth day-to-day operations.",
     image: img5,
     galleryImages: [img5, img3, img4],
-    tags: ["Retail", "Innovation", "Experience"],
+    tags: ["Retail", "MEP", "Lighting Design"],
     details: {
-      client: "Fashion Brand",
-      duration: "8 months",
-      area: "5,500 sq ft",
+      client: "Optical Store",
+      scope: "MEP Execution",
+      duration: "30 Days",
+      area: "250 sqm",
       highlights: [
-        "Interactive digital displays",
-        "Modular fixture systems",
-        "Instagram-worthy moments",
-        "Sustainable materials",
+        "Coordinated MEP design implementation aligned with retail standards",
+        "Efficient power distribution and lighting layout for product display optimization",
+        "HVAC installation to maintain thermal comfort and system efficiency",
+        "Integration of fire alarm and safety systems in compliance with regulations",
+        "Accelerated execution schedule to meet mall operational requirements",
       ],
     },
   },
   {
     id: 6,
     number: "06",
-    title: "WELLNESS RETREAT",
-    category: "HOSPITALITY",
-    location: "Al Maha Desert",
+    title: "Luxury Residential Apartment – Design & Build Execution",
+    category: "Residential",
+    location: "El Narges",
     year: "2023",
-    description:
-      "A serene wellness sanctuary in the desert, designed to promote relaxation and rejuvenation. Natural materials and organic forms create harmony with the surrounding landscape.",
+    clientObjective: "Deliver a fully integrated residential unit through a comprehensive design and build approach, ensuring functionality, aesthetic coherence, and high-quality finishing within the defined timeframe.",
+    result: "Successfully delivered a fully completed residential apartment with refined detailing, operational readiness, and high finishing standards within 116 days.",
     image: img6,
     galleryImages: [img6, img1, img2],
-    tags: ["Wellness", "Sustainable", "Nature"],
+    tags: ["Design & Build", "Residential", "High Finishing"],
     details: {
-      client: "Wellness Group",
-      duration: "20 months",
-      area: "35,000 sq ft",
+      client: "Luxury Residential",
+      scope: "Design and Build Execution",
+      duration: "116 Days",
+      area: "140 sqm",
       highlights: [
-        "Eco-friendly construction",
-        "Natural ventilation systems",
-        "Meditation & yoga pavilions",
-        "Organic spa facilities",
+        "End to end design development aligned with client lifestyle requirements",
+        "Coordinated architectural, MEP, and finishing works",
+        "Material selection and specification management",
+        "Structured execution schedule with phased approvals",
+        "Continuous site supervision and quality control",
       ],
     },
   },
 ];
+
+
+
 
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -538,29 +549,41 @@ export default function Projects() {
                         </div>
                       </div>
 
-                      {/* Description */}
+                      {/* Client Objective */}
                       <div className="mb-12">
+                        <h4 className="text-[#c9a750] text-sm font-bold tracking-[0.2em] uppercase mb-4 flex items-center gap-3">
+                          Client Objective
+                          <span className="flex-1 h-px bg-gradient-to-r from-[#c9a750]/20 to-transparent"></span>
+                        </h4>
                         <p className="text-[#e6d5c0]/80 text-lg leading-relaxed italic">
-                          &quot;{selectedProject.description}&quot;
+                          &quot;{selectedProject.clientObjective}&quot;
                         </p>
                       </div>
 
                       {/* Info Grid */}
-                      <div className="grid grid-cols-2 gap-8 mb-12 py-8 border-y border-[#c9a750]/10">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-12 py-8 border-y border-[#c9a750]/10 text-center md:text-left">
                         <div>
                           <h4 className="text-[#c9a750]/50 text-xs font-bold tracking-[0.2em] uppercase mb-2">
-                            Client
+                             Scope
                           </h4>
-                          <p className="text-[#e6d5c0] font-medium">
-                            {selectedProject.details.client}
+                          <p className="text-[#e6d5c0] font-medium text-sm">
+                            {selectedProject.details.scope}
                           </p>
                         </div>
                         <div>
                           <h4 className="text-[#c9a750]/50 text-xs font-bold tracking-[0.2em] uppercase mb-2">
-                            Area
+                            Size / Area
                           </h4>
-                          <p className="text-[#e6d5c0] font-medium">
+                          <p className="text-[#e6d5c0] font-medium text-sm">
                             {selectedProject.details.area}
+                          </p>
+                        </div>
+                        <div>
+                          <h4 className="text-[#c9a750]/50 text-xs font-bold tracking-[0.2em] uppercase mb-2 whitespace-nowrap">
+                            Delivery Timeline
+                          </h4>
+                          <p className="text-[#e6d5c0] font-medium text-sm">
+                            {selectedProject.details.duration}
                           </p>
                         </div>
                       </div>
@@ -571,20 +594,33 @@ export default function Projects() {
                           {t("Key Highlights")}
                           <span className="flex-1 h-px bg-gradient-to-r from-[#c9a750]/20 to-transparent"></span>
                         </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4">
                           {selectedProject.details.highlights.map(
                             (highlight, index) => (
                               <div
                                 key={index}
                                 className="flex items-start gap-3 p-4 bg-[#171410]/30 border border-[#c9a750]/5 rounded-2xl hover:border-[#c9a750]/20 transition-all duration-300"
                               >
-                                <div className="w-1.5 h-1.5 mt-2 bg-[#c9a750] rounded-full"></div>
+                                <div className="flex-shrink-0 w-1.5 h-1.5 mt-2 bg-[#c9a750] rounded-full"></div>
                                 <p className="text-[#e6d5c0]/70 text-sm leading-relaxed">
                                   {highlight}
                                 </p>
                               </div>
                             ),
                           )}
+                        </div>
+                      </div>
+
+                      {/* Result */}
+                      <div className="mb-6">
+                        <h4 className="text-[#c9a750] text-sm font-bold tracking-[0.2em] uppercase mb-4 flex items-center gap-3">
+                          Result
+                          <span className="flex-1 h-px bg-gradient-to-r from-[#c9a750]/20 to-transparent"></span>
+                        </h4>
+                        <div className="p-5 rounded-2xl bg-[#c9a750]/5 border border-[#c9a750]/10">
+                          <p className="text-[#e6d5c0] text-base leading-relaxed font-medium">
+                            {selectedProject.result}
+                          </p>
                         </div>
                       </div>
                     </div>

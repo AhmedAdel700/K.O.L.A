@@ -2,8 +2,8 @@
 
 const standardsList = [
   {
-    title: "Milestone-Driven Delivery",
-    desc: "Every project is structured around clear, agreed milestones — no vague timelines.",
+    title: "Executive Site Assessment & Strategic Planning",
+    desc: "Comprehensive site evaluation and strategic roadmap development to align with project goals.",
     icon: (
       <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-5 h-5">
         <path d="M4 14h20M14 4v20" strokeLinecap="round" />
@@ -13,8 +13,8 @@ const standardsList = [
     ),
   },
   {
-    title: "Executive-Level Supervision",
-    desc: "A senior decision-maker is assigned to every project, not delegated to juniors.",
+    title: "Scope Definition & Budget Structuring",
+    desc: "Detailed scope mapping and transparent financial framework for predictable cost management.",
     icon: (
       <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-5 h-5">
         <circle cx="14" cy="9" r="4" />
@@ -23,8 +23,8 @@ const standardsList = [
     ),
   },
   {
-    title: "Structured Budget Alignment",
-    desc: "Costs are mapped against scope from day one — with no surprise invoices.",
+    title: "Technical Documentation & Compliance Review",
+    desc: "Rigorous technical planning and compliance auditing to ensure operational readiness.",
     icon: (
       <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-5 h-5">
         <rect x="3" y="5" width="22" height="18" rx="2" />
@@ -34,8 +34,8 @@ const standardsList = [
     ),
   },
   {
-    title: "Risk-Aware Sequencing",
-    desc: "Tasks are ordered to surface and mitigate risks early, not suppress them.",
+    title: "Supervised Execution with Milestone Tracking",
+    desc: "Disciplined project oversight with real-time milestone monitoring for deadline protection.",
     icon: (
       <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-5 h-5">
         <path d="M14 3l11 19H3L14 3z" />
@@ -44,8 +44,8 @@ const standardsList = [
     ),
   },
   {
-    title: "Controlled Handover Procedures",
-    desc: "Every delivery follows a documented handover — signed, tested, and complete.",
+    title: "Formal Handover & Operational Readiness Review",
+    desc: "Structured final approval process ensuring the space is fully ready for its intended use.",
     icon: (
       <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-5 h-5">
         <path d="M6 7h10a2 2 0 012 2v10l-4-3H6a2 2 0 01-2-2V9a2 2 0 012-2z" />
@@ -55,15 +55,15 @@ const standardsList = [
   },
 ];
 
+
 export default function ExecutionStandard() {
   return (
     <div className="pt-24 pb-24 relative">
       {/* Header */}
       <div className="mb-20 text-center">
-        <div className="std-label inline-flex items-center gap-4 mb-5">
-          <div className="w-10 h-px" />
+        <div className="std-label inline-block mb-5">
           <span className="text-xs font-bold tracking-[0.35em] uppercase" style={{ color: "#c9a750" }}>Standards</span>
-          <div className="w-10 h-px" />
+          <div className="std-header-line h-0.5 w-full mt-2 bg-gradient-to-r from-transparent via-[#c9a750] to-transparent"></div>
         </div>
         <h2 className="std-title text-6xl md:text-8xl font-bold leading-[1] tracking-tight text-[#e6d5c0] uppercase">
           Our{" "}
@@ -90,10 +90,10 @@ export default function ExecutionStandard() {
 
             {/* Content Card */}
             <div className={`flex-1 p-8 rounded-3xl bg-gradient-to-br from-[#171410] to-[#252119] border border-[#c9a750]/10 hover:border-[#c9a750]/40 transition-all duration-500 lg:w-[45%] text-center ${i % 2 !== 0 ? 'lg:text-right' : 'lg:text-left'}`}>
-              <h3 className="text-xl md:text-3xl font-bold text-[#e6d5c0] mb-4">
+              <h3 className="text-xl md:text-3xl font-bold text-[#e6d5c0] mb-4 text-start">
                 {item.title}
               </h3>
-              <p className="text-[#e6d5c0]/60 text-base md:text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 ${i % 2 !== 0 ? 'lg:ml-auto' : ''}">
+              <p className="text-[#e6d5c0]/60 text-base md:text-lg text-start leading-relaxed max-w-lg mx-auto lg:mx-0 ${i % 2 !== 0 ? 'lg:ml-auto' : ''}">
                 {item.desc}
               </p>
               

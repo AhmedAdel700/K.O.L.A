@@ -79,33 +79,38 @@ export default function KoiaServicesSection() {
   const services = [
     {
       number: "01",
-      title: "DESIGN",
+      title: "Corporate",
+      subtitle: "Offices",
       description:
-        "Strategic spatial planning and design development that merges form with function.",
+        "Workplace fit-out delivered with clear milestones, coordinated shop drawings, and disciplined MEP/ceiling coordination supported by QA/QC checks and snagging before handover.",
       image: serviceImg1,
     },
     {
       number: "02",
-      title: "CONTRACTING",
+      title: "Commercial",
+      subtitle: "Retail",
       description:
-        "Full-scope construction delivery with transparent timelines and budget control.",
+        "Retail execution managed against defined opening schedules, with milestone-based planning, controlled site coordination, and structured closeout to ensure readiness for operation.",
       image: serviceImg2,
     },
     {
       number: "03",
-      title: "PROJECT MANAGEMENT",
+      title: "Medical",
+      subtitle: "Clinics / Clean Rooms",
       description:
-        "Coordinated oversight ensuring seamless execution from inception to completion.",
+        "Medical environments executed with precision and compliance awareness, integrating MEP coordination and documented QA/QC so the space is handed over ready for use.",
       image: serviceImg3,
     },
     {
       number: "04",
-      title: "FIT-OUT & EXECUTION",
+      title: "Residential",
+      subtitle: "Villas / Apartments",
       description:
-        "Precision interior installation with attention to every finish and detail.",
+        "High end residential finishing managed through approved material submittals, method statements, and staged inspections ensuring consistent quality through to close-out.",
       image: serviceImg4,
     },
   ];
+
 
   return (
     <section
@@ -164,14 +169,18 @@ export default function KoiaServicesSection() {
                       <div className="h-px w-full bg-gradient-to-r from-[#c9a750] to-transparent mb-6 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
 
                       {/* Title */}
-                      <h3 className="text-4xl font-bold text-[#e6d5c0] mb-4 tracking-wider">
+                      <h3 className="text-4xl font-bold text-[#e6d5c0] mb-2 tracking-wider">
                         {service.title}
                       </h3>
+                      <h4 className="text-xl font-semibold text-[#c9a750] mb-4 tracking-wide">
+                        {service.subtitle}
+                      </h4>
 
                       {/* Description */}
-                      <p className="text-[#e6d5c0]/70 text-lg leading-relaxed transform opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100">
+                      <p className="text-[#e6d5c0]/70 text-base leading-relaxed transform opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100 italic">
                         {service.description}
                       </p>
+
                     </div>
 
                     <div></div>

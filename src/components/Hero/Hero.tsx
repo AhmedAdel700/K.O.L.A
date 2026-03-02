@@ -102,9 +102,9 @@ export default function HeroSection() {
 
             {/* Description */}
             <p className="text-lg md:text-xl text-[var(--color-text-secondary)]/80 mb-5 xl:mb-10 max-w-2xl leading-relaxed animate-fade-in-up-delay-2 opacity-0">
-              K.O.I.A delivers high-end interior finishing with controlled
-              execution, ensuring predictable results and faster handover.
+              {t("Subheadline")}
             </p>
+
 
             {/* CTA Button */}
             <div className="flex flex-wrap gap-4 animate-fade-in-up-delay-3 opacity-0">

@@ -45,10 +45,9 @@ export default function RiskManagement() {
   return (
     <div className="pt-20 pb-24">
       <div className="mb-14 text-center">
-        <div className="risk-label inline-flex items-center gap-4 mb-5">
-          <div className="w-10 h-px" style={{ background: "#c9a750" }} />
+        <div className="risk-label inline-block mb-5">
           <span className="text-xs font-bold tracking-[0.35em] uppercase" style={{ color: "#c9a750" }}>Risk Management</span>
-          <div className="w-10 h-px" style={{ background: "#c9a750" }} />
+          <div className="risk-header-line h-0.5 w-full mt-2" style={{ background: "linear-gradient(to right, transparent, #c9a750, transparent)" }}></div>
         </div>
         <h2 className="risk-title text-6xl md:text-8xl font-bold leading-[0.95] tracking-tight uppercase" style={{ color: "#e6d5c0" }}>
           How We Control{" "}

@@ -14,6 +14,8 @@ const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().min(10, "Please enter a valid phone number"),
+  jobTitle: z.string().optional(),
+  companyName: z.string().optional(),
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
 
@@ -24,6 +26,8 @@ export default function KoiaContactSection() {
     name: "",
     email: "",
     phone: "",
+    jobTitle: "",
+    companyName: "",
     message: "",
   });
   const [errors, setErrors] = useState<
@@ -144,7 +148,14 @@ export default function KoiaContactSection() {
       console.log("Form Data Submitted:", validatedData);
       // Success
       setSubmitStatus("success");
-      setFormData({ name: "", email: "", phone: "", message: "" });
+      setFormData({ 
+        name: "", 
+        email: "", 
+        phone: "", 
+        jobTitle: "", 
+        companyName: "", 
+        message: "" 
+      });
 
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -413,6 +424,59 @@ export default function KoiaContactSection() {
                   </div>
                 </div>
 
+                {/* Job Title and Company Name Row */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Job Title Field */}
+                  <div className="relative">
+                    <label
+                      htmlFor="jobTitle"
+                      className={`absolute ${locale === "en" ? "left-4" : "right-4"} transition-all duration-300 pointer-events-none ${
+                        focusedField === "jobTitle" || formData.jobTitle
+                          ? "-top-6 text-[#c9a750]"
+                          : "top-4 text-base text-[#e6d5c0]/50"
+                      }`}
+                    >
+                      {t("Job Title")}
+                    </label>
+                    <input
+                      type="text"
+                      id="jobTitle"
+                      name="jobTitle"
+                      value={formData.jobTitle || ""}
+                      onChange={handleChange}
+                      onFocus={() => setFocusedField("jobTitle")}
+                      onBlur={() => setFocusedField(null)}
+                      className="w-full px-4 py-4 bg-[#171410]/50 border border-[#c9a750]/30 rounded-lg text-[#e6d5c0] focus:border-[#c9a750] focus:inOutline-none transition-all duration-300"
+                      suppressHydrationWarning
+                    />
+                  </div>
+
+                  {/* Company Name Field */}
+                  <div className="relative">
+                    <label
+                      htmlFor="companyName"
+                      className={`absolute ${locale === "en" ? "left-4" : "right-4"} transition-all duration-300 pointer-events-none ${
+                        focusedField === "companyName" || formData.companyName
+                          ? "-top-6 text-[#c9a750]"
+                          : "top-4 text-base text-[#e6d5c0]/50"
+                      }`}
+                    >
+                      {t("Company Name")}
+                    </label>
+                    <input
+                      type="text"
+                      id="companyName"
+                      name="companyName"
+                      value={formData.companyName || ""}
+                      onChange={handleChange}
+                      onFocus={() => setFocusedField("companyName")}
+                      onBlur={() => setFocusedField(null)}
+                      className="w-full px-4 py-4 bg-[#171410]/50 border border-[#c9a750]/30 rounded-lg text-[#e6d5c0] focus:border-[#c9a750] focus:inOutline-none transition-all duration-300"
+                      suppressHydrationWarning
+                    />
+                  </div>
+                </div>
+
                 {/* Message Field */}
                 <div className="relative">
                   <label
@@ -483,6 +547,7 @@ export default function KoiaContactSection() {
                     )}
                   </span>
                 </button>
+
               </div>
             </form>
           </div>

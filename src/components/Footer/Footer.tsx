@@ -61,6 +61,7 @@ export default function Footer() {
       { name: t("Home"), href: "#home" },
       { name: t("About"), href: "#about" },
       { name: t("Services"), href: "#services" },
+      { name: t("Execution Process"), href: "#execution-process" },
       { name: t("Projects"), href: "#projects" },
       { name: t("Contact"), href: "#contact-us" },
     ],
@@ -233,9 +234,7 @@ export default function Footer() {
                 <div className="h-1 w-20 bg-gradient-to-r from-[#c9a750] to-transparent mt-2 animate-on-scroll delay-1"></div>
               </div>
               <p className="text-[#e6d5c0]/70 text-base leading-relaxed mb-6 animate-on-scroll delay-2">
-                {t(
-                  "Delivering high-end interior finishing with controlled execution across commercial, residential, and branded environments",
-                )}
+                {t("Footer-Description")}
               </p>
               {/* Social Links */}
               <div className="flex gap-4 animate-on-scroll delay-3">

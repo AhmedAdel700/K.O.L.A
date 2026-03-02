@@ -54,10 +54,9 @@ export default function QualityControl() {
   return (
     <div className="pt-24 pb-24 max-w-9xl mx-auto">
       <div className="mb-16 text-center">
-        <div className="qc-label inline-flex items-center gap-4 mb-5">
-          <div className="w-10 h-px" style={{ background: "#c9a750" }} />
+        <div className="qc-label inline-block mb-5">
           <span className="text-xs font-bold tracking-[0.35em] uppercase" style={{ color: "#c9a750" }}>Quality Control</span>
-          <div className="w-10 h-px" style={{ background: "#c9a750" }} />
+          <div className="qc-header-line h-0.5 w-full mt-2" style={{ background: "linear-gradient(to right, transparent, #c9a750, transparent)" }}></div>
         </div>
         <h2 className="qc-title text-6xl md:text-8xl font-bold leading-[1.1] tracking-tight uppercase w-full" style={{ color: "#e6d5c0" }}>
           Our Quality{" "}
